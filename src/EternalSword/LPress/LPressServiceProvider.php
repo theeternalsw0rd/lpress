@@ -28,7 +28,8 @@ class LPressServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
-		//
+		define('PATH', dirname(dirname(__DIR__)));
+		require PATH . '/routes.php';
 	}
 
 	/**
