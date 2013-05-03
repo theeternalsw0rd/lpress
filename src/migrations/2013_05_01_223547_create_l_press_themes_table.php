@@ -1,9 +1,9 @@
-<?php
+<?php 
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateThemesTable extends Migration {
+class CreateLPressThemesTable extends Migration {
 
     /**
      * Run the migrations.
@@ -15,7 +15,7 @@ class CreateThemesTable extends Migration {
         Schema::create('lpress_themes', function(Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-			$table->string('slug')->unique();
+			$table->string('slug');
 			$table->text('description');
 			$table->string('image');
             $table->timestamps();
