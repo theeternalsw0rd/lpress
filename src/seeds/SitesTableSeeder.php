@@ -1,6 +1,6 @@
 <?php
 
-class SitesTableSeeder extends Seeder {
+class LPressSitesTableSeeder extends Seeder {
 
     public function run()
     {
@@ -13,7 +13,7 @@ class SitesTableSeeder extends Seeder {
         );
 
         // Uncomment the below to run the seeder
-		DB::table('sites')->insert($sites);
+		DB::table('lpress_sites')->insert($sites);
     }
 
 }

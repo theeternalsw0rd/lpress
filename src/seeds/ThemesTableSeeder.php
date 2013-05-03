@@ -1,6 +1,6 @@
 <?php
 
-class ThemesTableSeeder extends Seeder {
+class LPressThemesTableSeeder extends Seeder {
 
     public function run()
     {
@@ -13,7 +13,7 @@ class ThemesTableSeeder extends Seeder {
         );
 
         // Uncomment the below to run the seeder
-		DB::table('themes')->insert($themes);
+		DB::table('lpress_themes')->insert($themes);
     }
 
 }

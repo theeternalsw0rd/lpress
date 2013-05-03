@@ -12,10 +12,10 @@ class CreateThemesTable extends Migration {
      */
     public function up()
     {
-        Schema::create('themes', function(Blueprint $table) {
+        Schema::create('lpress_themes', function(Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-			$table->string('slug');
+			$table->string('slug')->unique();
 			$table->text('description');
 			$table->string('image');
             $table->timestamps();
@@ -29,7 +29,7 @@ class CreateThemesTable extends Migration {
      */
     public function down()
     {
-        Schema::drop('themes');
+        Schema::drop('lpress_themes');
     }
 
 }

@@ -12,9 +12,9 @@ class CreateSitesTable extends Migration {
      */
     public function up()
     {
-        Schema::create('sites', function(Blueprint $table) {
+        Schema::create('lpress_sites', function(Blueprint $table) {
             $table->increments('id');
-            $table->string('domain');
+			$table->string('domain')->unique();
 			$table->string('title');
 			$table->integer('theme_id');
             $table->timestamps();
@@ -28,7 +28,7 @@ class CreateSitesTable extends Migration {
      */
     public function down()
     {
-        Schema::drop('sites');
+        Schema::drop('lpress_sites');
     }
 
 }
