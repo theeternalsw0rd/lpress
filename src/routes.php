@@ -5,7 +5,7 @@ Route::filter(
 		define('DOMAIN', Request::server('HTTP_HOST'));
 		$site = NULL;
 		try { 
-			$site = DB::table('sites')->where('domain', DOMAIN)->first();
+			$site = DB::table('lpress_sites')->where('domain', DOMAIN)->first();
 		} catch(Exception $e) {
 			$message = $e->getMessage();
 			$code = $e->getCode();
@@ -22,7 +22,7 @@ Route::filter(
 			die();
 		}
 		if(!$site) {
-			$site = DB::table('sites')->where('domain', '*')->first();
+			$site = DB::table('lpress_sites')->where('domain', '*')->first();
 		}
 		if(!$site) {
 			echo 'No valid site found for this domain, ' 
@@ -31,7 +31,7 @@ Route::filter(
 			die();
 		}
 		try {
-			$theme = DB::table('themes')->where('id', $site->theme_id)->first();
+			$theme = DB::table('lpress_themes')->where('id', $site->theme_id)->first();
 		} catch(Exception $e) {
 			$message = $e->getMessage();
 			$code = $e->getCode();
@@ -55,8 +55,13 @@ Route::get(
 	'/',
 	array(
 		'before' => 'theme',
-		'uses' => 'EternalSword\LPress\IndexController@getIndex',
-		'as' => 'index'
+		'as' => 'index',
+		function() {
+			$route = Config::get('l-press::route_index');
+			if(Config::get('l-press::route_index')) {
+				return App::make($route['controller'])->{$route['action']}();
+			}
+		}
 	)
 );
 Route::get(

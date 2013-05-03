@@ -68,9 +68,34 @@
 			$segments = explode('/', $path);
 			$count = count($segments);
 			$path = $this->verifyPath($segments, $count);
-			$real_path = $segments[0] == 'uploads' ? 
-				PATH . $path :
-				PATH . '/views/themes/' . THEME . '/resources' . $path;
+			if($segments[0] == 'uploads') {
+				$upload_config = \Config::get('l-press::uploads');
+				$upload_path_base = $upload_config['path_base'];
+				switch($upload_path_base) {
+					case 'package':
+						$real_path = PATH . '/' . $upload_config['path'];
+						break;
+					case 'laravel':
+						$real_path = base_path() . '/' . $upload_config['path'];
+						break;
+					default:
+						$real_path = $upload_path_base . '/' . $upload_config['path'];
+				}
+			}
+			else {
+				$theme_config = \Config::get('l-press::themes');
+				$theme_path_base = $theme_config['path_base'];
+				switch($theme_path_base) {
+					case 'package':
+						$real_path = PATH . '/' . $theme_config['path'];
+						break;
+					case 'laravel':
+						$real_path = base_path() . '/' . $theme_config['path'];
+						break;
+					default:
+						$real_path = $theme_path_base . '/' . $theme_config['path'];
+				}
+			}
 			$download = $segments[--$count] == 'download';
 			if($download) {
 				$file_name = $segments[--$count];
