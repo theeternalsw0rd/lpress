@@ -7,7 +7,7 @@
 	use Illuminate\Support\Facades\Session;
 	use Illuminate\Support\Facades\Redirect;
 
-	class LoginController extends Controller {
+	class AuthenticationController extends Controller {
 		public function getLogin($return_route) {
 			if(!defined('THEME')) {
 				echo 'An unknown error occured, please try again later.';
@@ -15,7 +15,8 @@
 			}
 			$user = Auth::user();
 			if($user) {
-				Redirect::to('logout/' . $return_route);
+				Session::put('return_route', $return_route);
+				return Redirect::to('logout/logged');
 			}
 			$login_failed = Session::get('bad_login', false);
 			Session::forget('bad_login');
@@ -25,6 +26,17 @@
 					'login_failed' => $login_failed
 				)
 			);
+		}
+
+		public function getLogout() {
+			Auth::logout();
+			Session::put('message', 'Successfully Logged Out');
+			return Redirect::route('lpress-index');
+		}
+
+		public function getLogoutLogged() {
+			$return_route = Session::get('return_route', 'lpress-index');
+			return View::make('l-press::themes.' . THEME . '.logged-in', array('return_route', $return_route));
 		}
 	}
 ?>

@@ -99,6 +99,7 @@
 			'as' => 'lpress-admin',
 			function() {
 				echo "Hello username";
+
 			}
 		)
 	);
@@ -114,9 +115,37 @@
 		'login/{source}',
 		array(
 			'before' => 'theme',
-			'uses' => 'EternalSword\LPress\LoginController@getLogin',
+			'uses' => 'EternalSword\LPress\AuthenticationController@getLogin',
 			'as' => 'lpress-login'
 		)
+	);
+
+	Route::get(
+		'logout',
+		array(
+			'before' => 'theme',
+			'uses' => 'EternalSword\LPress\AuthenticationController@getLogout',
+			'as' => 'lpress-logout'
+		)
+	);
+
+	Route::get(
+		'logout/logged',
+		array(
+			'before' => 'theme',
+			'uses' => 'EternalSword\LPress\AuthenticationController@getLogoutLogged'
+		)
+	);
+
+	Route::get(
+		'logout/login',
+		function()
+		{
+			$return_route = Session::get('return_route', 'lpress-index');
+			Session::forget('return_route');
+			Auth::logout();
+			return Redirect::to('login/' . $return_route);
+		}
 	);
 
 	Route::post(
@@ -139,6 +168,8 @@
 			}
 		)
 	);
+
+
 
 	/*Route::get('{hierarchy}/{post}', array('as' => 'posts', function($hierarchy, $post) {
 		echo $hierarchy;
