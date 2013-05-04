@@ -1,5 +1,8 @@
 <?php namespace EternalSword\LPress;
+
 	use Illuminate\Routing\Controllers\Controller;
+	use Illuminate\Support\Facades\Config;
+	
 	class ResourceController extends Controller {
 		private $allowed_mime_parts = array(
 			'image',
@@ -69,7 +72,7 @@
 			$count = count($segments);
 			$path = $this->verifyPath($segments, $count);
 			if($segments[0] == 'uploads') {
-				$upload_config = \Config::get('l-press::uploads');
+				$upload_config = Config::get('l-press::uploads');
 				$upload_path_base = $upload_config['path_base'];
 				switch($upload_path_base) {
 					case 'package':
@@ -83,7 +86,7 @@
 				}
 			}
 			else {
-				$theme_config = \Config::get('l-press::themes');
+				$theme_config = Config::get('l-press::themes');
 				$theme_path_base = $theme_config['path_base'];
 				switch($theme_path_base) {
 					case 'package':

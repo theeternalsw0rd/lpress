@@ -21,18 +21,8 @@ class Site extends \Eloquent {
 	 *
 	 * @return array of User objects 
 	 */
-	/*public function users()
+	public function users()
 	{
 		return $this->belongsToMany('EternalSword\LPress\User')->withPivot('permission_id');
-	}
-
-	/**
-	 * Get the theme for this site.
-	 *
-	 * @return Theme object
-	 */
-	public function getTheme()
-	{
-		return Theme::find($this->theme_id);
 	}
 }

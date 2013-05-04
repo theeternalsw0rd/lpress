@@ -1,9 +1,18 @@
 <?php namespace EternalSword\LPress;
 	
-	\Route::filter(
+	use Illuminate\Support\Facades\Auth;
+	use Illuminate\Support\Facades\Route;
+	use Illuminate\Support\Facades\App;
+	use Illuminate\Support\Facades\Redirect;
+	use Illuminate\Support\Facades\Config;
+	use Illuminate\Support\Facades\Input;
+	use Illuminate\Support\Facades\Request;
+	use Illuminate\Support\Facades\Session;
+	
+	Route::filter(
 		'theme',
 		function() {
-			define('DOMAIN', \Request::server('HTTP_HOST'));
+			define('DOMAIN', Request::server('HTTP_HOST'));
 			$site = NULL;
 			try { 
 				$site = Site::where('domain', DOMAIN)->first();
@@ -52,27 +61,85 @@
 		}
 	);
 
-	\Route::get(
+	Route::filter(
+		'login',
+		function($route, $request, $route_name) {
+			$user = Auth::user();
+			if(is_null($user)) {
+				return Redirect::to('login/' . $route_name);
+			}
+		}
+	);
+
+	Route::get(
 		'/',
 		array(
 			'before' => 'theme',
-			'as' => 'index',
+			'as' => 'lpress-index',
 			function() {
-				$route = \Config::get('l-press::route_index');
-				if(\Config::get('l-press::route_index')) {
-					return \App::make($route['controller'])->{$route['action']}();
-				}
+				$route = Config::get('l-press::route_index');
+				return App::make($route['controller'])->{$route['action']}();
 			}
 		)
 	);
-	\Route::get(
+
+	Route::get(
 		'resources/{path}',
 		array(
 			'before' => 'theme',
 			'uses' => 'EternalSword\LPress\ResourceController@getResource',
-			'as' => 'resource'
+			'as' => 'lpress-resource'
 		)
 	)->where('path', '(.*)');
+
+	Route::get(
+		'admin',
+		array(
+			'before' => 'theme|login:lpress-admin',
+			'as' => 'lpress-admin',
+			function() {
+				echo "Hello username";
+			}
+		)
+	);
+
+	Route::get(
+		'login',
+		function() {
+			return Redirect::to('login/lpress-index');
+		}
+	);
+
+	Route::get(
+		'login/{source}',
+		array(
+			'before' => 'theme',
+			'uses' => 'EternalSword\LPress\LoginController@getLogin',
+			'as' => 'lpress-login'
+		)
+	);
+
+	Route::post(
+		'login/{source}',
+		array(
+			'before' => 'csrf',
+			function($return_route) {
+				$remember = Input::get('remember');
+				if(Auth::attempt(
+					array(
+						'username' => Input::get('username'),
+						'password' => Input::get('password')
+					),
+					$remember
+				)) {
+					return Redirect::route($return_route);
+				}
+				Session::put('bad_login', true);
+				return Redirect::to('login/' . $return_route);
+			}
+		)
+	);
+
 	/*Route::get('{hierarchy}/{post}', array('as' => 'posts', function($hierarchy, $post) {
 		echo $hierarchy;
 		echo $post;

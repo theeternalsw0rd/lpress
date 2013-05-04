@@ -1,0 +1,32 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+
+class CreateLPressPasswordRemindersTable extends Migration {
+
+	/**
+	 * Run the migrations.
+	 *
+	 * @return void
+	 */
+	public function up()
+	{
+		Schema::create('lpress_password_reminders', function($t)
+		{
+			$t->string('email');
+			$t->string('token');
+			$t->timestamp('created_at');
+		});
+	}
+
+	/**
+	 * Reverse the migrations.
+	 *
+	 * @return void
+	 */
+	public function down()
+	{
+		Schema::drop('lpress_password_reminders');
+	}
+
+}
