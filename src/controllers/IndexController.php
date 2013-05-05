@@ -10,7 +10,7 @@
 				echo 'An unknown error occured, please try again later.';
 				die();
 			}
-			parent::setupMacros();
+			//parent::setupMacros();
 			return View::make('l-press::themes.' . THEME . '.index', array('domain' => DOMAIN));
 		}
 	}
