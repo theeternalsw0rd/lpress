@@ -6,5 +6,6 @@
 			'controller' => 'EternalSword\LPress\IndexController',
 			'action' => 'getIndex'
 		),
-		'db_prefix' => 'lpress_'
+		'db_prefix' => 'lpress_',
+		'route_prefix' => '/' // must include trailing slash
 	);

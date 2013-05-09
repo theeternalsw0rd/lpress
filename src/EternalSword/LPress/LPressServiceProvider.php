@@ -26,6 +26,8 @@ class LPressServiceProvider extends ServiceProvider {
 		Config::set('database.connections', $db_connections);
 		Config::set('auth.driver', 'eloquent');
 		Config::set('auth.model', 'EternalSword\LPress\User');
+		define('PATH', dirname(dirname(__DIR__)));
+		require PATH . '/routes.php';
 	}
 
 	/**
@@ -35,8 +37,6 @@ class LPressServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
-		define('PATH', dirname(dirname(__DIR__)));
-		require PATH . '/routes.php';
 	}
 
 	/**

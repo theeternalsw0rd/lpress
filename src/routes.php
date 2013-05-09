@@ -10,6 +10,8 @@
 	use Illuminate\Support\Facades\Session;
 	use Illuminate\Support\Facades\Html;
 	
+	$route_prefix = Config::get('l-press::route_prefix');
+	$route_prefix = $route_prefix == '/' ? '' : $route_prefix;
 	Route::filter(
 		'theme',
 		function() {
@@ -73,11 +75,13 @@
 				echo 'An unexpected error occurred, please try again later.';
 				die();
 			}
-			if($theme) {
-				define('THEME', $theme->slug);
-				return;
-			}
-			define('THEME', 'default');
+			define('THEME', $theme ? $theme->slug : 'default');
+			try {
+				$users = User::get()->toArray();
+				if(empty($users)) {
+					//Redirect::to('lpress-install');
+				}
+			} catch(\Exception $e) {}
 		}
 	);
 
@@ -86,13 +90,15 @@
 		function($route, $request, $route_name) {
 			$user = Auth::user();
 			if(is_null($user)) {
-				return Redirect::to('login/' . $route_name);
+				$route_prefix = Config::get('l-press::route_prefix');
+				$route_prefix = $route_prefix == '/' ? '' : $route_prefix;
+				return Redirect::to($route_prefix . 'login/' . $route_name);
 			}
 		}
 	);
 
 	Route::get(
-		'/',
+		empty($route_prefix) ? '/' : $route_prefix,
 		array(
 			'before' => 'theme',
 			'as' => 'lpress-index',
@@ -104,7 +110,7 @@
 	);
 
 	Route::get(
-		'resources/{path}',
+		$route_prefix . 'resources/{path}',
 		array(
 			'before' => 'theme',
 			'uses' => 'EternalSword\LPress\ResourceController@getResource',
@@ -113,7 +119,7 @@
 	)->where('path', '(.*)');
 
 	Route::get(
-		'admin',
+		$route_prefix . 'admin',
 		array(
 			'before' => 'theme|login:lpress-admin',
 			'as' => 'lpress-admin',
@@ -125,14 +131,16 @@
 	);
 
 	Route::get(
-		'login',
+		$route_prefix . 'login',
 		function() {
-			return Redirect::to('login/lpress-index');
+			$route_prefix = Config::get('l-press::route_prefix');
+			$route_prefix = $route_prefix == '/' ? '' : $route_prefix;
+			return Redirect::to($route_prefix . 'login/lpress-index');
 		}
 	);
 
 	Route::get(
-		'login/{source}',
+		$route_prefix . 'login/{source}',
 		array(
 			'before' => 'theme',
 			'uses' => 'EternalSword\LPress\AuthenticationController@getLogin',
@@ -141,7 +149,7 @@
 	);
 
 	Route::get(
-		'logout',
+		$route_prefix . 'logout',
 		array(
 			'before' => 'theme',
 			'uses' => 'EternalSword\LPress\AuthenticationController@getLogout',
@@ -150,7 +158,7 @@
 	);
 
 	Route::get(
-		'logout/logged',
+		$route_prefix . 'logout/logged',
 		array(
 			'before' => 'theme',
 			'uses' => 'EternalSword\LPress\AuthenticationController@getLogoutLogged'
@@ -158,18 +166,20 @@
 	);
 
 	Route::get(
-		'logout/login',
+		$route_prefix . 'logout/login',
 		function()
 		{
 			$return_route = Session::get('return_route', 'lpress-index');
 			Session::forget('return_route');
 			Auth::logout();
-			return Redirect::to('login/' . $return_route);
+			$route_prefix = Config::get('l-press::route_prefix');
+			$route_prefix = $route_prefix == '/' ? '' : $route_prefix;
+			return Redirect::to($route_prefix . 'login/' . $return_route);
 		}
 	);
 
 	Route::post(
-		'login/{source}',
+		$route_prefix . 'login/{source}',
 		array(
 			'before' => 'csrf',
 			function($return_route) {
@@ -184,7 +194,9 @@
 					return Redirect::route($return_route);
 				}
 				Session::put('bad_login', true);
-				return Redirect::to('login/' . $return_route);
+				$route_prefix = Config::get('l-press::route_prefix');
+				$route_prefix = $route_prefix == '/' ? '' : $route_prefix;
+				return Redirect::to($route_prefix . 'login/' . $return_route);
 			}
 		)
 	);
