@@ -14,7 +14,7 @@
 		'theme',
 		function() {
 			define('DOMAIN', Request::server('HTTP_HOST'));
-			Html::macro('url', function($url, $text = null, $attributes = array()) {
+			HTML::macro('url', function($url, $text = null, $attributes = array()) {
 				$attribute_string = '';
 				$has_title = FALSE;
 				if(is_array($attributes) && count($attributes) > 0) {
