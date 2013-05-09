@@ -6,9 +6,9 @@ class LPressThemesTableSeeder extends Seeder {
     {
         $themes = array(
 			array(
-				'name' => 'Default Theme',
+				'label' => 'Default Theme',
 				'slug' => 'default',
-				'description' => 'Default theme provided by this application'
+				'description' => 'Default theme provided by LPress.'
 			)
         );
 

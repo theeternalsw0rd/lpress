@@ -6,9 +6,9 @@ class LPressSitesTableSeeder extends Seeder {
     {
         $sites = array(
 			array(
-				'theme_id' => 1,
-				'title' => 'My Awesome Site',
-				'domain' => 'wildcard'
+				'label' => 'Wildcard',
+				'domain' => 'wildcard',
+				'theme_id' => 1
 			)
         );
 

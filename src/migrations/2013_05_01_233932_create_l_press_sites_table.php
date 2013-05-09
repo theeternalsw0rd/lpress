@@ -14,8 +14,8 @@ class CreateLPressSitesTable extends Migration {
     {
         Schema::create('lpress_sites', function(Blueprint $table) {
             $table->increments('id');
-            $table->string('domain');
-			$table->string('title');
+            $table->string('label');
+			$table->string('domain')->unique();
 			$table->integer('theme_id');
             $table->timestamps();
         });

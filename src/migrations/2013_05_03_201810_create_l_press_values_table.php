@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateLPressSiteUsersTable extends Migration {
+class CreateLPressValuesTable extends Migration {
 
     /**
      * Run the migrations.
@@ -12,11 +12,12 @@ class CreateLPressSiteUsersTable extends Migration {
      */
     public function up()
     {
-		Schema::create('lpress_site_user', function(Blueprint $table) {
+        Schema::create('lpress_values', function(Blueprint $table) {
             $table->increments('id');
-            $table->integer('site_id');
-			$table->integer('user_id');
-			$table->integer('permission_id');
+			$table->integer('field_id');
+			$table->integer('record_id');
+			$table->integer('current_revision_id');
+			$table->integer('site_id');
             $table->timestamps();
         });
     }
@@ -28,7 +29,7 @@ class CreateLPressSiteUsersTable extends Migration {
      */
     public function down()
     {
-		Schema::drop('lpress_site_user');
+		Schema::drop('lpress_values');
     }
 
 }

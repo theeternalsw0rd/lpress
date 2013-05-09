@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateLPressPermissionsTable extends Migration {
+class CreateLPressGroupUserTable extends Migration {
 
     /**
      * Run the migrations.
@@ -12,10 +12,10 @@ class CreateLPressPermissionsTable extends Migration {
      */
     public function up()
     {
-        Schema::create('lpress_permissions', function(Blueprint $table) {
+		Schema::create('lpress_group_user', function(Blueprint $table) {
             $table->increments('id');
-			$table->string('label')->unique();
-			$table->text('description');
+			$table->integer('group_id');
+			$table->integer('user_id');
             $table->timestamps();
         });
     }
@@ -27,7 +27,7 @@ class CreateLPressPermissionsTable extends Migration {
      */
     public function down()
     {
-        Schema::drop('lpress_permissions');
+		Schema::drop('lpress_group_user');
     }
 
 }

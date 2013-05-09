@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateLPressPermissionsTable extends Migration {
+class CreateLPressRevisionsTable extends Migration {
 
     /**
      * Run the migrations.
@@ -12,10 +12,13 @@ class CreateLPressPermissionsTable extends Migration {
      */
     public function up()
     {
-        Schema::create('lpress_permissions', function(Blueprint $table) {
+        Schema::create('lpress_revisions', function(Blueprint $table) {
             $table->increments('id');
-			$table->string('label')->unique();
-			$table->text('description');
+			$table->integer('value_id');
+			$table->integer('author_id');
+			$table->integer('publisher_id');
+			$table->integer('prev_revision_id');
+			$table->text('contents');
             $table->timestamps();
         });
     }
@@ -27,7 +30,7 @@ class CreateLPressPermissionsTable extends Migration {
      */
     public function down()
     {
-        Schema::drop('lpress_permissions');
+        Schema::drop('lpress_revisions');
     }
 
 }

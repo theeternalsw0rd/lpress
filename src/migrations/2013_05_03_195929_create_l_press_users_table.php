@@ -21,8 +21,8 @@ class CreateLPressUsersTable extends Migration {
 			$table->string('last_name');
 			$table->string('name_suffix');
 			$table->string('name_prefix');
-			$table->boolean('root');
 			$table->text('bio');
+			$table->text('image');
 			$table->string('password', 100);
             $table->timestamps();
         });

@@ -6,39 +6,34 @@ class LPressPermissionsTableSeeder extends Seeder {
     {
 		$permissions = array(
 			array(
-				'level' => 0,
-				'name' => 'Site Admin',
-				'description' => 'Users in this level have full access to administrate '
-					. 'the associated site. Note that the Site Admin on the wildcard site '
-					. 'is not equivalent to users set as root as the scope is limited to '
-					. 'manage only the wildcard site and not any of the others.',
-				'section' => 0
+				'label' => 'Root',
+				'description' => 'Can do anything.'
 			),
 			array(
-				'level' => 1,
-				'name' => 'Editor',
-				'description' => 'Users in this level can create content and revisions of that content, and can publish any content.',
-				'section' => 0
+				'label' => 'Publish',
+				'description' => 'Make changes to front-end state for all records in scope.'
 			),
 			array(
-				'level' => 2,
-				'name' => 'Author',
-				'description' => 'Users in this level can create content and revisions of that content, and can publish that content.',
-				'section' => 0
+				'label' => 'Publish Own',
+				'description' => 'Make changes to front-end state for own records in scope.'
 			),
 			array(
-				'level' => 3,
-				'name' => 'Contributor',
-				'description' => 'Users in this level can create new content and revisions of that content, but cannot publish.',
-				'section' => 0
+				'label' => 'Delete',
+				'description' => 'Can delete any record or revision in scope.'
 			),
 			array(
-				'level' => 4,
-				'name' => 'Subscriber',
-				'description' => 'Users in this level have low level access, being able to have a profile on the site and make comments.',
-				'section' => 0
+				'label' => 'Delete Own',
+				'description' => 'Can delete own records or revisions in scope.'
+			),
+			array(
+				'label' => 'Edit',
+				'description' => 'Can create revisions for all records in scope.'
+			),
+			array(
+				'label' => 'Create',
+				'description' => 'Can create new records and revisions for own records in scope.'
 			)
-        );
+		);
 
         // Uncomment the below to run the seeder
 		DB::table('lpress_permissions')->insert($permissions);
