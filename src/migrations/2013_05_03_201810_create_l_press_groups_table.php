@@ -12,7 +12,7 @@ class CreateLPressGroupsTable extends Migration {
      */
     public function up()
     {
-		Schema::create('lpress_groups', function(Blueprint $table) {
+		Schema::create('groups', function(Blueprint $table) {
             $table->increments('id');
 			$table->string('label')->unique();
 			$table->text('description');
@@ -29,7 +29,7 @@ class CreateLPressGroupsTable extends Migration {
      */
     public function down()
     {
-		Schema::drop('lpress_groups');
+		Schema::drop('groups');
     }
 
 }

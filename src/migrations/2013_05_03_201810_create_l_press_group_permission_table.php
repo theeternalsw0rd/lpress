@@ -12,7 +12,7 @@ class CreateLPressGroupPermissionTable extends Migration {
      */
     public function up()
     {
-		Schema::create('lpress_group_permission', function(Blueprint $table) {
+		Schema::create('group_permission', function(Blueprint $table) {
             $table->increments('id');
 			$table->integer('group_id');
 			$table->integer('permission_id');
@@ -27,7 +27,7 @@ class CreateLPressGroupPermissionTable extends Migration {
      */
     public function down()
     {
-		Schema::drop('lpress_group_permission');
+		Schema::drop('group_permission');
     }
 
 }

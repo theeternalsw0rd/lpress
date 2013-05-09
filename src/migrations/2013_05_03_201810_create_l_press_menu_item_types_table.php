@@ -12,7 +12,7 @@ class CreateLPressMenuItemTypesTable extends Migration {
      */
     public function up()
     {
-		Schema::create('lpress_menu_item_types', function(Blueprint $table) {
+		Schema::create('menu_item_types', function(Blueprint $table) {
             $table->increments('id');
 			$table->string('label')->unique();
             $table->timestamps();
@@ -26,7 +26,7 @@ class CreateLPressMenuItemTypesTable extends Migration {
      */
     public function down()
     {
-		Schema::drop('lpress_menu_item_types');
+		Schema::drop('menu_item_types');
     }
 
 }

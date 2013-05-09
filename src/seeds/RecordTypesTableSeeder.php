@@ -34,7 +34,7 @@ class LPressRecordTypesTableSeeder extends Seeder {
         );
 
         // Uncomment the below to run the seeder
-		DB::table('lpress_record_types')->insert($record_types);
+		DB::table('record_types')->insert($record_types);
     }
 
 }

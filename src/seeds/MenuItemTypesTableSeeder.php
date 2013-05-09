@@ -17,7 +17,7 @@ class LPressMenuItemTypesTableSeeder extends Seeder {
         );
 
         // Uncomment the below to run the seeder
-		DB::table('lpress_menu_item_types')->insert($menu_item_types);
+		DB::table('menu_item_types')->insert($menu_item_types);
     }
 
 }

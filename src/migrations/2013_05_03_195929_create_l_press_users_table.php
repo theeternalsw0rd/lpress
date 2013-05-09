@@ -12,7 +12,7 @@ class CreateLPressUsersTable extends Migration {
      */
     public function up()
     {
-        Schema::create('lpress_users', function(Blueprint $table) {
+        Schema::create('users', function(Blueprint $table) {
 			$table->increments('id');
 			$table->string('username')->unique();
             $table->string('email')->unique();
@@ -35,7 +35,7 @@ class CreateLPressUsersTable extends Migration {
      */
     public function down()
     {
-        Schema::drop('lpress_users');
+        Schema::drop('users');
     }
 
 }

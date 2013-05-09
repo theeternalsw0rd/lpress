@@ -7,7 +7,7 @@ class Permission extends \Eloquent {
 	 *
 	 * @var string
 	 */
-	protected $table = 'lpress_permissions';
+	protected $table = 'permissions';
 
 	/**
 	 * The attributes excluded from the model's JSON form.

@@ -5,5 +5,6 @@
 		'route_index' => array(
 			'controller' => 'EternalSword\LPress\IndexController',
 			'action' => 'getIndex'
-		)
+		),
+		'db_prefix' => 'lpress_'
 	);

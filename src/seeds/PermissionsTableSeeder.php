@@ -36,7 +36,7 @@ class LPressPermissionsTableSeeder extends Seeder {
 		);
 
         // Uncomment the below to run the seeder
-		DB::table('lpress_permissions')->insert($permissions);
+		DB::table('permissions')->insert($permissions);
     }
 
 }

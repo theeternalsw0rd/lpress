@@ -12,7 +12,7 @@ class CreateLPressCommentsTable extends Migration {
      */
     public function up()
     {
-		Schema::create('lpress_comments', function(Blueprint $table) {
+		Schema::create('comments', function(Blueprint $table) {
             $table->increments('id');
 			$table->integer('record_id');
 			$table->integer('author_id');
@@ -30,7 +30,7 @@ class CreateLPressCommentsTable extends Migration {
      */
     public function down()
     {
-        Schema::drop('lpress_comments');
+        Schema::drop('comments');
     }
 
 }

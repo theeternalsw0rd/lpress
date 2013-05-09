@@ -13,7 +13,7 @@ class LPressThemesTableSeeder extends Seeder {
         );
 
         // Uncomment the below to run the seeder
-		DB::table('lpress_themes')->insert($themes);
+		DB::table('themes')->insert($themes);
     }
 
 }

@@ -12,7 +12,7 @@ class CreateLPressFieldsTable extends Migration {
      */
     public function up()
     {
-        Schema::create('lpress_fields', function(Blueprint $table) {
+        Schema::create('fields', function(Blueprint $table) {
             $table->increments('id');
 			$table->string('label');
 			$table->string('slug');
@@ -31,7 +31,7 @@ class CreateLPressFieldsTable extends Migration {
      */
     public function down()
     {
-        Schema::drop('lpress_fields');
+        Schema::drop('fields');
     }
 
 }

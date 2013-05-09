@@ -11,7 +11,7 @@ class CreateLPressPasswordRemindersTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('lpress_password_reminders', function($t)
+		Schema::create('password_reminders', function($t)
 		{
 			$t->string('email');
 			$t->string('token');
@@ -26,7 +26,7 @@ class CreateLPressPasswordRemindersTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('lpress_password_reminders');
+		Schema::drop('password_reminders');
 	}
 
 }

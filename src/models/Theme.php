@@ -7,7 +7,7 @@ class Theme extends \Eloquent {
 	 *
 	 * @var string
 	 */
-	protected $table = 'lpress_themes';
+	protected $table = 'themes';
 
 	/**
 	 * The attributes excluded from the model's JSON form.

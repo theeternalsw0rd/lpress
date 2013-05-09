@@ -12,7 +12,7 @@ class CreateLPressPermissionsTable extends Migration {
      */
     public function up()
     {
-        Schema::create('lpress_permissions', function(Blueprint $table) {
+        Schema::create('permissions', function(Blueprint $table) {
             $table->increments('id');
 			$table->string('label')->unique();
 			$table->text('description');
@@ -27,7 +27,7 @@ class CreateLPressPermissionsTable extends Migration {
      */
     public function down()
     {
-        Schema::drop('lpress_permissions');
+        Schema::drop('permissions');
     }
 
 }

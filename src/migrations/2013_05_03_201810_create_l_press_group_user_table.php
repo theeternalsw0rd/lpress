@@ -12,7 +12,7 @@ class CreateLPressGroupUserTable extends Migration {
      */
     public function up()
     {
-		Schema::create('lpress_group_user', function(Blueprint $table) {
+		Schema::create('group_user', function(Blueprint $table) {
             $table->increments('id');
 			$table->integer('group_id');
 			$table->integer('user_id');
@@ -27,7 +27,7 @@ class CreateLPressGroupUserTable extends Migration {
      */
     public function down()
     {
-		Schema::drop('lpress_group_user');
+		Schema::drop('group_user');
     }
 
 }

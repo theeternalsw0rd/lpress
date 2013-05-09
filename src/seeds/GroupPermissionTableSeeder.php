@@ -128,7 +128,7 @@ class LPressGroupPermissionTableSeeder extends Seeder {
         );
 
         // Uncomment the below to run the seeder
-		DB::table('lpress_group_permission')->insert($group_permissions);
+		DB::table('group_permission')->insert($group_permissions);
     }
 
 }

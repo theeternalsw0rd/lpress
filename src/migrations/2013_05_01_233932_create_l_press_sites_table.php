@@ -12,7 +12,7 @@ class CreateLPressSitesTable extends Migration {
      */
     public function up()
     {
-        Schema::create('lpress_sites', function(Blueprint $table) {
+        Schema::create('sites', function(Blueprint $table) {
             $table->increments('id');
             $table->string('label');
 			$table->string('domain')->unique();
@@ -28,7 +28,7 @@ class CreateLPressSitesTable extends Migration {
      */
     public function down()
     {
-        Schema::drop('lpress_sites');
+        Schema::drop('sites');
     }
 
 }

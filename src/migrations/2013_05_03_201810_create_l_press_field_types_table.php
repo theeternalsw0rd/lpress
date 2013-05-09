@@ -12,7 +12,7 @@ class CreateLPressFieldTypesTable extends Migration {
      */
     public function up()
     {
-        Schema::create('lpress_field_types', function(Blueprint $table) {
+        Schema::create('field_types', function(Blueprint $table) {
             $table->increments('id');
 			$table->string('label')->unique();
 			$table->text('description');
@@ -27,7 +27,7 @@ class CreateLPressFieldTypesTable extends Migration {
      */
     public function down()
     {
-        Schema::drop('lpress_field_types');
+        Schema::drop('field_types');
     }
 
 }

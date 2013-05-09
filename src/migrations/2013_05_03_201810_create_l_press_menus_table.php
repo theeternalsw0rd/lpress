@@ -12,7 +12,7 @@ class CreateLPressMenusTable extends Migration {
      */
     public function up()
     {
-        Schema::create('lpress_menus', function(Blueprint $table) {
+        Schema::create('menus', function(Blueprint $table) {
             $table->increments('id');
 			$table->string('label')->unique();
 			$table->integer('parent_menu_item_id');
@@ -27,7 +27,7 @@ class CreateLPressMenusTable extends Migration {
      */
     public function down()
     {
-        Schema::drop('lpress_menus');
+        Schema::drop('menus');
     }
 
 }

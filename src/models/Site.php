@@ -7,7 +7,7 @@ class Site extends \Eloquent {
 	 *
 	 * @var string
 	 */
-	protected $table = 'lpress_sites';
+	protected $table = 'sites';
 
 	/**
 	 * The attributes excluded from the model's JSON form.
