@@ -8,21 +8,24 @@
 	use Illuminate\Support\Facades\Redirect;
 
 	class AuthenticationController extends Controller {
-		public function getLogin($return_route) {
+		public function getLogin() {
 			if(!defined('THEME')) {
 				echo 'An unknown error occured, please try again later.';
 				die();
 			}
+			$first_user = User::find(1);
+			if($first_user->username == 'lpress') {
+				echo 'We will write the installer here';
+				die();
+			}
 			$user = Auth::user();
 			if($user) {
-				Session::put('return_route', $return_route);
-				return Redirect::to('logout/logged');
+				return Redirect::route('lpress-logout-logged');
 			}
 			$login_failed = Session::get('bad_login', false);
 			Session::forget('bad_login');
 			return View::make('l-press::themes.' . THEME . '.login',
 				array(
-					'return_route' => $return_route,
 					'login_failed' => $login_failed
 				)
 			);
@@ -35,8 +38,7 @@
 		}
 
 		public function getLogoutLogged() {
-			$return_route = Session::get('return_route', 'lpress-index');
-			return View::make('l-press::themes.' . THEME . '.logged-in', array('return_route', $return_route));
+			return View::make('l-press::themes.' . THEME . '.logged-in');
 		}
 	}
 ?>
