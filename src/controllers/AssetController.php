@@ -68,11 +68,12 @@
 				echo '<h1>File could not be found</h1>';
 				die();
 			}
-			header('Content-type: ' . $mime);
+			header('Content-Type: ' . $mime);
 			if($download) {
 				header('Content-Disposition: attachment; filename="' . $file_name . '"');
 			}
 			readfile($path);
+			exit;
 		}
 
 		public function getAsset($path) {
