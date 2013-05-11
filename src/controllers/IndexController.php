@@ -16,6 +16,7 @@
 				$site = Site::where('domain', 'wildcard')->get()->toArray();
 			}
 			$view_prefix = 'l-press::themes.' . THEME;
+			parent::setMacros();
 			return View::make($view_prefix . '.index', 
 				array(
 					'domain' => DOMAIN,

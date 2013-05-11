@@ -8,8 +8,6 @@
 	use Illuminate\Support\Facades\Input;
 	use Illuminate\Support\Facades\Request;
 	use Illuminate\Support\Facades\Session;
-	use Illuminate\Support\Facades\Html;
-	use Illuminate\Support\Facades\URL;
 	
 	$route_prefix = Config::get('l-press::route_prefix');
 	$route_prefix = $route_prefix == '/' ? '' : $route_prefix;
@@ -17,25 +15,6 @@
 		'theme',
 		function() {
 			define('DOMAIN', Request::server('HTTP_HOST'));
-			HTML::macro('url', function($url, $text = null, $attributes = array()) {
-				$attribute_string = '';
-				$has_title = FALSE;
-				if(is_array($attributes) && count($attributes) > 0) {
-					foreach($attributes as $attribute => $value) {
-						if($attribute == 'title') {
-							$title = $value;
-							$has_title = TRUE;
-						}
-						else {
-							$attribute_string .= " $attribute='$value'";
-						}
-					}
-				}
-				$text = is_null($text) ? $url : $text;
-				$title = $has_title ? $title : $text;
-				return "<a href='$url' title='$title'$attribute_string>$title</a>";
-
-			});
 			$site = NULL;
 			try { 
 				$site = Site::where('domain', DOMAIN)->first();

@@ -4,8 +4,61 @@
 	use Illuminate\Support\Facades\View;
 	use Illuminate\Support\Facades\Html;
 	use Illuminate\Support\Facades\Config;
+	use Illuminate\Support\Facades\URL;
 
 	class BaseController extends Controller {
+		protected function setMacros() {
+			HTML::macro('url', function($url, $text = null, $attributes = array()) {
+				$attribute_string = '';
+				$has_title = FALSE;
+				if(is_array($attributes) && count($attributes) > 0) {
+					foreach($attributes as $attribute => $value) {
+						if($attribute == 'title') {
+							$title = $value;
+							$has_title = TRUE;
+						}
+						else {
+							$attribute_string .= " $attribute='$value'";
+						}
+					}
+				}
+				$text = is_null($text) ? $url : $text;
+				$title = $has_title ? $title : $text;
+				return "<a href='$url' title='$title'$attribute_string>$title</a>";
+			});
+			HTML::macro('asset', function($type, $path, $attributes = array()) {
+				$open = '';
+				$close = '';
+				switch($type) {
+					case 'css': {
+						$open .= "<link rel='stylesheet' type='text/css' href='/assets". $path . "?v=";
+						$close .= "'>";
+						break;
+					}
+					case 'js': {
+						$open .= "<script type='text/javascript' src='/assets" . $path . "?v=";
+						$close .= "'></script>";
+						break;
+					}
+					case 'img': {
+						$attribute_string = '';
+						if(is_array($attributes) && count($attributes) > 0) {
+							foreach($attributes as $attribute => $value) {
+								$attribute_string .= " $attribute='$value'";
+							}
+						}
+						$open .= "<img src='/assets" . $path . "?v=";
+						$close .= "'" . $attribute_string . "/>";
+						break;
+					}
+					default: {
+						break;
+					}
+				}
+				return $open . filemtime(BaseController::getAssetPath() . '/' . $path) . $close;
+			});
+		}
+
 		public static function getAssetPath($upload = FALSE) {
 			$path = '';
 			if($upload) {
