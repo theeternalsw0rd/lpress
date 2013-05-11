@@ -3,14 +3,15 @@
 	use Illuminate\Routing\Controllers\Controller;
 	use Illuminate\Support\Facades\Config;
 	
-	class ResourceController extends Controller {
+	class AssetController extends Controller {
 		private $allowed_mime_parts = array(
 			'image',
 			'video',
 			'audio',
 			'pdf',
 			'css',
-			'javascript'
+			'javascript',
+			'plain'
 		);
 
 		private function verifyPath($segments, $count) {
@@ -43,6 +44,18 @@
 
 		private function sendFile($path, $file_name, $download) {
 			$mime = $this->getMime($path);
+			$ext = pathinfo($file_name, PATHINFO_EXTENSION);
+			// source files are detected as text/plain
+			switch($ext) {
+				case 'css': {
+					$mime = $mime == 'text/plain' ? 'text/css' : $mime;
+					break;
+				}
+				case 'js': {
+					$mime = $mime == 'text/plain' ? 'text/javascript' : $mime;
+					break;
+				}
+			}
 			$mime_parts = explode('/', $mime);
 			$allowed = FALSE;
 			foreach($this->allowed_mime_parts as $allowed_mime_part) {
@@ -62,7 +75,7 @@
 			readfile($path);
 		}
 
-		public function getResource($path) {
+		public function getAsset($path) {
 			if(!defined('THEME')) {
 				header('HTTP/1.0 404 Not Found');
 				echo '<h1>File could not be found</h1>';
@@ -76,13 +89,13 @@
 				$upload_path_base = $upload_config['path_base'];
 				switch($upload_path_base) {
 					case 'package':
-						$real_path = PATH . '/' . $upload_config['path'];
+						$real_path = PATH . '/' . $upload_config['path'] . '/' . $path;
 						break;
 					case 'laravel':
-						$real_path = base_path() . '/' . $upload_config['path'];
+						$real_path = base_path() . '/' . $upload_config['path'] . '/' . $path;
 						break;
 					default:
-						$real_path = $upload_path_base . '/' . $upload_config['path'];
+						$real_path = $upload_path_base . '/' . $upload_config['path'] . '/' . $path;
 				}
 			}
 			else {
@@ -90,13 +103,13 @@
 				$theme_path_base = $theme_config['path_base'];
 				switch($theme_path_base) {
 					case 'package':
-						$real_path = PATH . '/' . $theme_config['path'];
+						$real_path = PATH . '/' . $theme_config['path'] . '/' . THEME . '/assets' . $path;
 						break;
 					case 'laravel':
-						$real_path = base_path() . '/' . $theme_config['path'];
+						$real_path = base_path() . '/' . $theme_config['path'] . '/' . THEME . '/assets' . $path;
 						break;
 					default:
-						$real_path = $theme_path_base . '/' . $theme_config['path'];
+						$real_path = $theme_path_base . '/' . $theme_config['path'] . '/' . THEME . '/assets' . $path;
 				}
 			}
 			$download = $segments[--$count] == 'download';

@@ -104,11 +104,11 @@
 	);
 
 	Route::get(
-		$route_prefix . 'resources/{path}',
+		$route_prefix . 'assets/{path}',
 		array(
 			'before' => 'theme',
-			'uses' => 'EternalSword\LPress\ResourceController@getResource',
-			'as' => 'lpress-resource'
+			'uses' => 'EternalSword\LPress\AssetController@getAsset',
+			'as' => 'lpress-asset'
 		)
 	)->where('path', '(.*)');
 
