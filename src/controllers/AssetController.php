@@ -3,7 +3,7 @@
 	use Illuminate\Routing\Controllers\Controller;
 	use Illuminate\Support\Facades\Config;
 	
-	class AssetController extends Controller {
+	class AssetController extends BaseController {
 		private $allowed_mime_parts = array(
 			'image',
 			'video',
@@ -85,34 +85,7 @@
 			$segments = explode('/', $path);
 			$count = count($segments);
 			$path = $this->verifyPath($segments, $count);
-			if($segments[0] == 'uploads') {
-				$upload_config = Config::get('l-press::uploads');
-				$upload_path_base = $upload_config['path_base'];
-				switch($upload_path_base) {
-					case 'package':
-						$real_path = PATH . '/' . $upload_config['path'] . '/' . $path;
-						break;
-					case 'laravel':
-						$real_path = base_path() . '/' . $upload_config['path'] . '/' . $path;
-						break;
-					default:
-						$real_path = $upload_path_base . '/' . $upload_config['path'] . '/' . $path;
-				}
-			}
-			else {
-				$theme_config = Config::get('l-press::themes');
-				$theme_path_base = $theme_config['path_base'];
-				switch($theme_path_base) {
-					case 'package':
-						$real_path = PATH . '/' . $theme_config['path'] . '/' . THEME . '/assets' . $path;
-						break;
-					case 'laravel':
-						$real_path = base_path() . '/' . $theme_config['path'] . '/' . THEME . '/assets' . $path;
-						break;
-					default:
-						$real_path = $theme_path_base . '/' . $theme_config['path'] . '/' . THEME . '/assets' . $path;
-				}
-			}
+			$path = BaseController::getAssetPath($segments[0] == 'uploads') . $path;
 			$download = $segments[--$count] == 'download';
 			if($download) {
 				$file_name = $segments[--$count];
@@ -120,7 +93,7 @@
 			else {
 				$file_name = $segments[$count];
 			}
-			$this->sendFile($real_path, $file_name, $download);
+			$this->sendFile($path, $file_name, $download);
 		}
 	}
 ?>
