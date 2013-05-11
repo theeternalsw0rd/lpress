@@ -12,7 +12,7 @@
 			<!-- scripts that must go in head go here -->
 		@show
 		@section('styles')
-			<link rel='stylesheet' href='{{ $route_prefix }}assets/css/master.css' type='text/css'>
+			{{ HTML::asset('css', '/css/master.css') }}
 		@show
 	</head>
 	<body>
