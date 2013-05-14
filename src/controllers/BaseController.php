@@ -27,18 +27,20 @@
 				return "<a href='$url' title='$title'$attribute_string>$title</a>";
 			});
 			HTML::macro('asset', function($type, $path, $attributes = array()) {
+				$asset_domain = Config::get('l-press::asset_domain');
+				$asset_domain = empty($asset_domain) ? DOMAIN : $asset_domain;
 				$open = '';
 				$close = '';
 				switch($type) {
 					case 'css': {
 						$path = "css/" . PRODUCTION . '/' . $path;
-						$open .= "<link rel='stylesheet' type='text/css' href='/assets/" . $path . "?v=";
+						$open .= "<link rel='stylesheet' type='text/css' href='//" . $asset_domain ."/assets/" . $path . "?v=";
 						$close .= "'>";
 						break;
 					}
 					case 'js': {
 						$path = "js/" . PRODUCTION . '/' . $path;
-						$open .= "<script type='text/javascript' src='/assets/" . $path . "?v=";
+						$open .= "<script type='text/javascript' src='//" . $asset_domain . "/assets/" . $path . "?v=";
 						$close .= "'></script>";
 						break;
 					}
@@ -49,7 +51,7 @@
 								$attribute_string .= " $attribute='$value'";
 							}
 						}
-						$open .= "<img src='/assets" . $path . "?v=";
+						$open .= "<img src='//" . $asset_domain . "/assets" . $path . "?v=";
 						$close .= "'" . $attribute_string . "/>";
 						break;
 					}

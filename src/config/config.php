@@ -7,5 +7,6 @@
 			'action' => 'getIndex'
 		),
 		'db_prefix' => 'lpress_',
-		'route_prefix' => '/' // must include trailing slash
+		'route_prefix' => '/', // must include trailing slash
+		'asset_domain' => '' // will use the same domain as the originating request by default
 	);
