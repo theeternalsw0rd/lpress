@@ -9,10 +9,12 @@
 		<title>{{ $title }}</title>
 
 		@section('head_scripts')
-			<!-- scripts that must go in head go here -->
+			{{ HTML::asset('js', 'vendor/modernizr/modernizr.js') }}
 		@show
 		@section('styles')
-			{{ HTML::asset('css', '/css/master.css') }}
+			{{ HTML::asset('css', 'vendor/h5bp/normalize.css') }}
+			{{ HTML::asset('css', 'vendor/h5bp/main.css') }}
+			{{ HTML::asset('css', 'master.css') }}
 		@show
 	</head>
 	<body>
@@ -25,7 +27,8 @@
 		</div>
 
 		@section('footer_scripts')
-			<!-- scripts that can go in the footer should go here -->
+			{{ HTML::asset('js', 'vendor/jquery/jquery.js') }}
 		@show
 	</body>
+	<!-- this file was built on top of the HTML5 Boilerplate <https://github.com/h5bp/html5-boilerplate> included index.html file -->
 </html>

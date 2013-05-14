@@ -42,6 +42,7 @@
 					. 'or you have inadvertantly removed the wildcard domain site';
 				die();
 			}
+			define('PRODUCTION', $site->in_production == 1 ? 'compressed' : 'uncompressed');
 			try {
 				$theme = Theme::find($site->theme_id);
 			} catch(\Exception $e) {

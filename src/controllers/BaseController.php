@@ -31,12 +31,14 @@
 				$close = '';
 				switch($type) {
 					case 'css': {
-						$open .= "<link rel='stylesheet' type='text/css' href='/assets". $path . "?v=";
+						$path = "css/" . PRODUCTION . '/' . $path;
+						$open .= "<link rel='stylesheet' type='text/css' href='/assets/" . $path . "?v=";
 						$close .= "'>";
 						break;
 					}
 					case 'js': {
-						$open .= "<script type='text/javascript' src='/assets" . $path . "?v=";
+						$path = "js/" . PRODUCTION . '/' . $path;
+						$open .= "<script type='text/javascript' src='/assets/" . $path . "?v=";
 						$close .= "'></script>";
 						break;
 					}
