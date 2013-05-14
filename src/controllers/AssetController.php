@@ -68,11 +68,13 @@
 				echo '<h1>File could not be found</h1>';
 				die();
 			}
+			if(extension_loaded('zlib')){ob_start('ob_gzhandler');}
 			header('Content-Type: ' . $mime);
 			if($download) {
 				header('Content-Disposition: attachment; filename="' . $file_name . '"');
 			}
 			readfile($path);
+			if(extension_loaded('zlib')){ob_end_flush();}
 			exit;
 		}
 
