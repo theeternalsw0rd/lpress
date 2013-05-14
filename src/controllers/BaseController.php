@@ -57,7 +57,12 @@
 						break;
 					}
 				}
-				return $open . filemtime(BaseController::getAssetPath() . '/' . $path) . $close;
+				$version = '';
+				$version = @filemtime(BaseController::getAssetPath() . '/' . $path);
+				if($version == '') {
+					$close = "' data-err='$path could not be found" . $close;
+				}
+				return $open . $version . $close;
 			});
 		}
 

@@ -32,9 +32,9 @@
 		}
 
 		private function getMime($path) {
-			try {
-				$mime = finfo_file(finfo_open(FILEINFO_MIME_TYPE), $path);
-			} catch(\Exception $e) {
+			$mime = '';
+			$mime = @finfo_file(finfo_open(FILEINFO_MIME_TYPE), $path);
+			if($mime == '') {
 				header('HTTP/1.0 404 Not Found');
 				echo '<h1>File could not be found</h1>';
 				die();
