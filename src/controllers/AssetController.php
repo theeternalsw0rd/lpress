@@ -48,11 +48,11 @@
 			// source files are detected as text/plain
 			switch($ext) {
 				case 'css': {
-					$mime = $mime == 'text/plain' ? 'text/css' : $mime;
+					$mime = strpos($mime, 'text') !== FALSE ? 'text/css' : $mime;
 					break;
 				}
 				case 'js': {
-					$mime = $mime == 'text/plain' ? 'text/javascript' : $mime;
+					$mime = strpos($mime, 'text') !== FALSE ? 'text/javascript' : $mime;
 					break;
 				}
 			}
