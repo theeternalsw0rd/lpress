@@ -2,4 +2,4 @@
 composer.phar
 composer.lock
 .DS_Store
-src/views/themes/default/coffee-compile/node_modules
+src/views/themes/default/watcher/node_modules

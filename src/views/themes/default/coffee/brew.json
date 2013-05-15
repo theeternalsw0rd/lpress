@@ -1,0 +1,11 @@
+{
+	"packages": {
+		"main": {
+			"type": "normal",
+			"requires": [
+				"main.coffee",
+				"secondary.coffee"
+			]
+		}
+	}
+}
