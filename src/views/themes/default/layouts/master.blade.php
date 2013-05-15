@@ -28,6 +28,7 @@
 
 		@section('footer_scripts')
 			{{ HTML::asset('js', 'vendor/jquery/jquery.js') }}
+			{{ HTML::asset('js', 'main.js') }}
 		@show
 	</body>
 	<!-- this file was built on top of the HTML5 Boilerplate <https://github.com/h5bp/html5-boilerplate> included index.html file -->

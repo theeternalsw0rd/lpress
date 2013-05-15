@@ -1,0 +1,16 @@
+{
+  "name": "coffee-compile",
+  "version": "0.1.0",
+  "author": "Micah Bucy <micah.bucy@eternalsword.com",
+  "description": "This will watch coffee files for changes and compile an uncompressed and a compressed version at the same time.",
+  "keywords": ["javascript", "coffeescript", "compiler", "compressor", "watcher"],
+  "dependencies": {
+    "coffee-script": "*",
+    "uglify-js": "*",
+    "watch": "*"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=0.8.0"
+  }
+}
