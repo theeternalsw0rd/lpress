@@ -2,7 +2,7 @@
 
 	use Illuminate\Routing\Controllers\Controller;
 	use Illuminate\Support\Facades\View;
-	use Illuminate\Support\Facades\Html;
+	use Illuminate\Support\Facades\HTML;
 	use Illuminate\Support\Facades\Config;
 
 	class IndexController extends BaseController {
