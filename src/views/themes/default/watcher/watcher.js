@@ -18,7 +18,8 @@ var compileCoffee = function(source, uncompressed_file, compressed_file, type) {
     var compiled, minified;
     switch(type) {
         case 'jquery.ready': {
-            compiled = 'jQuery(document).ready(function() {' + coffee.compile(source) + '});';
+            compiled = 'jQuery(document).ready(function( $ ) {' + coffee.compile(source) + '});';
+	    break;
         }
         default: {
             compiled = coffee.compile(source);

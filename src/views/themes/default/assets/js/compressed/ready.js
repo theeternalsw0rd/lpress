@@ -1,0 +1,1 @@
+jQuery(document).ready(function(o){!function(){console.log("hello jquery"),console.log(o("body"))}.call(this)});

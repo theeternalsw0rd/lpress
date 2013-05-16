@@ -6,6 +6,13 @@
 				"main.coffee",
 				"secondary.coffee"
 			]
+		},
+		"ready": {
+			"type": "jquery.ready",
+			"requires": [
+				"jquery1.coffee",
+				"jquery2.coffee"
+			]
 		}
 	}
 }
