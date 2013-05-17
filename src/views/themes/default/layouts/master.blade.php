@@ -14,7 +14,6 @@
 		@section('styles')
 			{{ HTML::asset('css', 'vendor/h5bp/normalize.css') }}
 			{{ HTML::asset('css', 'vendor/h5bp/main.css') }}
-			{{ HTML::asset('css', 'master.css') }}
 		@show
 	</head>
 	<body>
