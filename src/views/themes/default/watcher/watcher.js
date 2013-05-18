@@ -28,7 +28,7 @@ var mkdirp = function(real_path, mode, callback) {
                 try {
                     fs.mkdirSync(create_path, mode);
                 } catch(e) {
-                    callback(e);
+                    return callback(e);
                 }
                 console.log('mkdir: ' + create_path);
             }
@@ -37,12 +37,8 @@ var mkdirp = function(real_path, mode, callback) {
     });
 }
 
-var compileCoffee = function(source, uncompressed_file, compressed_file, type) {
-    if(source == '') {
-        console.log('Source was empty, aborting');
-        return;
-    }
-    var compiled, minified;
+var compiledCoffee = function(source, type) {
+    var compiled;
     switch(type) {
         case 'jquery.ready': {
             compiled = 'jQuery(document).ready(function( $ ) {' + coffee.compile(source) + '});';
@@ -52,14 +48,83 @@ var compileCoffee = function(source, uncompressed_file, compressed_file, type) {
             compiled = coffee.compile(source);
         }
     }
-    fs.writeFile(uncompressed_file, compiled, function(err) {
+    return compiled;
+}
+
+var uncompressedCoffee = function(source, filename, uncompressed_path) {
+    var uncompressed_file = path.resolve(uncompressed_path, filename),
+        uncompressed_file_label = uncompressed_file.split(root)[1];
+    fs.writeFile(uncompressed_file, source, function(err) {
         if(err) throw err;
-        console.log('coffee compiled to ' + uncompressed_file)
+        console.log('coffee compiled to ' + uncompressed_file_label);
     });
-    minified = uglifyjs.minify(compiled, {fromString: true});
+}
+
+var compressedCoffee = function(source, filename, compressed_path) {
+    var compressed_file = path.resolve(compressed_path, filename),
+        minified = uglifyjs.minify(source, {fromString: true}),
+        compressed_file_label = compressed_file.split(root)[1];
     fs.writeFile(compressed_file, minified.code, function(err) {
         if(err) throw err;
-        console.log('coffee minified to ' + compressed_file);
+        console.log('coffee minified to ' + compressed_file_label);
+    });
+}
+
+var stirCoffee = function(scripts, callback) {
+    process.nextTick(function() {
+        var source = '';
+        for(var i=0, script_count=scripts.length; i<script_count; i++) {
+            try {
+                source += fs.readFileSync(path.resolve(coffee_src, scripts[i]), 'utf8') + end_of_line;
+            } catch(e) {
+                return callback(e, null);
+            }
+        }
+        callback(null, source);
+    });
+}
+
+var compileCoffee = function(pack_name) {
+    var segments, basename, relative_path = '', filename, pack,
+        scripts, uncompressed_path, compressed_path;
+    segments = pack_name.split('/');
+    for(var i=0, segment_max=segments.length - 1;i<=segment_max;i++) {
+        if(i == 0) relative_path += segments[i];
+        if(i > 0 && i < segment_max) relative_path += path.sep + segments[i];
+        if(i == segment_max) basename = segments[i];
+    }
+    filename = basename + '.js';
+    console.log('brewing coffee package ' + pack_name);
+    console.log('reading brew configuration...');
+    fs.readFile(path.resolve(coffee_src, 'brew.json'), 'utf8', function(err, data) {
+        if(err) return console.log('Could not read brew.json file from coffee directory. Aborting compilation.');
+        brew = JSON.parse(data);
+        pack = brew.packages[pack_name];
+        if(pack === undefined) {
+            console.log('Could not find package ' + pack_name + ' in brew.json. Aborting compilation.');
+            return;
+        }
+        stirCoffee(pack.requires, function(err, data) {
+            if(err) return console.log(err);
+            uncompressed_path = path.resolve(js_uncompressed, relative_path);
+            compressed_path = path.resolve(js_compressed, relative_path);
+            mkdirp(uncompressed_path, 0750, function(err) {
+                if(err) throw err;
+                uncompressedCoffee(
+                    compiledCoffee(data, pack.type),
+                    filename,
+                    uncompressed_path
+                );
+            });
+            mkdirp(compressed_path, 0750, function(err) {
+                if(err) throw err;
+                compressedCoffee(
+                    compiledCoffee(data, pack.type),
+                    filename,
+                    compressed_path
+                );
+            });
+        });
     });
 }
 
@@ -195,48 +260,13 @@ watch.createMonitor(coffee_src, function(monitor) {
                 return console.log(err);
             }
             lines = data.split("\n");
-            pack = lines[0].match(/package\:([A-z\d\-\_\.]*)/) || [];
+            pack = lines[0].match(/package\:([A-z\d\-\_\.\/]*)/) || [];
             if(pack.length > 0) {
-                basename = pack[1];
-                filename = basename + '.js';
-                console.log('compiling package ' + basename);
-                console.log('reading brew configuration...');
-                try {
-                    brew = fs.readFileSync(path.resolve(coffee_src, 'brew.json'), 'utf8');
-                } catch(e) {
-                    console.log('Could not read brew.json file from coffee directory. Aborting compilation.');
-                    return;
-                }
-                brew = JSON.parse(brew);
-                brew = brew.packages[basename];
-                if(brew === undefined) {
-                    console.log('Could not find package ' + basename + ' in brew.json. Aborting compilation.');
-                    return;
-                }
-                scripts = brew.requires;
-                source = '';
-                for(i=0, script_count=scripts.length; i<script_count; i++) {
-                    try {
-                        source += fs.readFileSync(path.resolve(coffee_src, scripts[i]), 'utf8') + end_of_line;
-                    } catch(e) {
-                        console.log('Could not find required file ' + scripts[i] + ' so aborting compilation.');
-                        return;
-                    }
-                }
-                compileCoffee(
-                    source,
-                    path.resolve(js_uncompressed, filename),
-                    path.resolve(js_compressed, filename),
-                    brew.type
-                );
+                compileCoffee(pack[1]);
                 return;
             }
-            compileCoffee(
-                data,
-                path.resolve(js_uncompressed, filename),
-                path.resolve(js_compressed, filename),
-                'normal'
-            );
+            console.log('The following coffeescript is not set up for packaging: ');
+            console.log(f);
         });
     });
 });

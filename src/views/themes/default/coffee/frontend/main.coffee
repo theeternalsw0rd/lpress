@@ -1,2 +1,2 @@
-# package:main
+# package:frontend/main
 console.log "hello world"
