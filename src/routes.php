@@ -12,6 +12,7 @@
 	
 	$route_prefix = Config::get('l-press::route_prefix');
 	$route_prefix = $route_prefix == '/' ? '' : $route_prefix;
+	$admin_route = Config::get('l-press::admin_route');
 	Route::filter(
 		'theme',
 		function() {
@@ -94,7 +95,7 @@
 	)->where('path', '(.*)');
 
 	Route::get(
-		$route_prefix . 'admin',
+		$route_prefix . $admin_route,
 		array(
 			'before' => 'theme|login',
 			'as' => 'lpress-admin',
