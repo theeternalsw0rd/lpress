@@ -1,3 +1,3 @@
-[submodule "src/views/themes/default/assets/fonts/raleway"]
-	path = src/views/themes/default/assets/fonts/raleway
-	url = git://github.com/eternalsword/raleway.git
+[submodule "src/views/themes/default/assets/fonts/junction"]
+	path = src/views/themes/default/assets/fonts/junction
+	url = git://github.com/eternalsword/junction.git

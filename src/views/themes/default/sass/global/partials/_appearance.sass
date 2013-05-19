@@ -1,12 +1,18 @@
+@mixin background-opacity($color, $opacity: 0.6)
+  background: $color /* The Fallback */
+  background: rgba($color, $opacity)
 
 body
   background: url(#{$base_path}/images/backgrounds/body.png?v=1)
   color: $normal_text
-  font-family: $font_family 
 
 a
   color: $normal_link
+  &:hover
+    text-decoration: none
 
-a:hover
-  text-decoration: none
+h1
+  color: $h1_color
 
+#page
+  @include background-opacity($page_background)

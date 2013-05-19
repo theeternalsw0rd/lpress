@@ -1,9 +1,33 @@
-@font-face { 
-  font-family: 'Raleway';
-  src: url('#{$base_path}/fonts/raleway/webfonts/raleway_thin-webfont.eot'); // IE9 Compat Modes
-  src: url('#{$base_path}/fonts/raleway/webfonts/raleway_thin-webfont.eot?#iefix') format('embedded-opentype'), // IE6-IE8
-       url('#{$base_path}/fonts/raleway/webfonts/raleway_thin-webfont.woff') format('woff'), // Modern Browsers
-       url('#{$base_path}/fonts/raleway/webfonts/raleway_thin-webfont.ttf')  format('truetype'), // Safari, Android, iOS
-       url('#{$base_path}/fonts/raleway/webfonts/raleway_thin-webfont.svg#svgFontName') format('svg'); // Legacy iOS
+/* Regular */
+@font-face {
+    font-family: 'Junction';
+    src: url('#{$base_path}/fonts/junction/webfonts/Junction-webfont.eot');
+    src: url('#{$base_path}/fonts/junction/webfonts/Junction-webfont.eot?#iefix') format('embedded-opentype'),
+         url('#{$base_path}/fonts/junction/webfonts/Junction-webfont.woff') format('woff'),
+         url('#{$base_path}/fonts/junction/webfonts/Junction-webfont.ttf') format('truetype'),
+         url('#{$base_path}/fonts/junction/webfonts/Junction-webfont.svg#junction') format('svg');
 }
-$font_family: 'Raleway', Sans-Serif;
+
+$font_family: 'Junction', Sans-Serif;
+
+body {
+	font-size: 14px;
+	font-family: $font_family;
+}
+h1 {
+	font-size: 1.5em;
+}
+@media 
+(-webkit-min-device-pixel-ratio: 1.5), 
+(min-resolution: 160dpi) {
+	body {
+		font-size: 16px;
+	}
+}
+@media only screen 
+and (min-device-width : 320px) 
+and (max-device-width : 480px) {
+	body {
+		font-size: 10px;
+	}
+}

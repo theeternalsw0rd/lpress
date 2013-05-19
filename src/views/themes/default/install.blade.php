@@ -3,7 +3,8 @@
 	@parent
 @stop
 @section('content')
-	<h1>Welcome to the Laravel Installer</h1>
+	<h1>Welcome to the LPress Installer</h1>
+	<p>Some regular text</p>
 @stop
 @section('footer_scripts')
 	@parent
