@@ -19,8 +19,12 @@
 			$view_prefix = 'l-press::themes.' . THEME;
 			$first_user = User::find(1);
 			if($first_user->username == 'lpress') {
-				echo 'We will write the installer here';
-				die();
+				return View::make($view_prefix . '.install',
+					array(
+						'view_prefix' => $view_prefix,
+						'title' => 'LPress Installer'
+					)
+				);
 			}
 			$user = Auth::user();
 			if($user) {
