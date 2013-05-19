@@ -6,8 +6,8 @@ var watch = require('watch'),
     find = require('findit').find,
     exec_real = require('child_process').exec,
     end_of_line = require('os').EOL,
-    root = path.dirname(__dirname);
-var coffee_src = path.resolve(root, 'coffee'),
+    root = path.dirname(__dirname),
+    coffee_src = path.resolve(root, 'coffee'),
     js_uncompressed = path.resolve(root, 'assets/js/uncompressed'),
     js_compressed = path.resolve(root, 'assets/js/compressed'),
     sass_src = path.resolve(root, 'sass'),
@@ -210,7 +210,8 @@ var processSass = function(file, partial) {
 
 watch.createMonitor(sass_src, function(monitor) {
     monitor.on("changed", function(f, curr, prev) {
-        var extension, filename, lines, basename, relative_path;
+        var extension, filename, lines, basename, relative_path,
+            uncompressed_path, compressed_path;
         if(sass_last_save_file == f && sass_last_save_time == curr.mtime) return;
         sass_last_save_file = f;
         sass_last_save_time = curr.mtime;
@@ -232,18 +233,26 @@ watch.createMonitor(sass_src, function(monitor) {
         }
         filename = basename + '.css';
         relative_path = path.dirname(f).split(sass_src)[1].substr(1);
-        uncompressedSass(
-            f,
-            filename,
-            path.resolve(css_uncompressed, relative_path),
-            extension
-        );
-        compressedSass(
-            f,
-            filename,
-            path.resolve(css_compressed, relative_path),
-            extension
-        );
+        uncompressed_path = path.resolve(css_uncompressed, relative_path);
+        compressed_path = path.resolve(css_compressed, relative_path);
+        mkdirp(uncompressed_path, 0750, function(err) {
+            if(err) throw err;
+            uncompressedSass(
+                f,
+                filename,
+                uncompressed_path,
+                extension
+            );
+        });
+        mkdirp(compressed_path, 0750, function(err) {
+            if(err) throw err;
+            compressedSass(
+                f,
+                filename,
+                compressed_path,
+                extension
+            );
+        });
     });
 });
 
