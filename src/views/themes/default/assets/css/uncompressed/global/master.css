@@ -1,6 +1,12 @@
+@font-face {
+  font-family: 'Raleway';
+  src: url("../../../fonts/raleway/webfonts/raleway_thin-webfont.eot");
+  src: url("../../../fonts/raleway/webfonts/raleway_thin-webfont.eot?#iefix") format("embedded-opentype"), url("../../../fonts/raleway/webfonts/raleway_thin-webfont.woff") format("woff"), url("../../../fonts/raleway/webfonts/raleway_thin-webfont.ttf") format("truetype"), url("../../../fonts/raleway/webfonts/raleway_thin-webfont.svg#svgFontName") format("svg"); }
+
 body {
   background: url(../../../images/backgrounds/body.png?v=1);
-  color: #dddddd; }
+  color: #dddddd;
+  font-family: "Raleway", Sans-Serif; }
 
 a {
   color: white; }
@@ -9,4 +15,9 @@ a:hover {
   text-decoration: none; }
 
 body {
-  min-height: 100%; }
+  min-height: 100%;
+  font-size: 14px; }
+
+#page {
+  width: 100%;
+  padding: 2em; }
