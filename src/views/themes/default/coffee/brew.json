@@ -1,17 +1,8 @@
 {
 	"packages": {
-		"frontend/main": {
+		"global/master": {
 			"type": "normal",
 			"requires": [
-				"frontend/main.coffee",
-				"frontend/secondary.coffee"
-			]
-		},
-		"frontend/ready/test": {
-			"type": "jquery.ready",
-			"requires": [
-				"frontend/ready/jquery1.coffee",
-				"frontend/ready/jquery2.coffee"
 			]
 		}
 	}
