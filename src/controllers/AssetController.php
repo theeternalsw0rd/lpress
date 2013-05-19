@@ -11,6 +11,9 @@
 			'pdf',
 			'css',
 			'javascript',
+			'font-woff', // woff webfont
+			'vnd.ms-fontobject', // eot webfont
+			'x-font-ttf', // ttf webfont
 			'plain'
 		);
 
@@ -31,9 +34,25 @@
 			return $path;
 		}
 
+		private function verifyWoff($path) {
+			$file = fopen($path, 'rb');
+			if($file === false) return '';
+			$signature = fread($file, 4);
+			fclose($file);
+			if(strtolower($signature) == 'woff')
+				return 'application/font-woff';
+			header('HTTP/1.0 403 Forbidden');
+			echo '<h1>Access Denied</h1>';
+			die();
+		}
+
 		private function getMime($path) {
+			$segments = explode('.', $path);
+			$extension = $segments[count($segments) - 1];
 			$mime = '';
-			$mime = @finfo_file(finfo_open(FILEINFO_MIME_TYPE), $path);
+			$mime = $extension == 'woff' ? 
+				$this->verifyWoff($path) :
+				@finfo_file(finfo_open(FILEINFO_MIME_TYPE), $path);
 			if($mime == '') {
 				header('HTTP/1.0 404 Not Found');
 				echo '<h1>File could not be found</h1>';
@@ -64,8 +83,8 @@
 				}
 			}
 			if(!$allowed) {
-				header('HTTP/1.0 404 Not Found');
-				echo '<h1>File could not be found</h1>';
+				header('HTTP/1.0 403 Forbidden');
+				echo '<h1>Mimetype ' . $mime . ' is forbidden.</h1>';
 				die();
 			}
 			if(extension_loaded('zlib')){ob_start('ob_gzhandler');}
