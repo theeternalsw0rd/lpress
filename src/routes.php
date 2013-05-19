@@ -8,6 +8,7 @@
 	use Illuminate\Support\Facades\Input;
 	use Illuminate\Support\Facades\Request;
 	use Illuminate\Support\Facades\Session;
+	use Illuminate\Support\Facades\URL;
 	
 	$route_prefix = Config::get('l-press::route_prefix');
 	$route_prefix = $route_prefix == '/' ? '' : $route_prefix;
@@ -66,7 +67,7 @@
 			$user = Auth::user();
 			if(is_null($user)) {
 				Session::set('redirect', URL::full());
-				return Redirect::to('lpress-login');
+				return Redirect::route('lpress-login');
 			}
 		}
 	);
