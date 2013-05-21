@@ -8,6 +8,9 @@
 		),
 		'db_prefix' => 'lpress_',
 		'admin_route' => 'admin',
+		'admin_require_ssl' => TRUE,
+		'login_require_ssl' => TRUE,
+		'require_ssl' => FALSE,
 		'route_prefix' => '/', // must include trailing slash
 		'asset_domain' => '' // will use the same domain as the originating request by default
 	);

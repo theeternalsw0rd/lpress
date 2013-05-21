@@ -63,8 +63,18 @@
 	);
 
 	Route::filter(
-		'login',
+		'general',
 		function() {
+			if(Config::get('l-press::require_ssl') && !Request::secure())
+				return Redirect::secure(Request::getRequestUri());
+		}
+	);
+
+	Route::filter(
+		'admin',
+		function() {
+			if(Config::get('l-press::admin_require_ssl') && !Request::secure())
+				return Redirect::secure(Request::getRequestUri());
 			$user = Auth::user();
 			if(is_null($user)) {
 				Session::set('redirect', URL::full());
@@ -73,10 +83,18 @@
 		}
 	);
 
+	Route::filter(
+		'login',
+		function() {
+			if(Config::get('l-press::login_require_ssl') && !Request::secure())
+				return Redirect::secure(Request::getRequestUri());
+		}
+	);
+
 	Route::get(
 		empty($route_prefix) ? '/' : $route_prefix,
 		array(
-			'before' => 'theme',
+			'before' => 'theme|general',
 			'as' => 'lpress-index',
 			function() {
 				$route = Config::get('l-press::route_index');
@@ -97,7 +115,7 @@
 	Route::get(
 		$route_prefix . $admin_route,
 		array(
-			'before' => 'theme|login',
+			'before' => 'theme|admin',
 			'as' => 'lpress-admin',
 			function() {
 				echo "Hello username";
@@ -109,7 +127,7 @@
 	Route::get(
 		$route_prefix . 'login',
 		array(
-			'before' => 'theme',
+			'before' => 'theme|login',
 			'uses' => 'EternalSword\LPress\AuthenticationController@getLogin',
 			'as' => 'lpress-login'
 		)
@@ -118,7 +136,7 @@
 	Route::get(
 		$route_prefix . 'logout',
 		array(
-			'before' => 'theme',
+			'before' => 'theme|login',
 			'uses' => 'EternalSword\LPress\AuthenticationController@getLogout',
 			'as' => 'lpress-logout'
 		)
@@ -127,7 +145,7 @@
 	Route::get(
 		$route_prefix . 'logout/logged',
 		array(
-			'before' => 'theme',
+			'before' => 'theme|login',
 			'as' => 'lpress-logout-logged',
 			'uses' => 'EternalSword\LPress\AuthenticationController@getLogoutLogged'
 		)
