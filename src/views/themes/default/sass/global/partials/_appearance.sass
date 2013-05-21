@@ -7,7 +7,7 @@ body
   color: $normal_text
 
 a
-  color: $normal_link
+  color: $link_color
   &:hover
     text-decoration: none
 
@@ -16,3 +16,6 @@ h1
 
 #page
   @include background-opacity($page_background)
+
+#content
+  @include background-opacity($content_background)

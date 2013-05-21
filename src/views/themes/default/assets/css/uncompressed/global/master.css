@@ -1,45 +1,70 @@
-/* Regular */
 @font-face {
-  font-family: 'Junction';
-  src: url("../../../fonts/junction/webfonts/Junction-webfont.eot");
-  src: url("../../../fonts/junction/webfonts/Junction-webfont.eot?#iefix") format("embedded-opentype"), url("../../../fonts/junction/webfonts/Junction-webfont.woff") format("woff"), url("../../../fonts/junction/webfonts/Junction-webfont.ttf") format("truetype"), url("../../../fonts/junction/webfonts/Junction-webfont.svg#junction") format("svg"); }
+  font-family: 'Fanwood';
+  src: url("../../../fonts/fanwood/webfonts/fanwood_text-webfont.eot");
+  src: url("../../../fonts/fanwood/webfonts/fanwood_text-webfont.eot?#iefix") format("embedded-opentype"), url("../../../fonts/fanwood/webfonts/fanwood_text-webfont.woff") format("woff"), url("../../../fonts/fanwood/webfonts/fanwood_text-webfont.ttf") format("truetype"), url("../../../fonts/fanwood/webfonts/fanwood_text-webfont.svg#fanwood") format("svg");
+  font-weight: normal;
+  font-style: normal; }
+
+@font-face {
+  font-family: 'Fanwood';
+  src: url("../../../fonts/fanwood/webfonts/fanwood_text_italic-webfont.eot");
+  src: url("../../../fonts/fanwood/webfonts/fanwood_text_italic-webfont.eot?#iefix") format("embedded-opentype"), url("../../../fonts/fanwood/webfonts/fanwood_text_italic-webfont.woff") format("woff"), url("../../../fonts/fanwood/webfonts/fanwood_text_italic-webfont.ttf") format("truetype"), url("../../../fonts/fanwood/webfonts/fanwood_text_italic-webfont.svg#fanwood") format("svg");
+  font-weight: normal;
+  font-style: italic; }
 
 body {
-  font-size: 14px;
-  font-family: "Junction", Sans-Serif; }
+  font-size: 18px;
+  font-family: "Fanwood", Serif; }
 
 h1 {
-  font-size: 1.5em; }
+  font-size: 1.7em;
+  font-family: "Fanwood", Serif; }
 
 @media (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 160dpi) {
   body {
-    font-size: 16px; } }
+    font-size: 18px; } }
 @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
   body {
-    font-size: 10px; } }
+    font-size: 12px; } }
 body {
   background: url(../../../images/backgrounds/body.png?v=1);
-  color: #222222; }
+  color: #381a1c; }
 
 a {
-  color: #373e4b; }
+  color: #5e7b96; }
   a:hover {
     text-decoration: none; }
 
 h1 {
-  color: #335e96; }
+  color: #381a1c; }
 
 #page {
-  background: #eeeeee;
-  background: rgba(238, 238, 238, 0.6); }
+  background: #e5d9cd;
+  background: rgba(229, 217, 205, 0.6); }
+
+#content {
+  background: #e1cdb5;
+  background: rgba(225, 205, 181, 0.6); }
 
 html, body {
   height: 100%; }
 
 #page {
   width: 100%;
-  height: 100%; }
+  height: 100%;
+  margin: 0; }
 
 #content {
   width: 96%;
-  padding: 1em 2%; }
+  padding: 0 2%;
+  max-width: 960px;
+  margin: 0 auto;
+  min-height: 100%; }
+
+h1 {
+  margin: 0;
+  padding: 0.6em 0 0 0; }
+
+p {
+  margin: 0;
+  padding: 0.6em 0 0 0; }
