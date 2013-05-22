@@ -40,10 +40,10 @@ h1 {
 
 #page {
   background: url(../../../images/backgrounds/page.png?v=1);
-  border-width: 15px 15px 15px 15px;
-  -moz-border-image: url("../../../images/borders/page.png?v=1") 15 15 15 15 repeat;
-  -webkit-border-image: url("../../../images/borders/page.png?v=1") 15 15 15 15 repeat;
-  border-image: url("../../../images/borders/page.png?v=1") 15 15 15 15 repeat;
+  border-width: 0 15px 0 15px;
+  -moz-border-image: url("../../../images/borders/page.png?v=1") 0 15 0 15 repeat;
+  -webkit-border-image: url("../../../images/borders/page.png?v=1") 0 15 0 15 repeat;
+  border-image: url("../../../images/borders/page.png?v=1") 0 15 0 15 repeat;
   background-clip: padding-box; }
 
 html, body {
@@ -54,7 +54,7 @@ html, body {
   padding: 0 2%;
   max-width: 960px;
   margin: 0 auto;
-  min-height: 94%; }
+  min-height: 100%; }
 
 h1 {
   margin: 0;
