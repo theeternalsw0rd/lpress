@@ -176,6 +176,13 @@
 		'prefix' => $route_prefix . 'admin',
 		'before' => 'theme'
 	), function() {
+		Route::get(
+			'install',
+			array(
+				'as' => 'lpress-installer',
+				'uses' => 'EternalSword\LPress\InstallController@getInstaller'
+			)
+		);
 		Route::post(
 			'update-user',
 			array(

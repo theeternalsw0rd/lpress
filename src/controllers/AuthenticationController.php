@@ -71,14 +71,7 @@
 				$remember
 			)) {
 				if(Input::get('username') == 'lpress') {
-					$view_prefix = 'l-press::themes.' . THEME;
-					parent::setMacros();
-					return View::make($view_prefix . '.installer.install',
-						array(
-							'view_prefix' => $view_prefix,
-							'title' => 'Update root user'
-						)
-					);
+					return Redirect::route('lpress-installer');
 				}
 				$route_prefix = Config::get('l-press::route_prefix');
 				$redirect = Session::get('redirect', $route_prefix);
