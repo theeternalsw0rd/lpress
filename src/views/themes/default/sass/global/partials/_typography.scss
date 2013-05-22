@@ -30,6 +30,9 @@ h1 {
 	font-size: 1.7em;
 	font-family: $header_family;
 }
+input, textarea {
+	font-size: 0.9em !important;
+}
 @media 
 (-webkit-min-device-pixel-ratio: 1.5), 
 (min-resolution: 160dpi) {

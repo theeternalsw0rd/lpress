@@ -20,6 +20,9 @@ h1 {
   font-size: 1.7em;
   font-family: "Fanwood", Serif; }
 
+input, textarea {
+  font-size: 0.9em !important; }
+
 @media (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 160dpi) {
   body {
     font-size: 18px; } }
@@ -27,7 +30,7 @@ h1 {
   body {
     font-size: 12px; } }
 body {
-  color: #381a1c;
+  color: #6d5226;
   background: url(../../../images/backgrounds/body.png?v=1); }
 
 a {
@@ -46,6 +49,36 @@ h1 {
   border-image: url("../../../images/borders/page.png?v=1") 0 15 0 15 repeat;
   background-clip: padding-box; }
 
+.error {
+  color: #7f151c;
+  background: #ce8a8e;
+  background: rgba(206, 138, 142, 0.3);
+  border: 1px solid #7f151c; }
+
+input, textarea {
+  background: white;
+  background: rgba(255, 255, 255, 0.3);
+  border: 1px solid #6d5226;
+  color: #6d5226;
+  outline: none; }
+
+.submit input, .button input {
+  background: white;
+  background: rgba(255, 255, 255, 0.3);
+  border: 3px outset #deccb7;
+  color: #6d5226;
+  outline: none; }
+
+input:focus, textarea:focus {
+  background: white;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid #5e7b96; }
+
+.submit input:active, .button input:active {
+  background: white;
+  background: rgba(255, 255, 255, 0.4);
+  border: 3px inset #deccb7; }
+
 html, body {
   height: 100%; }
 
@@ -56,6 +89,11 @@ html, body {
   margin: 0 auto;
   min-height: 100%; }
 
+.error {
+  padding: 0 0.5em 1em 0.5em;
+  position: relative;
+  top: 0.2em; }
+
 h1 {
   margin: 0;
   padding: 0.6em 0 0 0; }
@@ -63,3 +101,18 @@ h1 {
 p {
   margin: 0;
   padding: 0.6em 0 0 0; }
+
+label {
+  margin: 0.5em 0 0 0; }
+
+.text input {
+  display: inline-block;
+  padding: 0.2em;
+  width: 25%; }
+
+.submit input, .button input {
+  margin: 0.5em 0 0 0;
+  padding: 0.2em; }
+
+.submit input:active, .button input:active {
+  padding: 0.3em 0.2em 0.1em 0.2em; }
