@@ -28,24 +28,24 @@ h1
 .error
   color: $error_text
   @include background_opacity($error_background, 0.3)
-  border: 1px solid $error_text
+  border: 1px solid $error_border
 
 input, textarea
-  @include background_opacity($form_text_background, 0.3)
+  @include background_opacity($form_input_background, 0.3)
   border: 1px solid $normal_text
   color: $normal_text
   outline: none
 
 .submit input, .button input
-  @include background_opacity($form_text_background, 0.3)
-  border: 3px outset $form_borders
+  @include background_opacity($form_input_background, 0.3)
+  border: 2px outset $form_button_border
   color: $normal_text
   outline: none
 
 input:focus, textarea:focus
-  @include background_opacity($form_text_background)
-  border: 1px solid $link_color
+  @include background_opacity($form_input_background)
+  border: 1px solid $form_focus_border
 
 .submit input:active, .button input:active
-  @include background_opacity($form_text_background, 0.4)
-  border: 3px inset $form_borders
+  @include background_opacity($form_input_background, 0.4)
+  border: 2px inset $form_button_border

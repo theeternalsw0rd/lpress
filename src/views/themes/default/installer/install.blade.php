@@ -7,8 +7,16 @@
 	<div class='form'>
 		{{ Form::open(array('route' => 'lpress-user-update')) }}
 		<div class='text'>
-			{{ Form::label('Username') }}<br />
+			{{ Form::label('Username:') }}
 			{{ Form::text('username') }}
+		</div>
+		<div class='text'>
+			{{ Form::label('Password:') }}
+			{{ Form::password('password') }}
+		</div>
+		<div class='text'>
+			{{ Form::label('Verify Password:') }}
+			{{ Form::password('verify_password') }}
 		</div>
 		<div class='submit'>
 			{{ Form::submit('Submit') }}
