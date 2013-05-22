@@ -24,9 +24,7 @@
 		<![endif]-->
 
 		<div id='page'>
-			<div id='content'>
 				@yield('content')
-			</div>
 		</div>
 
 		@section('footer_scripts')

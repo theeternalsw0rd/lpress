@@ -2,9 +2,15 @@
   background: $color /* The Fallback */
   background: rgba($color, $opacity)
 
+@mixin border_image($url, $top, $right, $bottom, $left)
+  -moz-border-image: url($url) $top $right $bottom $left repeat
+  -webkit-border-image: url($url) $top $right $bottom $left repeat
+  border-image: url($url) $top $right $bottom $left repeat
+  background-clip: padding-box
+
 body
-  background: url(#{$base_path}/images/backgrounds/body.png?v=1)
   color: $normal_text
+  background: url(#{$base_path}/images/backgrounds/body.png?v=1)
 
 a
   color: $link_color
@@ -15,7 +21,6 @@ h1
   color: $h1_color
 
 #page
-  @include background-opacity($page_background)
-
-#content
-  @include background-opacity($content_background)
+  background: url(#{$base_path}/images/backgrounds/page.png?v=1)
+  border-width: 15px 15px 15px 15px
+  @include border_image("#{$base_path}/images/borders/page.png?v=1", 15, 15, 15, 15)

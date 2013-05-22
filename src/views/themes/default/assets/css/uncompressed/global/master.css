@@ -27,8 +27,8 @@ h1 {
   body {
     font-size: 12px; } }
 body {
-  background: url(../../../images/backgrounds/body.png?v=1);
-  color: #381a1c; }
+  color: #381a1c;
+  background: url(../../../images/backgrounds/body.png?v=1); }
 
 a {
   color: #5e7b96; }
@@ -39,27 +39,22 @@ h1 {
   color: #381a1c; }
 
 #page {
-  background: #e5d9cd;
-  background: rgba(229, 217, 205, 0.6); }
-
-#content {
-  background: #e1cdb5;
-  background: rgba(225, 205, 181, 0.6); }
+  background: url(../../../images/backgrounds/page.png?v=1);
+  border-width: 15px 15px 15px 15px;
+  -moz-border-image: url("../../../images/borders/page.png?v=1") 15 15 15 15 repeat;
+  -webkit-border-image: url("../../../images/borders/page.png?v=1") 15 15 15 15 repeat;
+  border-image: url("../../../images/borders/page.png?v=1") 15 15 15 15 repeat;
+  background-clip: padding-box; }
 
 html, body {
   height: 100%; }
 
 #page {
-  width: 100%;
-  height: 100%;
-  margin: 0; }
-
-#content {
-  width: 96%;
+  width: 82%;
   padding: 0 2%;
   max-width: 960px;
   margin: 0 auto;
-  min-height: 100%; }
+  min-height: 94%; }
 
 h1 {
   margin: 0;
