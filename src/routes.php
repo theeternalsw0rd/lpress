@@ -166,27 +166,25 @@
 	Route::post(
 		$route_prefix . 'login',
 		array(
-			'before' => 'csrf',
-			function() {
-				$remember = Input::get('remember');
-				if(Auth::attempt(
-					array(
-						'username' => Input::get('username'),
-						'password' => Input::get('password')
-					),
-					$remember
-				)) {
-					$route_prefix = Config::get('l-press::route_prefix');
-					$redirect = Session::get('redirect', $route_prefix);
-					Session::forget('redirect');
-					return Redirect::to($redirect);
-				}
-				Session::put('bad_login', true);
-				return Redirect::route('lpress-login');
-			}
+			'before' => 'csrf|theme',
+			'uses' => 'EternalSword\LPress\AuthenticationController@verifyLogin'
+
 		)
 	);
 
+	Route::group(array(
+		'prefix' => $route_prefix . 'admin',
+		'before' => 'theme'
+	), function() {
+		Route::post(
+			'update-user',
+			array(
+				'as' => 'lpress-user-update',
+				'before' => 'csrf',
+				'uses' => 'EternalSword\LPress\UserController@updateUser'
+			)
+		);
+	});
 
 
 	/*Route::get('{hierarchy}/{post}', array('as' => 'posts', function($hierarchy, $post) {
