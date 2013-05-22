@@ -55,6 +55,12 @@ h1 {
   background: rgba(206, 138, 142, 0.3);
   border: 1px solid #7f151c; }
 
+.message {
+  color: #938833;
+  background: #fce63c;
+  background: rgba(252, 230, 60, 0.3);
+  border: 1px solid #938833; }
+
 input, textarea {
   background: white;
   background: rgba(255, 255, 255, 0.3);
@@ -89,7 +95,7 @@ html, body {
   margin: 0 auto;
   min-height: 100%; }
 
-.error {
+.error, .message {
   padding: 0 0.5em 1em 0.5em;
   position: relative;
   top: 0.2em; }

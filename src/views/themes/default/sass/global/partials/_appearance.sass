@@ -30,6 +30,11 @@ h1
   @include background_opacity($error_background, 0.3)
   border: 1px solid $error_border
 
+.message
+  color: $message_text
+  @include background_opacity($message_background, 0.3)
+  border: 1px solid $message_border
+
 input, textarea
   @include background_opacity($form_input_background, 0.3)
   border: 1px solid $normal_text
