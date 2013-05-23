@@ -39,19 +39,24 @@ var mkdirp = function(real_path, mode, callback) {
 
 var compiledCoffee = function(source, type) {
     var compiled;
+    try {
+        compiled = coffee.compile(source);
+    } catch(e) {
+        console.log(source);
+        console.log(e);
+	return '';
+    }
     switch(type) {
         case 'jquery.ready': {
-            compiled = 'jQuery(document).ready(function( $ ) {' + coffee.compile(source) + '});';
+            compiled = 'jQuery(document).ready(function( $ ) {' + compiled + '});';
             break;
-        }
-        default: {
-            compiled = coffee.compile(source);
         }
     }
     return compiled;
 }
 
 var uncompressedCoffee = function(source, filename, uncompressed_path) {
+    if(source == '') return;
     var uncompressed_file = path.resolve(uncompressed_path, filename),
         uncompressed_file_label = uncompressed_file.split(root)[1];
     fs.writeFile(uncompressed_file, source, function(err) {
@@ -61,6 +66,7 @@ var uncompressedCoffee = function(source, filename, uncompressed_path) {
 }
 
 var compressedCoffee = function(source, filename, compressed_path) {
+    if(source == '') return;
     var compressed_file = path.resolve(compressed_path, filename),
         minified = uglifyjs.minify(source, {fromString: true}),
         compressed_file_label = compressed_file.split(root)[1];
@@ -75,6 +81,7 @@ var stirCoffee = function(scripts, callback) {
         var source = '';
         for(var i=0, script_count=scripts.length; i<script_count; i++) {
             try {
+                source += '# ' + scripts[i] + end_of_line;
                 source += fs.readFileSync(path.resolve(coffee_src, scripts[i]), 'utf8') + end_of_line;
             } catch(e) {
                 return callback(e, null);
@@ -217,6 +224,8 @@ watch.createMonitor(sass_src, function(monitor) {
         sass_last_save_time = curr.mtime;
         extension = path.extname(f);
         if(extension != '.sass' && extension != '.scss') return;
+        console.log("");
+        console.log("=== Process Sass ===");
         basename = path.basename(f, extension);
         if(basename.charAt(0) == '_') {
             finder = find(sass_src);
@@ -262,6 +271,8 @@ watch.createMonitor(coffee_src, function(monitor) {
             basename, brew, scripts, source;
         extension = path.extname(f);
         if(extension != '.coffee') return;
+        console.log("");
+        console.log("=== Process Coffee ===");
         filename = path.basename(f, extension) + '.js';
         fs.readFile(f, 'utf8', function (err, data) {
             if(err) {
