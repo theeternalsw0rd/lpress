@@ -47,7 +47,8 @@ h1 {
   -moz-border-image: url("../../../images/borders/page.png?v=1") 0 15 0 15 repeat;
   -webkit-border-image: url("../../../images/borders/page.png?v=1") 0 15 0 15 repeat;
   border-image: url("../../../images/borders/page.png?v=1") 0 15 0 15 repeat;
-  background-clip: padding-box; }
+  background-clip: padding-box;
+  border-style: solid; }
 
 .error {
   color: #7f151c;
@@ -64,26 +65,63 @@ h1 {
 input, textarea {
   background: white;
   background: rgba(255, 255, 255, 0.3);
-  border: 1px solid #6d5226;
-  color: #6d5226;
+  border: 1px solid #381a1c;
+  color: #381a1c;
   outline: none; }
+  input:focus, textarea:focus {
+    background: white;
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid #5e7b96; }
 
-.submit input, .button input {
+label.checkbox {
+  cursor: pointer;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none; }
+  label.checkbox:hover {
+    background: white;
+    background: rgba(255, 255, 255, 0.4); }
+  label.checkbox input.real-checkbox {
+    cursor: pointer;
+    opacity: 0; }
+    label.checkbox input.real-checkbox:focus + span.faux-checkbox {
+      border: 1px solid #5e7b96;
+      box-shadow: 0 0 5px #5e7b96;
+      background: white;
+      background: rgba(255, 255, 255, 0.6); }
+    label.checkbox input.real-checkbox:checked + span.faux-checkbox span.checkmark {
+      visibility: visible; }
+  label.checkbox span.faux-checkbox {
+    border: 1px solid #381a1c;
+    background: white;
+    background: rgba(255, 255, 255, 0.3);
+    color: #381a1c; }
+    label.checkbox span.faux-checkbox span.checkmark {
+      visibility: hidden; }
+
+label.file input.file {
+  visibility: hidden; }
+
+.no-js label.file input.file {
+  visibility: visible; }
+
+.submit input, .button input, .file input.faux-file {
   background: white;
   background: rgba(255, 255, 255, 0.3);
   border: 2px outset #deccb7;
-  color: #6d5226;
+  color: #381a1c;
   outline: none; }
-
-input:focus, textarea:focus {
-  background: white;
-  background: rgba(255, 255, 255, 0.6);
-  border: 1px solid #5e7b96; }
-
-.submit input:active, .button input:active {
-  background: white;
-  background: rgba(255, 255, 255, 0.4);
-  border: 2px inset #deccb7; }
+  .submit input:active, .button input:active, .file input.faux-file:active {
+    background: white;
+    background: rgba(255, 255, 255, 0.4);
+    border: 2px inset #deccb7; }
+  .submit input:focus, .button input:focus, .file input.faux-file:focus {
+    background: white;
+    background: rgba(255, 255, 255, 0.6);
+    border: 2px outset #5e7b96; }
 
 html, body {
   height: 100%; }
@@ -108,7 +146,10 @@ p {
   margin: 0;
   padding: 0.6em 0 0 0; }
 
-.text label {
+.form {
+  padding: 0 0 1em 0; }
+
+.text label, .file label {
   display: block;
   padding: 0.2em 0 0 0; }
 
@@ -118,9 +159,39 @@ p {
   margin: 0 0 0.5em 0;
   width: 25%; }
 
-.submit input, .button input {
-  margin: 0.5em 0 0 0;
-  padding: 0.2em; }
+label.checkbox {
+  display: inline-block;
+  position: relative;
+  left: -0.3em;
+  padding: 0.4em 0.3em 0.3em 1.6em; }
+  label.checkbox input.real-checkbox {
+    position: absolute;
+    top: 0.4em;
+    left: 0.3em; }
+  label.checkbox span.faux-checkbox {
+    display: table-cell;
+    width: 1em;
+    height: 1em;
+    text-align: center;
+    vertical-align: middle;
+    position: absolute;
+    top: 0.4em;
+    left: 0.3em; }
 
-.submit input:active, .button input:active {
-  padding: 0.3em 0.2em 0.1em 0.2em; }
+label.file {
+  display: inline-block; }
+
+.no-js label.file input.file {
+  margin: 1em 0 0 0; }
+
+.no-js label.file input.faux-file {
+  display: none; }
+
+.submit input, .button input, .file input.faux-file {
+  display: inline-block;
+  margin: 0.5em 0 0 0;
+  padding: 0.2em;
+  height: 2em;
+  overflow: hidden; }
+  .submit input:active, .button input:active, .file input.faux-file:active {
+    padding: 0.3em 0.2em 0.1em 0.2em; }

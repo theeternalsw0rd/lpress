@@ -21,7 +21,10 @@ p
   margin: 0
   padding: 0.6em 0 0 0
 
-.text label
+.form
+  padding: 0 0 1em 0
+
+.text label, .file label
   display: block
   padding: 0.2em 0 0 0
 
@@ -31,9 +34,39 @@ p
   margin: 0 0 0.5em 0
   width: 25%
 
-.submit input, .button input
+label.checkbox
+  display: inline-block
+  position: relative
+  left: -0.3em
+  padding: 0.4em 0.3em 0.3em 1.6em
+  input.real-checkbox
+    position: absolute
+    top: 0.4em
+    left: 0.3em
+  span.faux-checkbox
+    display: table-cell
+    width: 1em
+    height: 1em
+    text-align: center
+    vertical-align: middle
+    position: absolute
+    top: 0.4em
+    left: 0.3em
+
+label.file
+  display: inline-block
+
+.no-js label.file input.file
+  margin: 1em 0 0 0
+
+.no-js label.file input.faux-file
+  display: none
+
+.submit input, .button input, .file input.faux-file
+  display: inline-block
   margin: 0.5em 0 0 0
   padding: 0.2em
-
-.submit input:active, .button input:active
-  padding: 0.3em 0.2em 0.1em 0.2em
+  height: 2.0em
+  overflow: hidden
+  &:active
+    padding: 0.3em 0.2em 0.1em 0.2em

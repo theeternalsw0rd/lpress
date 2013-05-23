@@ -1,0 +1,1 @@
+jQuery(document).ready(function(n){!function(){n("form").on("click","input.faux-file",function(t){var i;return t.stopPropagation(),t.preventDefault(),i=n(this).parent().find("input.file").click()}),n("form").on("click","input.file",function(n){return n.stopPropagation()}),n("form").on("change","input.file",function(){return console.log(n(this).val())})}.call(this)});

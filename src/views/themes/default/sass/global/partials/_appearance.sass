@@ -7,9 +7,10 @@
   -webkit-border-image: url($url) $top $right $bottom $left repeat
   border-image: url($url) $top $right $bottom $left repeat
   background-clip: padding-box
+  border-style: solid /* for firefox */
 
 body
-  color: $normal_text
+  color: $text_color
   background: url(#{$base_path}/images/backgrounds/body.png?v=1)
 
 a
@@ -18,7 +19,7 @@ a
     text-decoration: none
 
 h1
-  color: $h1_color
+  color: $heading_color
 
 #page
   background: url(#{$base_path}/images/backgrounds/page.png?v=1)
@@ -37,20 +38,52 @@ h1
 
 input, textarea
   @include background_opacity($form_input_background, 0.3)
-  border: 1px solid $normal_text
-  color: $normal_text
+  border: 1px solid $form_input_border
+  color: $form_input_text
   outline: none
+  &:focus
+    @include background_opacity($form_input_background)
+    border: 1px solid $form_focus_border
 
-.submit input, .button input
+label.checkbox
+  cursor: pointer
+  -webkit-touch-callout: none
+  -webkit-user-select: none
+  -khtml-user-select: none
+  -moz-user-select: none
+  -ms-user-select: none
+  user-select: none
+  &:hover
+    @include background_opacity($checkbox_hover_background, 0.4)
+  input.real-checkbox
+    cursor: pointer
+    opacity: 0 /* visibility: hidden disables focusability */
+    &:focus + span.faux-checkbox
+      border: 1px solid $form_focus_border
+      box-shadow: 0 0 5px $form_focus_border
+      @include background_opacity($form_input_background)
+    &:checked + span.faux-checkbox span.checkmark
+      visibility: visible
+  span.faux-checkbox
+    border: 1px solid $form_input_border
+    @include background_opacity($form_input_background, 0.3)
+    color: $form_input_text
+    span.checkmark
+      visibility: hidden
+
+label.file input.file
+  visibility: hidden
+.no-js label.file input.file
+  visibility: visible
+
+.submit input, .button input, .file input.faux-file 
   @include background_opacity($form_input_background, 0.3)
   border: 2px outset $form_button_border
-  color: $normal_text
+  color: $form_input_text
   outline: none
-
-input:focus, textarea:focus
-  @include background_opacity($form_input_background)
-  border: 1px solid $form_focus_border
-
-.submit input:active, .button input:active
-  @include background_opacity($form_input_background, 0.4)
-  border: 2px inset $form_button_border
+  &:active
+    @include background_opacity($form_input_background, 0.4)
+    border: 2px inset $form_button_border
+  &:focus
+    @include background_opacity($form_input_background)
+    border: 2px outset $form_focus_border

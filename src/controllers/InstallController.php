@@ -19,7 +19,7 @@
 				return View::make($view_prefix . '.installer.install',
 					array(
 						'view_prefix' => $view_prefix,
-						'title' => 'Update root user'
+						'title' => 'Create User'
 					)
 				);
 			}

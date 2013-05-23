@@ -1,8 +1,9 @@
 {
 	"packages": {
-		"global/master": {
-			"type": "normal",
+		"global/ready": {
+			"type": "jquery.ready",
 			"requires": [
+				"global/forms.coffee"
 			]
 		}
 	}

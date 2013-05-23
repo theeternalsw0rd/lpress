@@ -3,6 +3,7 @@
 	use Illuminate\Routing\Controllers\Controller;
 	use Illuminate\Support\Facades\View;
 	use Illuminate\Support\Facades\HTML;
+	use Illuminate\Support\Facades\Form;
 	use Illuminate\Support\Facades\Config;
 	use Illuminate\Support\Facades\URL;
 
@@ -25,6 +26,15 @@
 				$text = is_null($text) ? $url : $text;
 				$title = $has_title ? $title : $text;
 				return "<a href='$url' title='$title'$attribute_string>$title</a>";
+			});
+			Form::macro('faux_checkbox', function($name, $label) {
+				return "
+					<label for='${name}' class='checkbox'>
+						<input id='${name}' name='${name}' class='real-checkbox' type='checkbox' />
+						<span class='faux-checkbox' data-for='${name}'><span class='checkmark'>&#x2713;</span></span>
+						<span class='checkbox-label' data-for='${name}'>${label}</span>
+					</label>
+				";
 			});
 			HTML::macro('asset', function($type, $path, $attributes = array()) {
 				$asset_domain = Config::get('l-press::asset_domain');
