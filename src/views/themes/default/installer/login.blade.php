@@ -12,7 +12,7 @@
 	<div class='form'>
 		{{ Form::open() }}
 		<div class='text'>
-			{{ Form::label('Application Key:') }}<br />
+			{{ Form::label('Application Key:') }}
 			{{ Form::password('password') }}
 		</div>
 		{{ Form::hidden('username', 'lpress') }}
