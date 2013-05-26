@@ -14,7 +14,8 @@
 
 body {
   font-size: 18px;
-  font-family: "Fanwood", Serif; }
+  font-family: "Fanwood", Serif;
+  font-weight: 600; }
 
 h1 {
   font-size: 1.7em;
@@ -43,6 +44,10 @@ h1 {
 
 #page {
   background: url(../../../images/backgrounds/page.png?v=1);
+  border-width: 0 1px 0 1px;
+  border-style: solid; }
+
+.borderimage #page {
   border-width: 0 15px 0 15px;
   -moz-border-image: url("../../../images/borders/page.png?v=1") 0 15 0 15 repeat;
   -webkit-border-image: url("../../../images/borders/page.png?v=1") 0 15 0 15 repeat;
@@ -182,7 +187,8 @@ label.file {
   display: inline-block; }
 
 .no-js label.file input.file {
-  margin: 1em 0 0 0; }
+  margin: 1em 0 0 0;
+  padding: 0.2em; }
 
 .no-js label.file input.faux-file {
   display: none; }
