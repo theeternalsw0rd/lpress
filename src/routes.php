@@ -13,6 +13,17 @@
 	$route_prefix = Config::get('l-press::route_prefix');
 	$route_prefix = $route_prefix == '/' ? '' : $route_prefix;
 	$admin_route = Config::get('l-press::admin_route');
+
+	function hasSNI() {
+		$user_agent = $_SERVER['HTTP_USER_AGENT'];
+		if(preg_match('/(Windows NT 5.1)|(Windows XP)/i', $user_agent)
+			&& preg_match('/MSIE/', $user_agent)
+		) {
+			return FALSE;
+		}
+		return TRUE;
+	}
+
 	Route::filter(
 		'theme',
 		function() {
@@ -65,20 +76,26 @@
 	Route::filter(
 		'general',
 		function() {
-			if(Config::get('l-press::require_ssl') && !Request::secure())
-				return Redirect::secure(Request::getRequestUri());
+			if(Config::get('l-press::require_ssl') && !Request::secure()) {
+				if(hasSNI())
+					return Redirect::secure(Request::getRequestUri());
+				return Redirect::route('lpress-sni');
+			}
 		}
 	);
 
 	Route::filter(
 		'admin',
 		function() {
-			if(Config::get('l-press::admin_require_ssl') && !Request::secure())
-				return Redirect::secure(Request::getRequestUri());
 			$user = Auth::user();
 			if(is_null($user)) {
 				Session::set('redirect', URL::full());
 				return Redirect::route('lpress-login');
+			}
+			if(Config::get('l-press::admin_require_ssl') && !Request::secure()) {
+				if(hasSNI())
+					return Redirect::secure(Request::getRequestUri());
+				return Redirect::route('lpress-sni');
 			}
 		}
 	);
@@ -86,8 +103,11 @@
 	Route::filter(
 		'login',
 		function() {
-			if(Config::get('l-press::login_require_ssl') && !Request::secure())
-				return Redirect::secure(Request::getRequestUri());
+			if(Config::get('l-press::login_require_ssl') && !Request::secure()) {
+				if(hasSNI())
+					return Redirect::secure(Request::getRequestUri());
+				return Redirect::route('lpress-sni');
+			}
 		}
 	);
 
@@ -99,6 +119,17 @@
 			function() {
 				$route = Config::get('l-press::route_index');
 				return App::make($route['controller'])->{$route['action']}();
+			}
+		)
+	);
+
+	Route::get(
+		$route_prefix . 'sni',
+		array(
+			'before' => 'theme',
+			'as' => 'lpress-sni',
+			function() {
+				return "Doesn't support SNI ssl";
 			}
 		)
 	);
