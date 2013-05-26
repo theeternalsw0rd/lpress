@@ -32,7 +32,7 @@
 					<label for='${name}' class='checkbox'>
 						<input id='${name}' name='${name}' class='real-checkbox' type='checkbox' />
 						<span class='faux-checkbox' data-for='${name}'><span class='checkmark'>&#x2713;</span></span>
-						<span class='checkbox-label' data-for='${name}'>${label}</span>
+						<span unselectable='on' class='checkbox-label' data-for='${name}'>${label}</span>
 					</label>
 				";
 			});

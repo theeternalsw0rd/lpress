@@ -19,3 +19,13 @@ $('form').on(
   (event) ->
     console.log($(this).val())
 )
+$('form').on(
+  'change'
+  'input.real-checkbox'
+  (event) ->
+    $this = $(this)
+    if($this.is(':checked'))
+      $this.parent().addClass('checked')
+    else
+      $this.parent().removeClass('checked')
+)

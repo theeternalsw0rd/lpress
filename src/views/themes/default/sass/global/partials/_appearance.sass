@@ -59,6 +59,10 @@ label.checkbox
   user-select: none
   &:hover
     @include background_opacity($checkbox_hover_background, 0.4)
+  span.checkmark
+    visibility: hidden
+
+.js label.checkbox
   input.real-checkbox
     cursor: pointer
     opacity: 0 /* visibility: hidden disables focusability */
@@ -66,14 +70,13 @@ label.checkbox
       border: 1px solid $form_focus_border
       box-shadow: 0 0 5px $form_focus_border
       @include background_opacity($form_input_background)
-    &:checked + span.faux-checkbox span.checkmark
-      visibility: visible
   span.faux-checkbox
     border: 1px solid $form_input_border
     @include background_opacity($form_input_background, 0.3)
     color: $form_input_text
-    span.checkmark
-      visibility: hidden
+
+.js label.checked span.faux-checkbox span.checkmark
+  visibility: visible
 
 label.file input.file
   visibility: hidden

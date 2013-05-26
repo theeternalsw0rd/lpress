@@ -89,23 +89,25 @@ label.checkbox {
   label.checkbox:hover {
     background: white;
     background: rgba(255, 255, 255, 0.4); }
-  label.checkbox input.real-checkbox {
-    cursor: pointer;
-    opacity: 0; }
-    label.checkbox input.real-checkbox:focus + span.faux-checkbox {
-      border: 1px solid #5e7b96;
-      box-shadow: 0 0 5px #5e7b96;
-      background: white;
-      background: rgba(255, 255, 255, 0.6); }
-    label.checkbox input.real-checkbox:checked + span.faux-checkbox span.checkmark {
-      visibility: visible; }
-  label.checkbox span.faux-checkbox {
-    border: 1px solid #381a1c;
+  label.checkbox span.checkmark {
+    visibility: hidden; }
+
+.js label.checkbox input.real-checkbox {
+  cursor: pointer;
+  opacity: 0; }
+  .js label.checkbox input.real-checkbox:focus + span.faux-checkbox {
+    border: 1px solid #5e7b96;
+    box-shadow: 0 0 5px #5e7b96;
     background: white;
-    background: rgba(255, 255, 255, 0.3);
-    color: #381a1c; }
-    label.checkbox span.faux-checkbox span.checkmark {
-      visibility: hidden; }
+    background: rgba(255, 255, 255, 0.6); }
+.js label.checkbox span.faux-checkbox {
+  border: 1px solid #381a1c;
+  background: white;
+  background: rgba(255, 255, 255, 0.3);
+  color: #381a1c; }
+
+.js label.checked span.faux-checkbox span.checkmark {
+  visibility: visible; }
 
 label.file input.file {
   visibility: hidden; }
@@ -171,7 +173,7 @@ label.checkbox {
   padding: 0.4em 0.3em 0.3em 1.6em; }
   label.checkbox input.real-checkbox {
     position: absolute;
-    top: 0.4em;
+    top: 0.6em;
     left: 0.3em; }
   label.checkbox span.faux-checkbox {
     display: table-cell;
