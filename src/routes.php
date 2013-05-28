@@ -15,10 +15,10 @@
 	$route_prefix = $route_prefix == '/' ? '' : $route_prefix;
 	$admin_route = Config::get('l-press::admin_route');
 
-	function hasSNI() {
+	function supportsSHA2() {
 		$user_agent = $_SERVER['HTTP_USER_AGENT'];
 		if(preg_match('/(Windows NT 5)|(Windows XP)/i', $user_agent)
-			&& preg_match('/MSIE/', $user_agent)
+			&& !preg_match('/firefox/i', $user_agent)
 		) {
 			return FALSE;
 		}
@@ -78,9 +78,9 @@
 		'general',
 		function() {
 			if(Config::get('l-press::require_ssl') && !Request::secure()) {
-				if(!Config::get('l-press::ssl_is_sni') || hasSNI())
+				if(!Config::get('l-press::ssl_is_sha2') || supportsSHA2())
 					return Redirect::secure(Request::getRequestUri());
-				return Redirect::route('lpress-sni');
+				return Redirect::route('lpress-sha2');
 			}
 		}
 	);
@@ -94,9 +94,9 @@
 				return Redirect::route('lpress-login');
 			}
 			if(Config::get('l-press::admin_require_ssl') && !Request::secure()) {
-				if(!Config::get('l-press::ssl_is_sni') || hasSNI())
+				if(!Config::get('l-press::ssl_is_sha2') || supportsSHA2())
 					return Redirect::secure(Request::getRequestUri());
-				return Redirect::route('lpress-sni');
+				return Redirect::route('lpress-sha2');
 			}
 		}
 	);
@@ -105,9 +105,9 @@
 		'login',
 		function() {
 			if(Config::get('l-press::login_require_ssl') && !Request::secure()) {
-				if(!Config::get('l-press::ssl_is_sni') || hasSNI())
+				if(!Config::get('l-press::ssl_is_sha2') || supportsSHA2())
 					return Redirect::secure(Request::getRequestUri());
-				return Redirect::route('lpress-sni');
+				return Redirect::route('lpress-sha2');
 			}
 		}
 	);
@@ -125,17 +125,17 @@
 	);
 
 	Route::get(
-		$route_prefix . 'sni',
+		$route_prefix . 'sha2',
 		array(
 			'before' => 'theme',
-			'as' => 'lpress-sni',
+			'as' => 'lpress-sha2',
 			function() {
 				$view_prefix = 'l-press::themes.' . THEME;
 				BaseController::setMacros();
-				return View::make($view_prefix . '.sni', 
+				return View::make($view_prefix . '.sha2', 
 					array(
 						'view_prefix' => $view_prefix,
-						'title' => 'SSL Requires SNI',
+						'title' => 'SSL Requires SHA2',
 						'route_prefix' => Config::get('l-press::route_prefix')
 					)
 				);	
@@ -219,6 +219,7 @@
 		Route::get(
 			'install',
 			array(
+				'before' => 'login',
 				'as' => 'lpress-installer',
 				'uses' => 'EternalSword\LPress\InstallController@getInstaller'
 			)
