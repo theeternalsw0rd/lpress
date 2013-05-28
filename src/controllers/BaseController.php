@@ -8,7 +8,7 @@
 	use Illuminate\Support\Facades\URL;
 
 	class BaseController extends Controller {
-		protected function setMacros() {
+		public static function setMacros() {
 			HTML::macro('url', function($url, $text = null, $attributes = array()) {
 				$attribute_string = '';
 				$has_title = FALSE;

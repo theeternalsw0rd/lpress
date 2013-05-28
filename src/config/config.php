@@ -12,5 +12,6 @@
 		'login_require_ssl' => TRUE,
 		'require_ssl' => FALSE,
 		'route_prefix' => '/', // must include trailing slash
-		'asset_domain' => '' // will use the same domain as the originating request by default
+		'asset_domain' => '', // will use the same domain as the originating request by default
+		'ssl_is_sni' => TRUE // if TRUE, test for sni
 	);

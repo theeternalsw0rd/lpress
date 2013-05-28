@@ -9,6 +9,7 @@
 	use Illuminate\Support\Facades\Request;
 	use Illuminate\Support\Facades\Session;
 	use Illuminate\Support\Facades\URL;
+	use Illuminate\Support\Facades\View;
 	
 	$route_prefix = Config::get('l-press::route_prefix');
 	$route_prefix = $route_prefix == '/' ? '' : $route_prefix;
@@ -16,7 +17,7 @@
 
 	function hasSNI() {
 		$user_agent = $_SERVER['HTTP_USER_AGENT'];
-		if(preg_match('/(Windows NT 5.1)|(Windows XP)/i', $user_agent)
+		if(preg_match('/(Windows NT 5)|(Windows XP)/i', $user_agent)
 			&& preg_match('/MSIE/', $user_agent)
 		) {
 			return FALSE;
@@ -77,7 +78,7 @@
 		'general',
 		function() {
 			if(Config::get('l-press::require_ssl') && !Request::secure()) {
-				if(hasSNI())
+				if(!Config::get('l-press::ssl_is_sni') || hasSNI())
 					return Redirect::secure(Request::getRequestUri());
 				return Redirect::route('lpress-sni');
 			}
@@ -93,7 +94,7 @@
 				return Redirect::route('lpress-login');
 			}
 			if(Config::get('l-press::admin_require_ssl') && !Request::secure()) {
-				if(hasSNI())
+				if(!Config::get('l-press::ssl_is_sni') || hasSNI())
 					return Redirect::secure(Request::getRequestUri());
 				return Redirect::route('lpress-sni');
 			}
@@ -104,7 +105,7 @@
 		'login',
 		function() {
 			if(Config::get('l-press::login_require_ssl') && !Request::secure()) {
-				if(hasSNI())
+				if(!Config::get('l-press::ssl_is_sni') || hasSNI())
 					return Redirect::secure(Request::getRequestUri());
 				return Redirect::route('lpress-sni');
 			}
@@ -129,7 +130,15 @@
 			'before' => 'theme',
 			'as' => 'lpress-sni',
 			function() {
-				return "Doesn't support SNI ssl";
+				$view_prefix = 'l-press::themes.' . THEME;
+				BaseController::setMacros();
+				return View::make($view_prefix . '.sni', 
+					array(
+						'view_prefix' => $view_prefix,
+						'title' => 'SSL Requires SNI',
+						'route_prefix' => Config::get('l-press::route_prefix')
+					)
+				);	
 			}
 		)
 	);
