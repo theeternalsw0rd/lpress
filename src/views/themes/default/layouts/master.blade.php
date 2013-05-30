@@ -8,10 +8,12 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>{{ $title }}</title>
-
 		@section('head_scripts')
 			{{ HTML::asset('js', 'vendor/modernizr/modernizr.js') }}
 		@show
+		<script>
+			var msie=/*@cc_on!@*/0; // detect internet explorer for file-upload click workaround
+		</script>
 		@section('styles')
 			{{ HTML::asset('css', 'vendor/h5bp/normalize.css') }}
 			{{ HTML::asset('css', 'vendor/h5bp/main.css') }}
