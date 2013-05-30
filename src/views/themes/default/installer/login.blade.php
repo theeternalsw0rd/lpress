@@ -17,7 +17,7 @@
 		</div>
 		{{ Form::hidden('username', 'lpress') }}
 		<div class='submit'>
-			{{ Form::submit('Submit') }}
+			{{ Form::submit('Submit', array('class' => 'button')) }}
 		</div>
 		{{ Form::close() }}
 	</div>

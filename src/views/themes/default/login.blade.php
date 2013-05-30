@@ -21,8 +21,8 @@
 			{{ Form::checkbox('remember') }}
 		</div>
 		{{ Form::token() }}
-		<div class='input-button'>
-			{{ Form::submit('Submit') }}
+		<div class='submit'>
+			{{ Form::submit('Submit', array('class' => 'button')) }}
 		</div>
 		{{ Form::close() }}
 	</div>
