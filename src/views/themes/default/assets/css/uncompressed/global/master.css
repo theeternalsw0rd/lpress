@@ -107,6 +107,12 @@ h1 {
     background: rgba(255, 255, 255, 0.6);
     outline: 2px inset #deccb7; }
 
+.lt-ie8 input, textarea {
+  border: 1px solid #6d5226 !important; }
+
+.lt-ie8 input.file {
+  background: white !important; }
+
 label.checkbox {
   cursor: pointer;
   -webkit-touch-callout: none;
@@ -215,6 +221,10 @@ p {
 .ie label.checkbox span.checkmark {
   top: 0.1em !important;
   left: 0.1em !important; }
+
+.no-js label.checkbox span.faux-checkbox,
+.no-opacity label.checkbox span.faux-checkbox {
+  display: none; }
 
 .no-js div.file input.faux-file,
 .no-opacity div.file input.faux-file {

@@ -9,7 +9,7 @@
   background-clip: padding-box
   border-style: solid /* for firefox */
 
-@mixin form_common($background_color, $outline_color,  $color, $active: false)
+@mixin form_common($background_color, $outline_color, $color, $active: false)
   @include background_opacity($background_color, 0.3)
   border: none
   outline: 2px outset $outline_color
@@ -59,6 +59,12 @@ h1
 
 .text input, textarea
   @include form_common($form_input_background, $input_outline_color, $form_input_text)
+
+.lt-ie8 input, textarea
+  border: 1px solid $text_color !important
+
+.lt-ie8 input.file
+  background: $form_input_background !important
 
 label.checkbox
   cursor: pointer
