@@ -4,7 +4,7 @@
 @stop
 @section('content')
 	<h1>Create User</h1>
-	<div class='form'>
+	<div class='form clearfix'>
 		{{ Form::open(array('route' => 'lpress-user-update')) }}
 		<div class='text'>
 			{{ Form::label('Username:') }}
@@ -45,14 +45,12 @@
 			{{ Form::label('Bio:') }}
 			{{ Form::textarea('bio') }}
 		</div>
-		<div class='file'>
-			<label class='file' for='image'>
-				<input type='button' class='faux-file' value='Image' />
-				<input id='image' name='image' class='file' type='file' />
-			</label>
+		<div class='file clearfix'>
+			{{ Form::faux_file('image', 'Upload Image') }}
+			<p class='file'>File to be uploaded: <span>none</span></p>
 		</div>
 		<div class='submit'>
-			{{ Form::submit('Submit') }}
+			{{ Form::submit('Submit', array('class' => 'button')) }}
 		</div>
 		{{ Form::close() }}
 	</div>

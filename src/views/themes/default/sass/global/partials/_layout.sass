@@ -1,5 +1,14 @@
+$input_padding: 0.2em
+$button_horizontal_padding: 0.4em
+$active_button_bottom_padding: 0.5 * $input_padding
+$active_button_top_padding: 2 * $input_padding - $active_button_bottom_padding
+$button_height: 2em
+
 html, body
   height: 100%
+
+textarea
+  max-width: 90%
 
 #page
   width: 82%
@@ -24,13 +33,13 @@ p
 .form
   padding: 0 0 1em 0
 
-.text label, .file label
+.text label
   display: block
-  padding: 0.2em 0 0 0
+  padding: $input_padding
 
 .text input
   display: block
-  padding: 0.2em
+  padding: $input_padding
   margin: 0 0 0.5em 0
   width: 25%
 
@@ -53,21 +62,58 @@ label.checkbox
     top: 0.4em
     left: 0.3em
 
-label.file
-  display: inline-block
-
-.no-js label.file input.file
-  margin: 1em 0 0 0
-  padding: 0.2em
-
-.no-js label.file input.faux-file
+.no-js div.file input.faux-file,
+.no-opacity div.file input.faux-file
   display: none
 
-.submit input, .button input, .file input.faux-file
+.no-js div.file p.file,
+.no-opacity div.file p.file
+  display: none
+
+.no-js input.file,
+.no-opacity input.file
+  margin: 0.5em 0 0 0
+  padding: $input_padding
+
+.no-fileinput form div.file
+  visibility: hidden !important
+  height: 0
+  width: 0
+  overflow: hidden
+
+.opacity div.file p
+  margin: 0.3em 1em
+
+.opacity div.upload 
+  float: left
+  padding: 0
+  position: relative
+  overflow: hidden
+  input.file
+    z-index: 2
+    display: inline-block
+    position: absolute
+    padding: 0
+    right: 0
+    height: 4 * $input_padding + $button_height
+    &:active + input.faux-file /* for mouse */
+      padding: $active_button_top_padding $button_horizontal_padding $active_button_bottom_padding $button_horizontal_padding
+
+.ie div.upload
+  overflow: visible
+  position: static
+  input.file
+    left: -1300px
+    right: auto !important
+
+input.active-button
+  @extend input.button:active
+
+input.button
   display: inline-block
   margin: 0.5em 0 0 0
-  padding: 0.2em
-  height: 2.0em
+  padding: $input_padding $button_horizontal_padding
+  height: $button_height
   overflow: hidden
   &:active
-    padding: 0.3em 0.2em 0.1em 0.2em
+    padding: $active_button_top_padding $button_horizontal_padding $active_button_bottom_padding $button_horizontal_padding

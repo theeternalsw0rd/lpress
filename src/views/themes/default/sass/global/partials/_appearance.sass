@@ -44,10 +44,12 @@ input, textarea
   @include background_opacity($form_input_background, 0.3)
   border: 1px solid $form_input_border
   color: $form_input_text
-  outline: none
   &:focus
     @include background_opacity($form_input_background)
     border: 1px solid $form_focus_border
+
+textarea, .text input
+  outline: none
 
 label.checkbox
   cursor: pointer
@@ -62,7 +64,7 @@ label.checkbox
   span.checkmark
     visibility: hidden
 
-.js label.checkbox
+.opacity label.checkbox
   input.real-checkbox
     cursor: pointer
     opacity: 0 /* visibility: hidden disables focusability */
@@ -75,22 +77,37 @@ label.checkbox
     @include background_opacity($form_input_background, 0.3)
     color: $form_input_text
 
-.js label.checked span.faux-checkbox span.checkmark
+.opacity label.checked span.faux-checkbox span.checkmark
   visibility: visible
 
-label.file input.file
-  visibility: hidden
-.no-js label.file input.file
-  visibility: visible
+.opacity div.file 
+  input.file
+    cursor: pointer 
+    opacity: 0
+    &:active + input.faux-file /* for mouse */
+      @include background_opacity($form_input_background, 0.4)
+      outline: 2px inset $form_button_border !important /* important override focus for browsers that need it */
+    &:focus + input.faux-file /* for mouse */
+      @include background_opacity($form_input_background)
+      outline: 2px outset $form_focus_border
+  p.file
+    display: inline-block
 
-.submit input, .button input, .file input.faux-file 
+.ie input.file
+  opacity: 1 !important
+
+input.active-button
+  @extend input.button:active
+
+input.button
   @include background_opacity($form_input_background, 0.3)
-  border: 2px outset $form_button_border
   color: $form_input_text
-  outline: none
+  border: none
+  outline: 2px outset $form_button_border
+  outline-offset: -2px /* hide opera outline */
   &:active
     @include background_opacity($form_input_background, 0.4)
-    border: 2px inset $form_button_border
+    outline: 2px inset $form_button_border !important /* important overrides focus for browsers that need it */
   &:focus
     @include background_opacity($form_input_background)
-    border: 2px outset $form_focus_border
+    outline: 2px outset $form_focus_border

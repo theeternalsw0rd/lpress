@@ -24,6 +24,18 @@ h1 {
 input, textarea {
   font-size: 0.9em !important; }
 
+/*.opacity div.upload {
+	font-size: 3em; // make excessively large to fill fake button
+	p.normal {
+		font-size: 0.333em; // reset font size from 3em to normal
+	}
+}*/
+.opacity input.file {
+  font-size: 3em !important; }
+
+.ie div.file input.file {
+  font-size: 0.9em !important; }
+
 @media (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 160dpi) {
   body {
     font-size: 18px; } }
@@ -71,12 +83,14 @@ input, textarea {
   background: white;
   background: rgba(255, 255, 255, 0.3);
   border: 1px solid #381a1c;
-  color: #381a1c;
-  outline: none; }
+  color: #381a1c; }
   input:focus, textarea:focus {
     background: white;
     background: rgba(255, 255, 255, 0.6);
     border: 1px solid #5e7b96; }
+
+textarea, .text input {
+  outline: none; }
 
 label.checkbox {
   cursor: pointer;
@@ -92,46 +106,61 @@ label.checkbox {
   label.checkbox span.checkmark {
     visibility: hidden; }
 
-.js label.checkbox input.real-checkbox {
+.opacity label.checkbox input.real-checkbox {
   cursor: pointer;
   opacity: 0; }
-  .js label.checkbox input.real-checkbox:focus + span.faux-checkbox {
+  .opacity label.checkbox input.real-checkbox:focus + span.faux-checkbox {
     border: 1px solid #5e7b96;
     box-shadow: 0 0 5px #5e7b96;
     background: white;
     background: rgba(255, 255, 255, 0.6); }
-.js label.checkbox span.faux-checkbox {
+.opacity label.checkbox span.faux-checkbox {
   border: 1px solid #381a1c;
   background: white;
   background: rgba(255, 255, 255, 0.3);
   color: #381a1c; }
 
-.js label.checked span.faux-checkbox span.checkmark {
+.opacity label.checked span.faux-checkbox span.checkmark {
   visibility: visible; }
 
-label.file input.file {
-  visibility: hidden; }
-
-.no-js label.file input.file {
-  visibility: visible; }
-
-.submit input, .button input, .file input.faux-file {
-  background: white;
-  background: rgba(255, 255, 255, 0.3);
-  border: 2px outset #deccb7;
-  color: #381a1c;
-  outline: none; }
-  .submit input:active, .button input:active, .file input.faux-file:active {
+.opacity div.file input.file {
+  cursor: pointer;
+  opacity: 0; }
+  .opacity div.file input.file:active + input.faux-file {
     background: white;
     background: rgba(255, 255, 255, 0.4);
-    border: 2px inset #deccb7; }
-  .submit input:focus, .button input:focus, .file input.faux-file:focus {
+    outline: 2px inset #deccb7 !important; }
+  .opacity div.file input.file:focus + input.faux-file {
     background: white;
     background: rgba(255, 255, 255, 0.6);
-    border: 2px outset #5e7b96; }
+    outline: 2px outset #5e7b96; }
+.opacity div.file p.file {
+  display: inline-block; }
+
+.ie input.file {
+  opacity: 1 !important; }
+
+input.button {
+  background: white;
+  background: rgba(255, 255, 255, 0.3);
+  color: #381a1c;
+  border: none;
+  outline: 2px outset #deccb7;
+  outline-offset: -2px; }
+  input.button:active, input.active-button {
+    background: white;
+    background: rgba(255, 255, 255, 0.4);
+    outline: 2px inset #deccb7 !important; }
+  input.button:focus {
+    background: white;
+    background: rgba(255, 255, 255, 0.6);
+    outline: 2px outset #5e7b96; }
 
 html, body {
   height: 100%; }
+
+textarea {
+  max-width: 90%; }
 
 #page {
   width: 82%;
@@ -156,9 +185,9 @@ p {
 .form {
   padding: 0 0 1em 0; }
 
-.text label, .file label {
+.text label {
   display: block;
-  padding: 0.2em 0 0 0; }
+  padding: 0.2em; }
 
 .text input {
   display: block;
@@ -185,21 +214,55 @@ label.checkbox {
     top: 0.4em;
     left: 0.3em; }
 
-label.file {
-  display: inline-block; }
-
-.no-js label.file input.file {
-  margin: 1em 0 0 0;
-  padding: 0.2em; }
-
-.no-js label.file input.faux-file {
+.no-js div.file input.faux-file,
+.no-opacity div.file input.faux-file {
   display: none; }
 
-.submit input, .button input, .file input.faux-file {
+.no-js div.file p.file,
+.no-opacity div.file p.file {
+  display: none; }
+
+.no-js input.file,
+.no-opacity input.file {
+  margin: 0.5em 0 0 0;
+  padding: 0.2em; }
+
+.no-fileinput form div.file {
+  visibility: hidden !important;
+  height: 0;
+  width: 0;
+  overflow: hidden; }
+
+.opacity div.file p {
+  margin: 0.3em 1em; }
+
+.opacity div.upload {
+  float: left;
+  padding: 0;
+  position: relative;
+  overflow: hidden; }
+  .opacity div.upload input.file {
+    z-index: 2;
+    display: inline-block;
+    position: absolute;
+    padding: 0;
+    right: 0;
+    height: 2.8em; }
+    .opacity div.upload input.file:active + input.faux-file {
+      padding: 0.3em 0.4em 0.1em 0.4em; }
+
+.ie div.upload {
+  overflow: visible;
+  position: static; }
+  .ie div.upload input.file {
+    left: -1300px;
+    right: auto !important; }
+
+input.button {
   display: inline-block;
   margin: 0.5em 0 0 0;
-  padding: 0.2em;
+  padding: 0.2em 0.4em;
   height: 2em;
   overflow: hidden; }
-  .submit input:active, .button input:active, .file input.faux-file:active {
-    padding: 0.3em 0.2em 0.1em 0.2em; }
+  input.button:active, input.active-button {
+    padding: 0.3em 0.4em 0.1em 0.4em; }

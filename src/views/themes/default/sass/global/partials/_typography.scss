@@ -34,6 +34,18 @@ h1 {
 input, textarea {
 	font-size: 0.9em !important;
 }
+/*.opacity div.upload {
+	font-size: 3em; // make excessively large to fill fake button
+	p.normal {
+		font-size: 0.333em; // reset font size from 3em to normal
+	}
+}*/
+.opacity input.file {
+	font-size: 3em !important;
+}
+.ie div.file input.file {
+	font-size: 0.9em !important;
+}
 @media 
 (-webkit-min-device-pixel-ratio: 1.5), 
 (min-resolution: 160dpi) {

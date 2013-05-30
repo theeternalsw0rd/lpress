@@ -36,6 +36,14 @@
 					</label>
 				";
 			});
+			Form::macro('faux_file', function($name, $label) {
+				return "
+					<div class='upload'>
+						<input name='${name}' class='file' type='file' />
+						<input type='button' class='faux-file button' value='${label}' />
+					</div>
+				";
+			});
 			HTML::macro('asset', function($type, $path, $attributes = array()) {
 				$asset_domain = Config::get('l-press::asset_domain');
 				$asset_domain = empty($asset_domain) ? DOMAIN : $asset_domain;

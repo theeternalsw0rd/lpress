@@ -1,31 +1,91 @@
 # package:global/ready
-$('form').on(
+if msie is on
+  $('html').addClass('ie')
+$(document).on(
+  'mousedown'
+  'input.button'
+  (event) ->
+    $(this).addClass('active-button')
+  #return
+)
+$(document).on(
+  'mouseup'
+  (event) ->
+    $('.active-button').removeClass('active-button')
+  #return
+)
+$('.opacity form').each(
+  ->
+    $(this).find('input.file').attr('tabindex', '-1')
+  #return
+)
+$('.opacity form').on(
+  'focus'
+  'input.file'
+  (event) ->
+    $this = $(this)
+    if $.isEmptyObject(event.originalEvent) is false
+      $this.parent().find('input.faux-file').focus()
+    else
+      setTimeout(
+        ->
+          $this.parent().find('input.faux-file').focus()
+        #return
+        300
+      )
+    #endif
+  #return
+)
+$('.opacity form').on(
   'click'
   'input.faux-file'
   (event) ->
-    event.stopPropagation()
+    $this = $(this)
+    #focus is for older opera
     event.preventDefault()
-    parent = $(this).parent().find('input.file').click()
+    $(this).focus()
+    $(this).parent().find('input.file').trigger('focus', jQuery.Event('focus')).click()
+  #return
 )
-$('form').on(
-  'click'
-  'input.file'
+$('.opacity form').on(
+  'keydown'
+  'input.faux-file'
   (event) ->
-    event.stopPropagation()
+    key = event.which
+    switch key
+      when 13, 32 # enter or space
+        event.preventDefault()
+        $(this).click()
+      #end cases
+    #end switch
+  #return
 )
-$('form').on(
+$('.opacity form').on(
   'change'
   'input.file'
   (event) ->
     console.log($(this).val())
+  #return
 )
-$('form').on(
-  'change'
+$('.opacity form').on(
+  'click'
+  'label.checkbox'
+  (event) ->
+    event.preventDefault()
+    $this = $(this)
+    $('#' + $this.attr('for')).click()
+  #return
+)
+$('.opacity form').on(
+  'click'
   'input.real-checkbox'
   (event) ->
+    event.stopPropagation()
     $this = $(this)
-    if($this.is(':checked'))
+    if $this.is(':checked') is true
       $this.parent().addClass('checked')
     else
       $this.parent().removeClass('checked')
+    #endif
+  #return
 )
