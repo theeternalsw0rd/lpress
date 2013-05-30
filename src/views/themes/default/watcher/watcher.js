@@ -48,7 +48,7 @@ var compiledCoffee = function(source, type) {
     }
     switch(type) {
         case 'jquery.ready': {
-            compiled = 'jQuery(document).ready(function( $ ) {' + compiled + '});';
+            compiled = 'jQuery(document).ready(function( $ ) {' + end_of_line + compiled + end_of_line + '});';
             break;
         }
     }
