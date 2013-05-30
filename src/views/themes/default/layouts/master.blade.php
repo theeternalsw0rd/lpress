@@ -13,6 +13,7 @@
 		@show
 		<script>
 			var msie=/*@cc_on!@*/0; // detect internet explorer for file-upload click workaround
+			if(msie) document.documentElement.className += ' ie';
 		</script>
 		@section('styles')
 			{{ HTML::asset('css', 'vendor/h5bp/normalize.css') }}

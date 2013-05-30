@@ -1,8 +1,17 @@
 jQuery(document).ready(function( $ ) {
+/*
+ * open global/forms.coffee
+*/
+
+
 (function() {
-  if (msie === true) {
-    $('html').addClass('ie');
-  }
+  $(document).on('mousedown', 'label.checkbox', function(event) {
+    return $(this).find('span.faux-checkbox').addClass('focused');
+  });
+
+  $(document).on('mouseup', function(event) {
+    return $('.focused').removeClass('focused');
+  });
 
   $(document).on('mousedown', 'input.button', function(event) {
     return $(this).addClass('active-button');
@@ -73,6 +82,11 @@ jQuery(document).ready(function( $ ) {
       return $this.parent().removeClass('checked');
     }
   });
+
+  /*
+   * close global/forms.coffee
+  */
+
 
 }).call(this);
 

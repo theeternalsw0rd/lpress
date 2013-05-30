@@ -24,12 +24,9 @@ h1 {
 input, textarea {
   font-size: 0.9em !important; }
 
-/*.opacity div.upload {
-	font-size: 3em; // make excessively large to fill fake button
-	p.normal {
-		font-size: 0.333em; // reset font size from 3em to normal
-	}
-}*/
+.opacity span.checkmark {
+  font-size: 0.8em !important; }
+
 .opacity input.file {
   font-size: 3em !important; }
 
@@ -42,6 +39,25 @@ input, textarea {
 @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
   body {
     font-size: 12px; } }
+@media only print {
+  body {
+    font-size: 12pt; } }
+.opacity label.checkbox span.faux-checkbox, input.button {
+  background: white;
+  background: rgba(255, 255, 255, 0.3);
+  border: none;
+  outline: 2px outset #deccb7;
+  outline-offset: -2px;
+  color: #381a1c; }
+  .opacity label.checkbox input.real-checkbox:focus + span.faux-checkbox, .opacity label.checkbox input.real-checkbox:active + span.faux-checkbox, .opacity label.checkbox span.focused, .opacity label.checkbox span.faux-checkbox:focus, .opacity div.file input.file:focus + input.faux-file, input.button:focus {
+    background: white;
+    background: rgba(255, 255, 255, 0.6);
+    outline: 2px inset #deccb7; }
+  .opacity label.checkbox span.faux-checkbox:active, .opacity div.file input.file:active + input.faux-file, input.active-button, input.button:active {
+    background: white;
+    background: rgba(255, 255, 255, 0.6);
+    outline: 2px inset #deccb7; }
+
 body {
   color: #6d5226;
   background: url(../../../images/backgrounds/body.png?v=1); }
@@ -79,18 +95,17 @@ h1 {
   background: rgba(252, 230, 60, 0.3);
   border: 1px solid #938833; }
 
-input, textarea {
+.text input, textarea {
   background: white;
   background: rgba(255, 255, 255, 0.3);
-  border: 1px solid #381a1c;
+  border: none;
+  outline: 2px outset #deccb7;
+  outline-offset: -2px;
   color: #381a1c; }
-  input:focus, textarea:focus {
+  .text input:focus, textarea:focus {
     background: white;
     background: rgba(255, 255, 255, 0.6);
-    border: 1px solid #5e7b96; }
-
-textarea, .text input {
-  outline: none; }
+    outline: 2px inset #deccb7; }
 
 label.checkbox {
   cursor: pointer;
@@ -102,23 +117,13 @@ label.checkbox {
   user-select: none; }
   label.checkbox:hover {
     background: white;
-    background: rgba(255, 255, 255, 0.4); }
+    background: rgba(255, 255, 255, 0.2); }
   label.checkbox span.checkmark {
     visibility: hidden; }
 
 .opacity label.checkbox input.real-checkbox {
   cursor: pointer;
   opacity: 0; }
-  .opacity label.checkbox input.real-checkbox:focus + span.faux-checkbox {
-    border: 1px solid #5e7b96;
-    box-shadow: 0 0 5px #5e7b96;
-    background: white;
-    background: rgba(255, 255, 255, 0.6); }
-.opacity label.checkbox span.faux-checkbox {
-  border: 1px solid #381a1c;
-  background: white;
-  background: rgba(255, 255, 255, 0.3);
-  color: #381a1c; }
 
 .opacity label.checked span.faux-checkbox span.checkmark {
   visibility: visible; }
@@ -126,38 +131,15 @@ label.checkbox {
 .opacity div.file input.file {
   cursor: pointer;
   opacity: 0; }
-  .opacity div.file input.file:active + input.faux-file {
-    background: white;
-    background: rgba(255, 255, 255, 0.4);
-    outline: 2px inset #deccb7 !important; }
-  .opacity div.file input.file:focus + input.faux-file {
-    background: white;
-    background: rgba(255, 255, 255, 0.6);
-    outline: 2px outset #5e7b96; }
 .opacity div.file p.file {
   display: inline-block; }
 
 .ie input.file {
   opacity: 1 !important; }
 
-input.button {
-  background: white;
-  background: rgba(255, 255, 255, 0.3);
-  color: #381a1c;
-  border: none;
-  outline: 2px outset #deccb7;
-  outline-offset: -2px; }
-  input.button:active, input.active-button {
-    background: white;
-    background: rgba(255, 255, 255, 0.4);
-    outline: 2px inset #deccb7 !important; }
-  input.button:focus {
-    background: white;
-    background: rgba(255, 255, 255, 0.6);
-    outline: 2px outset #5e7b96; }
-
 html, body {
-  height: 100%; }
+  height: 100%;
+  padding: 0; }
 
 textarea {
   max-width: 90%; }
@@ -195,24 +177,44 @@ p {
   margin: 0 0 0.5em 0;
   width: 25%; }
 
-label.checkbox {
+.opacity label.checkbox {
   display: inline-block;
   position: relative;
   left: -0.3em;
-  padding: 0.4em 0.3em 0.3em 1.6em; }
-  label.checkbox input.real-checkbox {
+  padding: input_padding; }
+  .opacity label.checkbox input.real-checkbox {
     position: absolute;
-    top: 0.6em;
-    left: 0.3em; }
-  label.checkbox span.faux-checkbox {
-    display: table-cell;
+    top: 0.2em;
+    left: 0.2em; }
+  .opacity label.checkbox span.faux-checkbox {
+    display: inline-block;
+    position: relative;
+    width: 1.1em;
+    height: 1.1em;
+    overflow: hidden;
+    float: left;
+    margin: 0.4em 0 0 0.3em; }
+  .opacity label.checkbox span.checkmark {
+    display: inline-block;
+    position: absolute;
+    top: 0.3em;
+    left: 0.2em;
     width: 1em;
     height: 1em;
-    text-align: center;
-    vertical-align: middle;
-    position: absolute;
-    top: 0.4em;
-    left: 0.3em; }
+    line-height: 1em; }
+  .opacity label.checkbox span.checkbox-label {
+    display: inline-block;
+    margin: 0.1em 0 0 0;
+    height: 1.4em;
+    padding: 0.2em; }
+
+/* ie is still weird */
+.ie label.checkbox span.faux-checkbox {
+  height: 0.9em !important;
+  width: 0.9em !important; }
+.ie label.checkbox span.checkmark {
+  top: 0.1em !important;
+  left: 0.1em !important; }
 
 .no-js div.file input.faux-file,
 .no-opacity div.file input.faux-file {

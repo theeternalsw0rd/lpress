@@ -1,3 +1,5 @@
+$text_family: 'Fanwood', Serif;
+$header_family: 'Fanwood', Serif;
 @font-face {
     font-family: 'Fanwood';
     src: url('#{$base_path}/fonts/fanwood/webfonts/fanwood_text-webfont.eot');
@@ -5,8 +7,8 @@
          url('#{$base_path}/fonts/fanwood/webfonts/fanwood_text-webfont.woff') format('woff'),
          url('#{$base_path}/fonts/fanwood/webfonts/fanwood_text-webfont.ttf') format('truetype'),
          url('#{$base_path}/fonts/fanwood/webfonts/fanwood_text-webfont.svg#fanwood') format('svg');
-	font-weight: normal;
-	font-style: normal;
+    font-weight: normal;
+    font-style: normal;
 }
 
 @font-face {
@@ -16,47 +18,47 @@
          url('#{$base_path}/fonts/fanwood/webfonts/fanwood_text_italic-webfont.woff') format('woff'),
          url('#{$base_path}/fonts/fanwood/webfonts/fanwood_text_italic-webfont.ttf') format('truetype'),
          url('#{$base_path}/fonts/fanwood/webfonts/fanwood_text_italic-webfont.svg#fanwood') format('svg');
-	font-weight: normal;
-	font-style: italic;
+    font-weight: normal;
+    font-style: italic;
 }
 
-$text_family: 'Fanwood', Serif;
-$header_family: 'Fanwood', Serif;
 body {
-	font-size: 18px;
-	font-family: $text_family;
-	font-weight: 600;
+    font-size: 18px;
+    font-family: $text_family;
+    font-weight: 600;
 }
 h1 {
-	font-size: 1.7em;
-	font-family: $header_family;
+    font-size: 1.7em;
+    font-family: $header_family;
 }
 input, textarea {
-	font-size: 0.9em !important;
+    font-size: 0.9em !important;
 }
-/*.opacity div.upload {
-	font-size: 3em; // make excessively large to fill fake button
-	p.normal {
-		font-size: 0.333em; // reset font size from 3em to normal
-	}
-}*/
+.opacity span.checkmark {
+    font-size: 0.8em !important;
+}
 .opacity input.file {
-	font-size: 3em !important;
+    font-size: 3em !important;
 }
 .ie div.file input.file {
-	font-size: 0.9em !important;
+    font-size: 0.9em !important;
 }
 @media 
 (-webkit-min-device-pixel-ratio: 1.5), 
 (min-resolution: 160dpi) {
-	body {
-		font-size: 18px;
-	}
+    body {
+        font-size: 18px;
+    }
 }
 @media only screen 
 and (min-device-width : 320px) 
 and (max-device-width : 480px) {
-	body {
-		font-size: 12px;
-	}
+    body {
+        font-size: 12px;
+    }
+}
+@media only print {
+    body {
+        font-size: 12pt;
+    }
 }

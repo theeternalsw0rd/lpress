@@ -1,6 +1,20 @@
 # package:global/ready
-if msie is on
-  $('html').addClass('ie')
+###
+ * open global/forms.coffee
+###
+$(document).on(
+  'mousedown'
+  'label.checkbox'
+  (event) ->
+    $(this).find('span.faux-checkbox').addClass('focused')
+  #return
+)
+$(document).on(
+  'mouseup'
+  (event) ->
+    $('.focused').removeClass('focused')
+  #return
+)
 $(document).on(
   'mousedown'
   'input.button'
@@ -89,3 +103,6 @@ $('.opacity form').on(
     #endif
   #return
 )
+###
+ * close global/forms.coffee
+###
