@@ -2,24 +2,29 @@
   background: $color /* The Fallback */
   background: rgba($color, $opacity)
 
-@mixin border_image($url, $top, $right, $bottom, $left)
-  -moz-border-image: url($url) $top $right $bottom $left repeat
-  -webkit-border-image: url($url) $top $right $bottom $left repeat
-  border-image: url($url) $top $right $bottom $left repeat
+@mixin border_image($url, $height, $type, $width: $height, $htype: $type)
+  -moz-border-image: url($url) $height $width $type $htype
+  -webkit-border-image: url($url) $height $width $type $htype
+  -o-border-image: url($url) $height $width $type $htype
+  border-image: url($url) $height $width $type $htype
   background-clip: padding-box
   border-style: solid /* for firefox */
 
-@mixin form_common($background_color, $outline_color, $color, $active: false)
+@mixin form_common($background_color, $outline_color, $color, $button: false)
   @include background_opacity($background_color, 0.3)
   border: none
   outline: 2px outset $outline_color
   outline-offset: -2px
   color: $color
-  &:focus
-    @include background_opacity($background_color)
-    outline: 2px inset $outline_color
-  @if $active
+  @if $button
     &:active
+      @include background_opacity($background_color)
+      outline: 2px inset $outline_color !important /* need to override focus on IE for .active class */
+    &:focus
+      @include background_opacity($background_color)
+      outline: 2px outset $outline_color
+  @else
+    &:focus
       @include background_opacity($background_color)
       outline: 2px inset $outline_color
 
@@ -40,12 +45,14 @@ h1
 
 #page
   background: url(#{$base_path}/images/backgrounds/page.png?v=1)
-  border-width: 0 1px 0 1px
-  border-style: solid
+  border-width: 0 3px 0 3px
+  border-style: double 
 
 .borderimage #page
-  border-width: 0 15px 0 15px
-  @include border_image("#{$base_path}/images/borders/page.png?v=1", 0, 15, 0, 15)
+  $border_width: 15
+  border-width: 0 #{$border_width}px 0 #{$border_width}px
+  $url: "#{$base_path}/images/borders/page.png?v=1"
+  @include border_image($url, $height: 0, $width: $border_width, $type: repeat)
 
 .error
   color: $error_text
