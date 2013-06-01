@@ -1,5 +1,5 @@
-@mixin background_opacity($color, $opacity: 0.6)
-  background: $color /* The Fallback */
+@mixin background_opacity($color, $opacity: 0.6, $fallback: $color)
+  background: $fallback /* The Fallback */
   background: rgba($color, $opacity)
 
 @mixin border_image($url, $height, $type, $width: $height, $htype: $type)
@@ -10,26 +10,38 @@
   background-clip: padding-box
   border-style: solid /* for firefox */
 
-@mixin form_common($background_color, $outline_color, $color, $button: false)
-  @include background_opacity($background_color, 0.3)
+@mixin form_common($button: false, $real_button: false)
+  @include background_opacity($form_input_rgba_background, 0.3, $fallback: $form_input_background)
   border: none
-  outline: 2px outset $outline_color
+  outline: 2px outset $input_outline_color
   outline-offset: -2px
-  color: $color
+  color: $form_input_text
   @if $button
+    cursor: pointer
+  @if $button and $real_button
     &:active
-      @include background_opacity($background_color)
-      outline: 2px inset $outline_color !important /* need to override focus on IE for .active class */
+      @include background_opacity($form_input_rgba_background, $fallback: $form_input_focused_background)
+      outline: 2px inset $input_outline_color !important /* need to override focus on IE for .active class */
     &:focus
-      @include background_opacity($background_color)
-      outline: 2px outset $outline_color
-  @else
+      @include background_opacity($form_input_rgba_background, $fallback: $form_input_focused_background)
+  @if $button == false
     &:focus
-      @include background_opacity($background_color)
-      outline: 2px inset $outline_color
+      @include background_opacity($form_input_rgba_background, $fallback: $form_input_focused_background)
+      outline: 2px inset $input_outline_color
 
-%button
-  @include form_common($form_input_background, $input_outline_color, $form_input_text, true)
+%real-button
+  @include form_common($button: true, $real_button: true)
+
+%faux-button
+  @include form_common($button: true, $real_button: false)
+
+%unselectable
+  -webkit-touch-callout: none
+  -webkit-user-select: none
+  -khtml-user-select: none
+  -moz-user-select: none
+  -ms-user-select: none
+  user-select: none
 
 body
   color: $text_color
@@ -65,59 +77,63 @@ h1
   border: 1px solid $message_border
 
 .text input, textarea
-  @include form_common($form_input_background, $input_outline_color, $form_input_text)
+  @include form_common()
 
-.lt-ie8 input, textarea
-  border: 1px solid $text_color !important
-
-.lt-ie8 input.file
-  background: $form_input_background !important
+.lt-ie8
+  input, textarea, span.faux-checkbox, span.button, a.button
+    border: 2px outset $input_outline_color
+  input.focused, textarea.focused
+    border: 2px inset $input_outline_color
+  span.active-button, a.active-button
+    border: 2px inset $input_outline_color
+  input.file
+    background: $form_input_background !important
 
 label.checkbox
+  @extend %unselectable
   cursor: pointer
-  -webkit-touch-callout: none
-  -webkit-user-select: none
-  -khtml-user-select: none
-  -moz-user-select: none
-  -ms-user-select: none
-  user-select: none
   &:hover
-    @include background_opacity($checkbox_hover_background, 0.2)
+    @include background_opacity($checkbox_hover_rgba_background, 0.2, $checkbox_hover_background)
   span.checkmark
+    @extend %unselectable
     visibility: hidden
 
-.opacity label.checkbox
-  input.real-checkbox
-    cursor: pointer
-    opacity: 0 /* visibility: hidden disables focusability */
+.js label.checkbox
+  input.checkbox
     &:focus + span.faux-checkbox
-      @extend %button:focus
+      @extend %real-button:focus
     &:active + span.faux-checkbox
-      @extend %button:focus
-  span.focused
-    @extend %button:focus
+      @extend %real-button:focus
   span.faux-checkbox
-    @extend %button
+    @extend %faux-button
+  span.focused-checkbox
+    @extend %real-button:focus
+  span.active-checkbox
+    @extend %real-button:active
 
-.opacity label.checked span.faux-checkbox span.checkmark
+.js label.checked span.faux-checkbox span.checkmark
   visibility: visible
 
-.opacity div.file 
+.opacity div.file, .ie div.file 
   input.file
-    cursor: pointer 
+    cursor: pointer
     opacity: 0
-    &:active + input.faux-file /* for mouse */
-      @extend %button:active
-    &:focus + input.faux-file /* for mouse */
-      @extend %button:focus
+    &:active + span.button /* for mouse */
+      @extend %real-button:active
+    &:focus + span.button /* for mouse */
+      @extend %real-button:focus
   p.file
     display: inline-block
 
-.ie input.file
-  opacity: 1 !important
+span.button, a.button
+  @extend %unselectable
+  @extend %faux-button
 
-input.active-button
-  @extend %button:active
+span.active-button, a.active-button
+  @extend %real-button:active
+
+span.focused, a.focused
+  @extend %real-button:focus
 
 input.button
-  @extend %button
+  @extend %real-button

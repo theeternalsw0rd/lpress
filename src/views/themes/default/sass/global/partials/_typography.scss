@@ -1,5 +1,11 @@
 $text_family: 'Fanwood', Serif;
 $header_family: 'Fanwood', Serif;
+$base_size: 18px;
+$base_weight: 400;
+@mixin base_font($base_size, $base_weight: normal) {
+	font-size: $base_size;
+	font-weight: $base_weight;
+}
 @font-face {
     font-family: 'Fanwood';
     src: url('#{$base_path}/fonts/fanwood/webfonts/fanwood_text-webfont.eot');
@@ -22,17 +28,13 @@ $header_family: 'Fanwood', Serif;
     font-style: italic;
 }
 
-body {
-    font-size: 18px;
+body, input, textarea {
     font-family: $text_family;
-    font-weight: 600;
+	@include base_font(18px)
 }
 h1 {
     font-size: 1.7em;
     font-family: $header_family;
-}
-input, textarea {
-    font-size: 0.9em !important;
 }
 .opacity span.checkmark {
     font-size: 0.8em !important;
@@ -41,7 +43,10 @@ input, textarea {
     font-size: 3em !important;
 }
 .ie div.file input.file {
-    font-size: 0.9em !important;
+    font-size: 1em !important;
+}
+a.button {
+	text-decoration: none;
 }
 @media 
 (-webkit-min-device-pixel-ratio: 1.5), 
@@ -53,12 +58,12 @@ input, textarea {
 @media only screen 
 and (min-device-width : 320px) 
 and (max-device-width : 480px) {
-    body {
-        font-size: 12px;
+    body, input, textarea {
+		@include base_font(12px)
     }
 }
 @media only print {
-    body {
-        font-size: 12pt;
+    body, input, textarea {
+		@include base_font(12pt)
     }
 }

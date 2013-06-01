@@ -10,11 +10,11 @@
 		{{ Form::open() }}
 		<div class='text'>
 			{{ Form::label('Username') }}<br />
-			{{ Form::text('username') }}
+			{{ Form::text('username', array('tabindex' => '1')) }}
 		</div>
 		<div class='text'>
 			{{ Form::label('Password') }}<br />
-			{{ Form::text('password') }}
+			{{ Form::text('password', array('tabindex' => '2')) }}
 		</div>
 		<div class='checkbox'>
 			{{ Form::label('Remember me') }}
@@ -22,7 +22,7 @@
 		</div>
 		{{ Form::token() }}
 		<div class='submit'>
-			{{ Form::submit('Submit', array('class' => 'button')) }}
+			{{ Form::submit('Submit', array('class' => 'button', 'tabindex' => '3')) }}
 		</div>
 		{{ Form::close() }}
 	</div>

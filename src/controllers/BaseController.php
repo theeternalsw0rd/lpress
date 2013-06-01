@@ -30,8 +30,7 @@
 			Form::macro('faux_checkbox', function($name, $label) {
 				return "
 					<label for='${name}' class='checkbox'>
-						<input id='${name}' name='${name}' class='real-checkbox' type='checkbox' />
-						<span class='faux-checkbox' data-for='${name}'><span class='checkmark'>&#x2713;</span></span>
+						<input id='${name}' name='${name}' class='checkbox' type='checkbox' />
 						<span unselectable='on' class='checkbox-label' data-for='${name}'>${label}</span>
 					</label>
 				";
@@ -39,8 +38,7 @@
 			Form::macro('faux_file', function($name, $label) {
 				return "
 					<div class='upload'>
-						<input name='${name}' class='file' type='file' />
-						<input type='button' class='faux-file button' value='${label}' />
+						<input id='${name}' name='${name}' data-label='${label}' class='file' type='file' />
 					</div>
 				";
 			});

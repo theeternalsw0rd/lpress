@@ -13,11 +13,11 @@
 		{{ Form::open() }}
 		<div class='text'>
 			{{ Form::label('Application Key:') }}
-			{{ Form::password('password') }}
+			{{ Form::password('password', array('tabindex' => '1')) }}
 		</div>
 		{{ Form::hidden('username', 'lpress') }}
 		<div class='submit'>
-			{{ Form::submit('Submit', array('class' => 'button')) }}
+			{{ Form::submit('Submit', array('class' => 'button', 'tabindex' => '2')) }}
 		</div>
 		{{ Form::close() }}
 	</div>

@@ -33,6 +33,7 @@
 
 		@section('footer_scripts')
 			{{ HTML::asset('js', 'vendor/jquery/jquery.js') }}
+			{{ HTML::asset('js', 'vendor/jquery-ui/jquery-ui.js') }}
 			{{ HTML::asset('js', 'global/ready.js') }}
 		@show
 	</body>

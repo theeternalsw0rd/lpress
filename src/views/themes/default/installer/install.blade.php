@@ -8,49 +8,48 @@
 		{{ Form::open(array('route' => 'lpress-user-update')) }}
 		<div class='text'>
 			{{ Form::label('Username:') }}
-			{{ Form::text('username', '', array('autofocus' => 'autofocus')) }}
+			{{ Form::text('username', '', array('autofocus' => 'autofocus', 'tabindex' => '1')) }}
 		</div>
 		<div class='text'>
 			{{ Form::label('Password:') }}
-			{{ Form::password('password') }}
+			{{ Form::password('password', array('tabindex' => '2')) }}
 		</div>
 		<div class='text'>
 			{{ Form::label('Verify Password:') }}
-			{{ Form::password('verify_password') }}
+			{{ Form::password('verify_password', array('tabindex' => '3')) }}
 		</div>
 		<div class='text'>
 			{{ Form::label('Email Address:') }}
-			{{ Form::input('email', 'email') }}
+			{{ Form::input('email', 'email', '', array('tabindex' => '4')) }}
 		</div>
 		<div class='checkbox'>
-			{{ Form::faux_checkbox('email-public', 'Allow email to be displayed publicly.') }}
+			{{ Form::faux_checkbox('email-public', 'Allow email to be displayed publicly.', array('tabindex' => '5')) }}
 		</div>
 		<div class='text'>
 			{{ Form::label('Title:') }}
-			{{ Form::text('first_name') }}
+			{{ Form::text('first_name', '', array('tabindex' => '6')) }}
 		</div>
 		<div class='text'>
 			{{ Form::label('First Name:') }}
-			{{ Form::text('first_name') }}
+			{{ Form::text('first_name', '', array('tabindex' => '7')) }}
 		</div>
 		<div class='text'>
 			{{ Form::label('Last Name:') }}
-			{{ Form::text('last_name') }}
+			{{ Form::text('last_name', '', array('tabindex' => '8')) }}
 		</div>
 		<div class='text'>
 			{{ Form::label('Name Suffix:') }}
-			{{ Form::text('suffix') }}
+			{{ Form::text('suffix', '', array('tabindex' => '9')) }}
 		</div>
 		<div class='text'>
 			{{ Form::label('Bio:') }}
-			{{ Form::textarea('bio') }}
+			{{ Form::textarea('bio', '', array('tabindex' => '10')) }}
 		</div>
 		<div class='file clearfix'>
-			{{ Form::faux_file('image', 'Upload Image') }}
-			<p class='file'>File to be uploaded: <span>none</span></p>
+			{{ Form::faux_file('image', 'Upload Image', array('tabindex' => '11')) }}
 		</div>
 		<div class='submit'>
-			{{ Form::submit('Submit', array('class' => 'button')) }}
+			{{ Form::submit('Submit', array('class' => 'button', 'tabindex' => '12')) }}
 		</div>
 		{{ Form::close() }}
 	</div>

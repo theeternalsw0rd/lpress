@@ -2,107 +2,225 @@
 ###
  * open global/forms.coffee
 ###
-$(document).on(
-  'mousedown'
-  'label.checkbox'
-  (event) ->
-    $(this).find('span.faux-checkbox').addClass('focused')
-  #return
-)
-$(document).on(
-  'mouseup'
-  (event) ->
-    $('.focused').removeClass('focused')
-  #return
-)
-$(document).on(
-  'mousedown'
-  'input.button'
-  (event) ->
-    $(this).addClass('active-button')
-  #return
-)
+$focusables = $(':focusable')
+focusables_max_index = $focusables.length - 1
+$html = $('html')
+if $html.hasClass('lt-ie8')
+  css = '*{noFocusLine: expression(this.hideFocus=true);}'
+  head = document.getElementsByTagName('head')[0]
+  style = document.createElement('style')
+  style.type = 'text/css'
+  style.styleSheet.cssText = css
+  head.appendChild(style)
+  $('form').each(
+    ->
+      $this = $(this)
+      ### replace input buttons cause ie puts a unremovable black border around them use an anchor instead ###
+      $this.find('input[type=submit]').each(
+        ->
+          $this = $(this)
+          $this.after(
+            "<a href='#' tabindex='#{$this.attr('tabindex')}' class='button submit'>#{$this.val()}</a>"
+          ).remove()
+        #return
+      )
+      $this.find('input[type=reset]').each(
+        ->
+          $this = $(this)
+          $this.after(
+            "<a href='#' tabindex='#{$this.attr('tabindex')}' class='button reset'>#{$this.val()}</a>"
+          ).remove()
+        #return
+      )
+      $this.find('input[type=button]').each(
+        ->
+          $this = $(this)
+          $this.after(
+            "<a href='#' tabindex='#{$this.attr('tabindex')}' class='button'>#{$this.val()}</a>"
+          ).remove()
+        #return
+      )
+      $focusables = $(':focusable')
+    #return
+  )
+  $('label.checkbox').on(
+    'mousedown',
+    (event) ->
+      $(this).find('input.checkbox').focus()
+    #return
+  )
+  $('a.submit').on(
+    'click'
+    (event) ->
+      event.preventDefault()
+      $(this).closest('form').submit()
+    #return
+  )
+  $('input, textarea, a.button').on(
+    'focus'
+    (event) ->
+      $this = $(this)
+      if $this.hasClass('file') or $this.hasClass('checkbox')
+        $this.next().addClass('focused')
+      else
+        $this.addClass('focused')
+      #endif
+    #return
+  )
+  $('input, textarea, a.button').on(
+    'blur'
+    (event) ->
+      $this = $(this)
+      if $this.hasClass('file') or $this.hasClass('checkbox')
+        $this.next().removeClass('focused')
+      else
+        $this.removeClass('focused')
+      #endif
+    #return
+  )
+  $('input[type=file]').on(
+    'keydown'
+    (event) ->
+      $this = $(this)
+      if event.which in [13, 32]
+        event.preventDefault()
+        $this.click()
+      #endif
+    #return
+  )
+  $('input[type=text], input[type=password]').on(
+    'keydown'
+    (event) ->
+      $this = $(this)
+      if event.which is 13 then $this.closest('form').submit()
+    #return
+  )
+#endif
 $(document).on(
   'mouseup'
   (event) ->
     $('.active-button').removeClass('active-button')
+    $('.active-checkbox').removeClass('active-checkbox')
   #return
 )
-$('.opacity form').each(
-  ->
-    $(this).find('input.file').attr('tabindex', '-1')
-  #return
-)
-$('.opacity form').on(
-  'focus'
-  'input.file'
+$(document).on(
+  'mousedown'
+  '.button'
   (event) ->
-    $this = $(this)
-    if $.isEmptyObject(event.originalEvent) is false
-      $this.parent().find('input.faux-file').focus()
-    else
-      setTimeout(
+    $(this).addClass('active-button')
+  #return
+)
+if $html.hasClass('opacity') or $html.hasClass('ie')
+  $(document).on(
+    'mousedown'
+    'label.checkbox'
+    (event) ->
+      $(this).find('span.faux-checkbox').addClass('active-checkbox')
+    #return
+  )
+  $('form').each(
+    ->
+      $this = $(this)
+      if $html.hasClass('lt-ie7') is false
+        $this.find('input.checkbox').each(
+          ->
+            $(this).after(
+              "<span class='faux-checkbox' id='for-#{this.id}'>
+                  <span unselectable='on' class='checkmark'>&#x2713;</span>
+              </span>"
+            )
+          #return
+        )
+      #endif
+      $this.find('input.file').each(
         ->
-          $this.parent().find('input.faux-file').focus()
+          $this = $(this)
+          $this.after(
+            "<span unselectable='on' id='for-#{this.id}' class='button'>#{$this.attr('data-label')}</span>"
+          )
+          $this.parent().after(
+            "<p class='file'>File to be uploaded: <span id='label-#{this.id}'>none</span></p>"
+          )
         #return
-        300
       )
-    #endif
-  #return
-)
-$('.opacity form').on(
-  'click'
-  'input.faux-file'
-  (event) ->
-    $this = $(this)
-    #focus is for older opera
-    event.preventDefault()
-    $(this).focus()
-    $(this).parent().find('input.file').trigger('focus', jQuery.Event('focus')).click()
-  #return
-)
-$('.opacity form').on(
-  'keydown'
-  'input.faux-file'
-  (event) ->
-    key = event.which
-    switch key
-      when 13, 32 # enter or space
+    #return
+  )
+  ### firefox doesn't support focus psuedo-class on input type file ###
+  $('input.file').on(
+    'focus'
+    (event) ->
+      $(this).next().addClass('focused-button')
+    #return
+  )
+  $('input.file').on(
+    'blur'
+    (event) ->
+      $(this).next().removeClass('focused-button')
+    #return
+  )
+  $('input.file').on(
+    'change'
+    (event) ->
+      $this = $(this)
+    #return
+  )
+  ### workaround browsers that have two-tab focus on file input ###
+  $('form').on(
+    'keydown'
+    (event) ->
+      $focusables = $(':focusable')
+      focusable_max_index = $focusables.length - 1
+      if event.which is 9 # tab
+        event.preventDefault()
+        event.stopPropagation()
+        current_index = $focusables.index(event.target)
+        if event.shiftKey # shift + tab
+          next_index = if current_index is 0 then focusables_max_index else current_index - 1
+        else
+          next_index = if current_index is focusables_max_index then 0 else current_index + 1
+        #endif
+        $focusables.eq(next_index).focus()
+      #endif
+    #return
+  )
+  ### this.id.substring(4) removes the 'for-' from the id ###
+  $('.ie div.file span.button').on(
+    'click'
+    (event) ->
+      event.preventDefault()
+      $file = $(document.getElementById(this.id.substring(4)))
+      $file.click()
+    #return
+  )
+  $('input.file').on(
+    'keydown'
+    (event) ->
+      if event.which in [13, 32]
         event.preventDefault()
         $(this).click()
-      #end cases
-    #end switch
-  #return
-)
-$('.opacity form').on(
-  'change'
-  'input.file'
-  (event) ->
-    console.log($(this).val())
-  #return
-)
-$('.opacity form').on(
-  'click'
-  'label.checkbox'
-  (event) ->
-    event.preventDefault()
-    $this = $(this)
-    $('#' + $this.attr('for')).click()
-  #return
-)
-$('.opacity form').on(
-  'click'
-  'input.real-checkbox'
-  (event) ->
-    event.stopPropagation()
-    $this = $(this)
-    if $this.is(':checked') is true
-      $this.parent().addClass('checked')
-    else
-      $this.parent().removeClass('checked')
-    #endif
-  #return
-)
+      #endif
+    #return
+  )
+  $('label.checkbox').on(
+    'click'
+    (event) ->
+      event.preventDefault()
+      $this = $(this)
+      $('#' + $this.attr('for')).click()
+    #return
+  )
+  $('input.checkbox').on(
+    'click'
+    (event) ->
+      event.stopPropagation()
+      $this = $(this)
+      if $this.is(':checked') is true
+        $this.parent().addClass('checked')
+      else
+        $this.parent().removeClass('checked')
+      #endif
+    #return
+  )
 ###
  * close global/forms.coffee
 ###
