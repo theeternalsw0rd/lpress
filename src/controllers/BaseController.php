@@ -8,6 +8,16 @@
 	use Illuminate\Support\Facades\URL;
 
 	class BaseController extends Controller {
+		public static function getAttributeString($attributes) {
+			$attribute_string = '';
+			if(is_array($attributes) && count($attributes) > 0) {
+				foreach($attributes as $attribute => $value) {
+					$attribute_string .= " ${attribute}='${value}'";
+				}
+			}
+			return $attribute_string;
+		}
+
 		public static function setMacros() {
 			HTML::macro('url', function($url, $text = null, $attributes = array()) {
 				$attribute_string = '';
@@ -19,26 +29,26 @@
 							$has_title = TRUE;
 						}
 						else {
-							$attribute_string .= " $attribute='$value'";
+							$attribute_string .= " ${attribute}='${value}'";
 						}
 					}
 				}
 				$text = is_null($text) ? $url : $text;
 				$title = $has_title ? $title : $text;
-				return "<a href='$url' title='$title'$attribute_string>$title</a>";
+				return "<a href='${url}' title='${title}'${attribute_string}>${title}</a>";
 			});
-			Form::macro('faux_checkbox', function($name, $label) {
+			Form::macro('faux_checkbox', function($name, $label, $attributes = array()) {
 				return "
 					<label for='${name}' class='checkbox'>
-						<input id='${name}' name='${name}' class='checkbox' type='checkbox' />
+						<input id='${name}' name='${name}' class='checkbox' type='checkbox'" . self::getAttributeString($attributes) . " />
 						<span unselectable='on' class='checkbox-label' data-for='${name}'>${label}</span>
 					</label>
 				";
 			});
-			Form::macro('faux_file', function($name, $label) {
+			Form::macro('faux_file', function($name, $label, $attributes = array()) {
 				return "
 					<div class='upload'>
-						<input id='${name}' name='${name}' data-label='${label}' class='file' type='file' />
+						<input id='${name}' name='${name}' data-label='${label}' class='file' type='file'" . self::getAttributeString($attributes) . " />
 					</div>
 				";
 			});
@@ -61,14 +71,8 @@
 						break;
 					}
 					case 'img': {
-						$attribute_string = '';
-						if(is_array($attributes) && count($attributes) > 0) {
-							foreach($attributes as $attribute => $value) {
-								$attribute_string .= " $attribute='$value'";
-							}
-						}
 						$open .= "<img src='//" . $asset_domain . "/assets" . $path . "?v=";
-						$close .= "'" . $attribute_string . "/>";
+						$close .= "'" . self::getAttributeString($attributes) . "/>";
 						break;
 					}
 					default: {
