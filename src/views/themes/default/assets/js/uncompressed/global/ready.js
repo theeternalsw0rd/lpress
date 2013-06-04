@@ -5,13 +5,13 @@ jQuery(document).ready(function( $ ) {
 
 
 (function() {
-  var $focusables, $html, css, focusables_max_index, head, style;
-
-  $focusables = $(':focusable');
-
-  focusables_max_index = $focusables.length - 1;
+  var $body, $html, $page, css, head, style;
 
   $html = $('html');
+
+  $body = $('body');
+
+  $page = $(document.getElementById('page'));
 
   if ($html.hasClass('lt-ie8')) {
     css = '*{noFocusLine: expression(this.hideFocus=true);}';
@@ -20,6 +20,9 @@ jQuery(document).ready(function( $ ) {
     style.type = 'text/css';
     style.styleSheet.cssText = css;
     head.appendChild(style);
+    if ($body.height() > $page.height()) {
+      $page.css('height', $body.height());
+    }
     $('form').each(function() {
       var $this;
 
@@ -35,11 +38,10 @@ jQuery(document).ready(function( $ ) {
         $this = $(this);
         return $this.after("<a href='#' tabindex='" + ($this.attr('tabindex')) + "' class='button reset'>" + ($this.val()) + "</a>").remove();
       });
-      $this.find('input[type=button]').each(function() {
+      return $this.find('input[type=button]').each(function() {
         $this = $(this);
         return $this.after("<a href='#' tabindex='" + ($this.attr('tabindex')) + "' class='button'>" + ($this.val()) + "</a>").remove();
       });
-      return $focusables = $(':focusable');
     });
     $('label.checkbox').on('mousedown', function(event) {
       return $(this).find('input.checkbox').focus();
@@ -53,20 +55,18 @@ jQuery(document).ready(function( $ ) {
 
       $this = $(this);
       if ($this.hasClass('file') || $this.hasClass('checkbox')) {
-        return $this.next().addClass('focused');
-      } else {
-        return $this.addClass('focused');
+        $this.next().addClass('focused');
       }
+      return $this.addClass('focused');
     });
     $('input, textarea, a.button').on('blur', function(event) {
       var $this;
 
       $this = $(this);
       if ($this.hasClass('file') || $this.hasClass('checkbox')) {
-        return $this.next().removeClass('focused');
-      } else {
-        return $this.removeClass('focused');
+        $this.next().removeClass('focused');
       }
+      return $this.removeClass('focused');
     });
     $('input[type=file]').on('keydown', function(event) {
       var $this, _ref;
@@ -132,21 +132,45 @@ jQuery(document).ready(function( $ ) {
     /* workaround browsers that have two-tab focus on file input
     */
 
-    $('form').on('keydown', function(event) {
-      var current_index, focusable_max_index, next_index;
+    $(document).on('keydown', '*[tabindex]', function(event) {
+      var $tabindexed, $target, current_index, max_index;
 
-      $focusables = $(':focusable');
-      focusable_max_index = $focusables.length - 1;
       if (event.which === 9) {
-        event.preventDefault();
-        event.stopPropagation();
-        current_index = $focusables.index(event.target);
+        $target = $(event.target);
+        $tabindexed = $('*[tabindex]').not('[tabindex="-1"]').sort(function(a, b) {
+          var index_a, index_b;
+
+          index_a = parseInt($(a).attr('tabindex'));
+          index_b = parseInt($(b).attr('tabindex'));
+          return index_a - index_b;
+        });
+        current_index = $tabindexed.index($target);
+        max_index = $tabindexed.length - 1;
         if (event.shiftKey) {
-          next_index = current_index === 0 ? focusables_max_index : current_index - 1;
+          if (current_index !== 0) {
+            event.preventDefault();
+            event.stopPropagation();
+            /* opera 10 doesn't prevent default, so blur target and set smallest timeout to focus
+            */
+
+            $target.blur();
+            return setTimeout(function() {
+              return $tabindexed.eq(current_index - 1).focus();
+            }, 1);
+          }
         } else {
-          next_index = current_index === focusables_max_index ? 0 : current_index + 1;
+          if (current_index !== max_index) {
+            event.preventDefault();
+            event.stopPropagation();
+            /* opera 10 doesn't prevent default, so blur target and set smallest timeout to focus
+            */
+
+            $target.blur();
+            return setTimeout(function() {
+              return $tabindexed.eq(current_index + 1).focus();
+            }, 1);
+          }
         }
-        return $focusables.eq(next_index).focus();
       }
     });
     /* this.id.substring(4) removes the 'for-' from the id

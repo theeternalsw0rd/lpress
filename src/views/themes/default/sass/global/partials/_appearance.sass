@@ -84,10 +84,14 @@ h1
     border: 2px outset $input_outline_color
   input.focused, textarea.focused
     border: 2px inset $input_outline_color
+    @include background_opacity($form_input_rgba_background, $fallback: $form_input_focused_background)
+  span.focused, a.focused
+    @include background_opacity($form_input_rgba_background, $fallback: $form_input_focused_background)
   span.active-button, a.active-button
     border: 2px inset $input_outline_color
+    @include background_opacity($form_input_rgba_background, $fallback: $form_input_focused_background)
   input.file
-    background: $form_input_background !important
+    background: $form_input_background
 
 label.checkbox
   @extend %unselectable
@@ -132,7 +136,7 @@ span.button, a.button
 span.active-button, a.active-button
   @extend %real-button:active
 
-span.focused, a.focused
+span.focused, span.focused-button, a.focused
   @extend %real-button:focus
 
 input.button

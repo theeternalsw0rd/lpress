@@ -2,9 +2,9 @@
 ###
  * open global/forms.coffee
 ###
-$focusables = $(':focusable')
-focusables_max_index = $focusables.length - 1
 $html = $('html')
+$body = $('body')
+$page = $(document.getElementById('page'))
 if $html.hasClass('lt-ie8')
   css = '*{noFocusLine: expression(this.hideFocus=true);}'
   head = document.getElementsByTagName('head')[0]
@@ -12,6 +12,8 @@ if $html.hasClass('lt-ie8')
   style.type = 'text/css'
   style.styleSheet.cssText = css
   head.appendChild(style)
+  if $body.height() > $page.height()
+    $page.css('height', $body.height())
   $('form').each(
     ->
       $this = $(this)
@@ -40,7 +42,6 @@ if $html.hasClass('lt-ie8')
           ).remove()
         #return
       )
-      $focusables = $(':focusable')
     #return
   )
   $('label.checkbox').on(
@@ -62,9 +63,8 @@ if $html.hasClass('lt-ie8')
       $this = $(this)
       if $this.hasClass('file') or $this.hasClass('checkbox')
         $this.next().addClass('focused')
-      else
-        $this.addClass('focused')
       #endif
+      $this.addClass('focused')
     #return
   )
   $('input, textarea, a.button').on(
@@ -73,9 +73,8 @@ if $html.hasClass('lt-ie8')
       $this = $(this)
       if $this.hasClass('file') or $this.hasClass('checkbox')
         $this.next().removeClass('focused')
-      else
-        $this.removeClass('focused')
       #endif
+      $this.removeClass('focused')
     #return
   )
   $('input[type=file]').on(
@@ -165,21 +164,48 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
     #return
   )
   ### workaround browsers that have two-tab focus on file input ###
-  $('form').on(
+  $(document).on(
     'keydown'
+    '*[tabindex]'
     (event) ->
-      $focusables = $(':focusable')
-      focusable_max_index = $focusables.length - 1
       if event.which is 9 # tab
-        event.preventDefault()
-        event.stopPropagation()
-        current_index = $focusables.index(event.target)
+        $target = $(event.target)
+        $tabindexed = $('*[tabindex]').not('[tabindex="-1"]').sort(
+          (a, b) ->
+            index_a = parseInt($(a).attr('tabindex'))
+            index_b = parseInt($(b).attr('tabindex'))
+            return index_a - index_b
+          #return
+        )
+        current_index = $tabindexed.index($target)
+        max_index = $tabindexed.length - 1
         if event.shiftKey # shift + tab
-          next_index = if current_index is 0 then focusables_max_index else current_index - 1
+          if current_index isnt 0
+            event.preventDefault()
+            event.stopPropagation()
+            ### opera 10 doesn't prevent default, so blur target and set smallest timeout to focus ###
+            $target.blur()
+            setTimeout(
+              ->
+                $tabindexed.eq(current_index - 1).focus()
+              #return
+              1
+            )
+          #endif
         else
-          next_index = if current_index is focusables_max_index then 0 else current_index + 1
+          if current_index isnt max_index
+            event.preventDefault()
+            event.stopPropagation()
+            ### opera 10 doesn't prevent default, so blur target and set smallest timeout to focus ###
+            $target.blur()
+            setTimeout(
+              ->
+                $tabindexed.eq(current_index + 1).focus()
+              #return
+              1
+            )
+          #endif
         #endif
-        $focusables.eq(next_index).focus()
       #endif
     #return
   )

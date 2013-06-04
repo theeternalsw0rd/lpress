@@ -53,11 +53,11 @@ input.button {
   color: #381a1c;
   cursor: pointer; }
   .js label.checkbox span.active-checkbox, .opacity div.file input.file:active + span.button, .ie div.file input.file:active + span.button, span.active-button, a.active-button, input.button:active, .opacity div.upload input.file:active + span.faux-file, .ie div.upload input.file:active + span.faux-file {
-    background: #f5f0ea;
+    background: #f6f1eb;
     background: rgba(255, 255, 255, 0.6);
     outline: 2px inset #deccb7 !important; }
-  .js label.checkbox input.checkbox:focus + span.faux-checkbox, .js label.checkbox input.checkbox:active + span.faux-checkbox, .js label.checkbox span.focused-checkbox, .opacity div.file input.file:focus + span.button, .ie div.file input.file:focus + span.button, span.focused, a.focused, input.button:focus {
-    background: #f5f0ea;
+  .js label.checkbox input.checkbox:focus + span.faux-checkbox, .js label.checkbox input.checkbox:active + span.faux-checkbox, .js label.checkbox span.focused-checkbox, .opacity div.file input.file:focus + span.button, .ie div.file input.file:focus + span.button, span.focused, span.focused-button, a.focused, input.button:focus {
+    background: #f6f1eb;
     background: rgba(255, 255, 255, 0.6); }
 
 .js label.checkbox span.faux-checkbox, span.button, a.button {
@@ -123,18 +123,25 @@ h1 {
   outline-offset: -2px;
   color: #381a1c; }
   .text input:focus, textarea:focus {
-    background: #f5f0ea;
+    background: #f6f1eb;
     background: rgba(255, 255, 255, 0.6);
     outline: 2px inset #deccb7; }
 
 .lt-ie8 input, .lt-ie8 textarea, .lt-ie8 span.faux-checkbox, .lt-ie8 span.button, .lt-ie8 a.button {
   border: 2px outset #deccb7; }
 .lt-ie8 input.focused, .lt-ie8 textarea.focused {
-  border: 2px inset #deccb7; }
+  border: 2px inset #deccb7;
+  background: #f6f1eb;
+  background: rgba(255, 255, 255, 0.6); }
+.lt-ie8 span.focused, .lt-ie8 a.focused {
+  background: #f6f1eb;
+  background: rgba(255, 255, 255, 0.6); }
 .lt-ie8 span.active-button, .lt-ie8 a.active-button {
-  border: 2px inset #deccb7; }
+  border: 2px inset #deccb7;
+  background: #f6f1eb;
+  background: rgba(255, 255, 255, 0.6); }
 .lt-ie8 input.file {
-  background: #ece4da !important; }
+  background: #ece4da; }
 
 label.checkbox {
   cursor: pointer; }
