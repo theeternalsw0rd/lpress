@@ -13,7 +13,7 @@
 		{{ Form::open() }}
 		<div class='text'>
 			{{ Form::label('Application Key:') }}
-			{{ Form::password('password', array('tabindex' => '1')) }}
+			{{ Form::password('password', array('autofocus' => 'autofocus', 'tabindex' => '1')) }}
 		</div>
 		{{ Form::hidden('username', 'lpress') }}
 		<div class='submit'>

@@ -10,7 +10,7 @@
 		{{ Form::open() }}
 		<div class='text'>
 			{{ Form::label('Username') }}<br />
-			{{ Form::text('username', array('tabindex' => '1')) }}
+			{{ Form::text('username', array('autofocus' => 'autofocus', 'tabindex' => '1')) }}
 		</div>
 		<div class='text'>
 			{{ Form::label('Password') }}<br />
