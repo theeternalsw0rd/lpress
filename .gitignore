@@ -2,4 +2,12 @@
 composer.phar
 composer.lock
 .DS_Store
-src/views/themes/default/watcher/node_modules
+/src/views/themes/default/watcher/node_modules
+/src/views/themes/default/assets/js/*
+/src/views/themes/default/assets/js/*/
+/src/views/themes/default/assets/css/*
+/src/views/themes/default/assets/css/*/
+!/src/views/themes/default/assets/js/uncompressed/vendor/
+!/src/views/themes/default/assets/js/compressed/vendor/
+!/src/views/themes/default/assets/css/uncompressed/vendor/
+!/src/views/themes/default/assets/css/compressed/vendor/
