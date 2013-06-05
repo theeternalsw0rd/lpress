@@ -17,7 +17,7 @@ if $html.hasClass('lt-ie8')
   $('form').each(
     ->
       $this = $(this)
-      ### replace input buttons cause ie puts a unremovable black border around them use an anchor instead ###
+      ### replace input buttons cause ie puts an unremovable black border around them use an anchor instead ###
       $this.find('input[type=submit]').each(
         ->
           $this = $(this)
@@ -57,7 +57,7 @@ if $html.hasClass('lt-ie8')
       $(this).closest('form').submit()
     #return
   )
-  $('input, textarea, a.button').on(
+  $('input, textarea').on(
     'focus'
     (event) ->
       $this = $(this)
@@ -67,7 +67,7 @@ if $html.hasClass('lt-ie8')
       $this.addClass('focused')
     #return
   )
-  $('input, textarea, a.button').on(
+  $('input, textarea').on(
     'blur'
     (event) ->
       $this = $(this)
@@ -109,6 +109,20 @@ $(document).on(
     $(this).addClass('active-button')
   #return
 )
+$(document).on(
+  'focus'
+  '.button'
+  (event) ->
+    $(this).addClass('focused-button')
+  #return
+)
+$(document).on(
+  'blur'
+  '.button'
+  (event) ->
+    $(this).removeClass('focused-button')
+  #return
+)
 if $html.hasClass('opacity') or $html.hasClass('ie')
   $(document).on(
     'mousedown'
@@ -134,9 +148,16 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
       $this.find('input.file').each(
         ->
           $this = $(this)
-          $this.after(
-            "<span unselectable='on' id='for-#{this.id}' class='button'>#{$this.attr('data-label')}</span>"
-          )
+          if $html.hasClass('ie')
+            $this.after(
+              "<a unselectable='on' tabindex='#{$this.attr('tabindex')}' id='for-#{this.id}' class='button'>#{$this.attr('data-label')}</a>"
+            )
+            $this.prop('tabindex', '-1')
+          else
+            $this.after(
+              "<span unselectable='on' id='for-#{this.id}' class='button'>#{$this.attr('data-label')}</span>"
+            )
+          #endif
           $this.parent().after(
             "<p class='file'>File to be uploaded: <span id='label-#{this.id}'>none</span></p>"
           )
@@ -164,69 +185,91 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
     #return
   )
   ### workaround browsers that have two-tab focus on file input ###
-  $(document).on(
-    'keydown'
-    '*[tabindex]'
-    (event) ->
-      if event.which is 9 # tab
-        $target = $(event.target)
-        $tabindexed = $('*[tabindex]').not('[tabindex="-1"]').sort(
-          (a, b) ->
-            index_a = parseInt($(a).attr('tabindex'))
-            index_b = parseInt($(b).attr('tabindex'))
-            return index_a - index_b
-          #return
-        )
-        current_index = $tabindexed.index($target)
-        max_index = $tabindexed.length - 1
-        if event.shiftKey # shift + tab
-          if current_index isnt 0
-            event.preventDefault()
-            event.stopPropagation()
-            ### opera 10 doesn't prevent default, so blur target and set smallest timeout to focus ###
-            $target.blur()
-            setTimeout(
-              ->
-                $tabindexed.eq(current_index - 1).focus()
-              #return
-              1
-            )
-          #endif
-        else
-          if current_index isnt max_index
-            event.preventDefault()
-            event.stopPropagation()
-            ### opera 10 doesn't prevent default, so blur target and set smallest timeout to focus ###
-            $target.blur()
-            setTimeout(
-              ->
-                $tabindexed.eq(current_index + 1).focus()
-              #return
-              1
-            )
+  if navigator.appName is 'Opera'
+    $(document).on(
+      'keydown'
+      '*[tabindex]'
+      (event) ->
+        if event.which is 9
+          $target = $(event.target)
+          $tabindexed = $('*[tabindex]').not('[tabindex="-1"]').sort(
+            (a, b) ->
+              index_a = parseInt($(a).attr('tabindex'))
+              index_b = parseInt($(b).attr('tabindex'))
+              return index_a - index_b
+            #return
+          )
+          current_index = $tabindexed.index($target)
+          max_index = $tabindexed.length - 1
+          if event.shiftKey # shift + tab
+            if current_index isnt 0
+              event.preventDefault()
+              event.stopPropagation()
+              ### opera 10 doesn't prevent default, so blur target and set smallest timeout to focus ###
+              $target.blur()
+              setTimeout(
+                ->
+                  $tabindexed.eq(current_index - 1).focus()
+                #return
+                1
+              )
+            #endif
+          else
+            if current_index isnt max_index
+              event.preventDefault()
+              event.stopPropagation()
+              ### opera 10 doesn't prevent default, so blur target and set smallest timeout to focus ###
+              $target.blur()
+              setTimeout(
+                ->
+                  $tabindexed.eq(current_index + 1).focus()
+                #return
+                1
+              )
+            #endif
           #endif
         #endif
-      #endif
-    #return
-  )
-  ### this.id.substring(4) removes the 'for-' from the id ###
-  $('.ie div.file span.button').on(
-    'click'
-    (event) ->
-      event.preventDefault()
-      $file = $(document.getElementById(this.id.substring(4)))
-      $file.click()
-    #return
-  )
-  $('input.file').on(
-    'keydown'
-    (event) ->
-      if event.which in [13, 32]
+      #return
+    )
+    ### unify browser accessibility experience for opera ###
+    $('input.file').on(
+      'keydown'
+      (event) ->
+        if event.which in [13, 32]
+          $this = $(this)
+          event.preventDefault()
+          event.stopPropagation()
+          $this.click()
+        #endif
+      #return
+    )
+  #endif
+  if $html.hasClass('ie')
+    ### unify browser accessibility experience for ie ###
+    ### this.id.substring(4) removes the 'for-' from the id ###
+    $('div.upload a.button').on(
+      'keydown'
+      (event) ->
+        if event.which in [13, 32]
+          $this = $(this)
+          event.preventDefault()
+          event.stopPropagation()
+          $this.click()
+        #endif
+      #return
+    )
+    ### this.id.substring(4) removes the 'for-' from the id ###
+    $('div.file a.button').on(
+      'click'
+      (event) ->
         event.preventDefault()
-        $(this).click()
-      #endif
-    #return
-  )
+        $file = $(document.getElementById(this.id.substring(4)))
+        $(':focus').blur()
+        $file.click()
+        $(this).focus()
+      #return
+    )
+  #endif
   $('label.checkbox').on(
     'click'
     (event) ->

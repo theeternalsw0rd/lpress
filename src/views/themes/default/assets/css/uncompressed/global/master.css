@@ -52,11 +52,11 @@ input.button {
   outline-offset: -2px;
   color: #381a1c;
   cursor: pointer; }
-  .js label.checkbox span.active-checkbox, .opacity div.file input.file:active + span.button, .ie div.file input.file:active + span.button, span.active-button, a.active-button, input.button:active, .opacity div.upload input.file:active + span.faux-file, .ie div.upload input.file:active + span.faux-file {
+  .js label.checkbox span.active-checkbox, .opacity div.file input.file:active + span.button, .ie div.file input.file:active + span.button, .js span.active-button, .js a.active-button, input.button:active, .opacity div.upload input.file:active + span.faux-file, .ie div.upload input.file:active + span.faux-file, span.active-button, a.active-button {
     background: #f6f1eb;
     background: rgba(255, 255, 255, 0.6);
     outline: 2px inset #deccb7 !important; }
-  .js label.checkbox input.checkbox:focus + span.faux-checkbox, .js label.checkbox input.checkbox:active + span.faux-checkbox, .js label.checkbox span.focused-checkbox, .opacity div.file input.file:focus + span.button, .ie div.file input.file:focus + span.button, span.focused, span.focused-button, a.focused, input.button:focus {
+  .js label.checkbox input.checkbox:focus + span.faux-checkbox, .js label.checkbox input.checkbox:active + span.faux-checkbox, .js label.checkbox span.focused-checkbox, .opacity div.file input.file:focus + span.button, .ie div.file input.file:focus + span.button, .js span.focused-button, .js a.focused-button, input.button:focus {
     background: #f6f1eb;
     background: rgba(255, 255, 255, 0.6); }
 
@@ -133,7 +133,7 @@ h1 {
   border: 2px inset #deccb7;
   background: #f6f1eb;
   background: rgba(255, 255, 255, 0.6); }
-.lt-ie8 span.focused, .lt-ie8 a.focused {
+.lt-ie8 span.focused-button, .lt-ie8 a.focused-button {
   background: #f6f1eb;
   background: rgba(255, 255, 255, 0.6); }
 .lt-ie8 span.active-button, .lt-ie8 a.active-button {
@@ -151,14 +151,14 @@ label.checkbox {
   label.checkbox span.checkmark {
     visibility: hidden; }
 
-.js label.checked span.faux-checkbox span.checkmark {
-  visibility: visible; }
-
 .opacity div.file input.file, .ie div.file input.file {
   cursor: pointer;
   opacity: 0; }
 .opacity div.file p.file, .ie div.file p.file {
   display: inline-block; }
+
+.js label.checked span.faux-checkbox span.checkmark {
+  visibility: visible; }
 
 span.button, a.button, input.button {
   display: inline-block;

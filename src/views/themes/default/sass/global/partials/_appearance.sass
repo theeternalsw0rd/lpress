@@ -85,7 +85,7 @@ h1
   input.focused, textarea.focused
     border: 2px inset $input_outline_color
     @include background_opacity($form_input_rgba_background, $fallback: $form_input_focused_background)
-  span.focused, a.focused
+  span.focused-button, a.focused-button
     @include background_opacity($form_input_rgba_background, $fallback: $form_input_focused_background)
   span.active-button, a.active-button
     border: 2px inset $input_outline_color
@@ -115,9 +115,6 @@ label.checkbox
   span.active-checkbox
     @extend %real-button:active
 
-.js label.checked span.faux-checkbox span.checkmark
-  visibility: visible
-
 .opacity div.file, .ie div.file 
   input.file
     cursor: pointer
@@ -133,11 +130,13 @@ span.button, a.button
   @extend %unselectable
   @extend %faux-button
 
-span.active-button, a.active-button
-  @extend %real-button:active
-
-span.focused, span.focused-button, a.focused
-  @extend %real-button:focus
+.js 
+  label.checked span.faux-checkbox span.checkmark
+    visibility: visible
+  span.active-button, a.active-button
+    @extend %real-button:active
+  span.focused-button, a.focused-button
+    @extend %real-button:focus
 
 input.button
   @extend %real-button
