@@ -134,7 +134,7 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
   $('form').each(
     ->
       $this = $(this)
-      if $html.hasClass('lt-ie7') is false
+      if $html.hasClass('lt-ie8') is false
         $this.find('input.checkbox').each(
           ->
             $(this).after(

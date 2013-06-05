@@ -112,7 +112,7 @@ jQuery(document).ready(function( $ ) {
       var $this;
 
       $this = $(this);
-      if ($html.hasClass('lt-ie7') === false) {
+      if ($html.hasClass('lt-ie8') === false) {
         $this.find('input.checkbox').each(function() {
           return $(this).after("<span class='faux-checkbox' id='for-" + this.id + "'>                  <span unselectable='on' class='checkmark'>&#x2713;</span>              </span>");
         });
@@ -138,9 +138,10 @@ jQuery(document).ready(function( $ ) {
       return $(this).next().removeClass('focused-button');
     });
     $('input.file').on('change', function(event) {
-      var $this;
+      var filename;
 
-      return $this = $(this);
+      filename = this.files ? this.files[0].name || this.files.item(0).fileName : this.value.replace(/^.*(\\|\/|\:)/, '');
+      return document.getElementById('label-' + this.id).innerHTML = filename;
     });
     /* workaround browsers that have two-tab focus on file input
     */

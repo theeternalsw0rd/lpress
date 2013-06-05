@@ -17,6 +17,10 @@ body, input, textarea {
   font-size: 18px;
   font-weight: normal; }
 
+/* some browsers don't automatically fallback if character doesn't exist in webfont */
+input[type=password], span.checkmark {
+  font-family: Serif; }
+
 h1 {
   font-size: 1.7em;
   font-family: "Fanwood", Serif; }
@@ -247,8 +251,12 @@ p {
   top: 0 !important;
   left: 0 !important; }
 
-.lt-ie7 input.checkbox {
-  position: static !important; }
+.lt-ie8 input.checkbox {
+  position: relative !important;
+  left: 0 !important;
+  top: -0.4em;
+  height: 1em;
+  width: 1em; }
 
 .no-js input.file {
   margin: 0.5em 0 0 0;
