@@ -30,7 +30,11 @@ $base_weight: 400;
 
 body, input, textarea {
     font-family: $text_family;
-	@include base_font(18px)
+    @include base_font(18px)
+}
+/* some browsers don't automatically fallback if character doesn't exist in webfont */
+input[type=password], span.checkmark {
+    font-family: Serif
 }
 h1 {
     font-size: 1.7em;
@@ -46,7 +50,7 @@ h1 {
     font-size: 1em !important;
 }
 a.button {
-	text-decoration: none;
+    text-decoration: none;
 }
 @media 
 (-webkit-min-device-pixel-ratio: 1.5), 
@@ -59,11 +63,11 @@ a.button {
 and (min-device-width : 320px) 
 and (max-device-width : 480px) {
     body, input, textarea {
-		@include base_font(12px)
+        @include base_font(12px)
     }
 }
 @media only print {
     body, input, textarea {
-		@include base_font(12pt)
+        @include base_font(12pt)
     }
 }
