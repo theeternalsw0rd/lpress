@@ -181,7 +181,8 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
   $('input.file').on(
     'change'
     (event) ->
-      $this = $(this)
+      filename = if this.files then this.files[0].name || this.files.item(0).fileName else this.value.replace(/^.*(\\|\/|\:)/, '')
+      document.getElementById('label-' + this.id).innerHTML = filename
     #return
   )
   ### workaround browsers that have two-tab focus on file input ###
