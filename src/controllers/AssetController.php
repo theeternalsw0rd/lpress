@@ -90,6 +90,7 @@
 			if(extension_loaded('zlib')){ob_start('ob_gzhandler');}
 			header('Content-Type: ' . $mime);
 			if($download) {
+				header('X-Download-Options: noopen'); // disable directly opening download on IE
 				header('Content-Disposition: attachment; filename="' . $file_name . '"');
 			}
 			readfile($path);
