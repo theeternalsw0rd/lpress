@@ -104,21 +104,21 @@ $(document).on(
 )
 $(document).on(
   'mousedown'
-  '.button'
+  '.button, button'
   (event) ->
     $(this).addClass('active-button')
   #return
 )
 $(document).on(
   'focus'
-  '.button'
+  '.button, button'
   (event) ->
     $(this).addClass('focused-button')
   #return
 )
 $(document).on(
   'blur'
-  '.button'
+  '.button, button'
   (event) ->
     $(this).removeClass('focused-button')
   #return
