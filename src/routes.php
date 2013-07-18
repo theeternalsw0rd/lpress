@@ -11,8 +11,7 @@
 	use Illuminate\Support\Facades\URL;
 	use Illuminate\Support\Facades\View;
 	
-	$route_prefix = Config::get('l-press::route_prefix');
-	$route_prefix = $route_prefix == '/' ? '' : $route_prefix;
+	$route_prefix = BaseController::getRoutePrefix();
 	$admin_route = Config::get('l-press::admin_route');
 
 	function supportsSHA2() {

@@ -8,6 +8,12 @@
 	use Illuminate\Support\Facades\URL;
 
 	class BaseController extends Controller {
+		public static function getRoutePrefix() {
+			$route_prefix = Config::get('l-press::route_prefix');
+			$route_prefix = $route_prefix == '/' ? '' : $route_prefix;
+			return $route_prefix;
+		}
+
 		public static function getAttributeString($attributes) {
 			$attribute_string = '';
 			if(is_array($attributes) && count($attributes) > 0) {
