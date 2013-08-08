@@ -2,7 +2,7 @@
 composer.phar
 composer.lock
 .DS_Store
-/src/views/themes/default/watcher/node_modules
+node_modules
 /src/views/themes/default/assets/js/uncompressed/compiled
 /src/views/themes/default/assets/js/uncompressed/compiled/*
 /src/views/themes/default/assets/js/compressed/compiled
