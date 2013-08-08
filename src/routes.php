@@ -152,6 +152,28 @@
 	)->where('path', '(.*)');
 
 	Route::get(
+		$route_prefix . 'upload',
+		array(
+			'before' => 'theme',
+			'uses' => 'EternalSword\LPress\UploadController@getURL'
+		)
+	);
+	Route::post(
+		$route_prefix . 'upload',
+		array(
+			'before' => 'theme',
+			'uses' => 'EternalSword\LPress\UploadController@postFile'
+		)
+	);
+	Route::delete(
+		$route_prefix . 'upload',
+		array(
+			'before' => 'theme',
+			'uses' => 'EternalSword\LPress\UploadController@deleteFile'
+		)
+	);
+
+	Route::get(
 		$route_prefix . $admin_route,
 		array(
 			'before' => 'theme|admin',
