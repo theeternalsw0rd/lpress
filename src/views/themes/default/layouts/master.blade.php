@@ -18,7 +18,7 @@
 		@section('styles')
 			{{ HTML::asset('css', 'vendor/h5bp/normalize.css') }}
 			{{ HTML::asset('css', 'vendor/h5bp/main.css') }}
-			{{ HTML::asset('css', 'global/master.css') }}
+			{{ HTML::asset('css', 'compiled/global/master.css') }}
 		@show
 	</head>
 	<body>
@@ -33,7 +33,7 @@
 
 		@section('footer_scripts')
 			{{ HTML::asset('js', 'vendor/jquery/jquery.js') }}
-			{{ HTML::asset('js', 'global/ready.js') }}
+			{{ HTML::asset('js', 'compiled/global/ready.js') }}
 		@show
 	</body>
 	<!-- this file was built on top of the HTML5 Boilerplate <https://github.com/h5bp/html5-boilerplate> included index.html file -->
