@@ -15,8 +15,8 @@
         "classmap": [
             "src/migrations",
             "src/seeds",
-	    "src/controllers",
-	    "src/models"
+            "src/controllers",
+            "src/models"
         ],
         "psr-0": {
             "EternalSword\\LPress": "src/"
