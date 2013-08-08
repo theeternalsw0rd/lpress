@@ -11,3 +11,5 @@ composer.lock
 !/src/views/themes/default/assets/js/compressed/vendor/
 !/src/views/themes/default/assets/css/uncompressed/vendor/
 !/src/views/themes/default/assets/css/compressed/vendor/
+/src/uploads/*
+!/src/uploads/.gitkeep
