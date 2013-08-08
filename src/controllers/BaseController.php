@@ -86,7 +86,7 @@
 					}
 				}
 				$version = '';
-				$version = @filemtime(BaseController::getAssetPath() . '/' . $path);
+				$version = @filemtime(self::getAssetPath() . '/' . $path);
 				if($version == '') {
 					$close = "' data-err='$path could not be found" . $close;
 				}
