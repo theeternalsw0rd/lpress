@@ -61,23 +61,24 @@
 			HTML::macro('asset', function($type, $path, $attributes = array()) {
 				$asset_domain = Config::get('l-press::asset_domain');
 				$asset_domain = empty($asset_domain) ? DOMAIN : $asset_domain;
+				$route_prefix = self::getRoutePrefix();
 				$open = '';
 				$close = '';
 				switch($type) {
 					case 'css': {
 						$path = "css/" . PRODUCTION . '/' . $path;
-						$open .= "<link rel='stylesheet' type='text/css' href='//" . $asset_domain ."/assets/" . $path . "?v=";
+						$open .= "<link rel='stylesheet' type='text/css' href='//" . $asset_domain . $route_prefix ."/assets/" . $path . "?v=";
 						$close .= "'>";
 						break;
 					}
 					case 'js': {
 						$path = "js/" . PRODUCTION . '/' . $path;
-						$open .= "<script type='text/javascript' src='//" . $asset_domain . "/assets/" . $path . "?v=";
+						$open .= "<script type='text/javascript' src='//" . $asset_domain . $route_prefix . "/assets/" . $path . "?v=";
 						$close .= "'></script>";
 						break;
 					}
 					case 'img': {
-						$open .= "<img src='//" . $asset_domain . "/assets" . $path . "?v=";
+						$open .= "<img src='//" . $asset_domain . $route_prefix . "/assets" . $path . "?v=";
 						$close .= "'" . self::getAttributeString($attributes) . "/>";
 						break;
 					}
