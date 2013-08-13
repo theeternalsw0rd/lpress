@@ -18,6 +18,7 @@
 		@section('styles')
 			{{ HTML::asset('css', 'vendor/h5bp/normalize.css') }}
 			{{ HTML::asset('css', 'vendor/h5bp/main.css') }}
+			{{ HTML::asset('css', 'vendor/colorbox/colorbox.css') }}
 			{{ HTML::asset('css', 'compiled/global/master.css') }}
 		@show
 	</head>
@@ -33,6 +34,7 @@
 
 		@section('footer_scripts')
 			{{ HTML::asset('js', 'vendor/jquery/jquery.js') }}
+			{{ HTML::asset('js', 'vendor/colorbox/colorbox.js') }}
 			{{ HTML::asset('js', 'compiled/global/ready.js') }}
 		@show
 	</body>
