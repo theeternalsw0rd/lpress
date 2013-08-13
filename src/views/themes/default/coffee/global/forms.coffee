@@ -291,6 +291,7 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
       #endif
     #return
   )
+#endif
 ###
  * close global/forms.coffee
 ###
