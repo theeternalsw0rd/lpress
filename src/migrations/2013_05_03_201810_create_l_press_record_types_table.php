@@ -12,7 +12,7 @@ class CreateLPressRecordTypesTable extends Migration {
      */
     public function up()
     {
-		Schema::create('record_types', function(Blueprint $table) {
+        Schema::create('record_types', function(Blueprint $table) {
             $table->increments('id');
 			$table->string('label')->unique();
 			$table->string('slug')->unique();
@@ -31,7 +31,7 @@ class CreateLPressRecordTypesTable extends Migration {
      */
     public function down()
     {
-		Schema::drop('record_types');
+        Schema::drop('record_types');
     }
 
 }
