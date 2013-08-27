@@ -14,10 +14,10 @@ class CreateLPressValuesTable extends Migration {
     {
         Schema::create('values', function(Blueprint $table) {
             $table->increments('id');
-			$table->integer('field_id');
-			$table->integer('record_id');
-			$table->integer('current_revision_id');
-			$table->integer('site_id');
+            $table->integer('field_id');
+            $table->integer('record_id');
+            $table->integer('current_revision_id');
+            $table->integer('site_id');
             $table->timestamps();
         });
     }
@@ -29,7 +29,7 @@ class CreateLPressValuesTable extends Migration {
      */
     public function down()
     {
-		Schema::drop('values');
+        Schema::drop('values');
     }
 
 }
