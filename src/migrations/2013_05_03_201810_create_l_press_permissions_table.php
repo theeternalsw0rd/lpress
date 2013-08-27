@@ -5,29 +5,29 @@ use Illuminate\Database\Schema\Blueprint;
 
 class CreateLPressPermissionsTable extends Migration {
 
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::create('permissions', function(Blueprint $table) {
-            $table->increments('id');
+	/**
+	 * Run the migrations.
+	 *
+	 * @return void
+	 */
+	public function up()
+	{
+		Schema::create('permissions', function(Blueprint $table) {
+			$table->increments('id');
 			$table->string('label')->unique();
 			$table->text('description');
-            $table->timestamps();
-        });
-    }
+			$table->timestamps();
+		});
+	}
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::drop('permissions');
-    }
+	/**
+	 * Reverse the migrations.
+	 *
+	 * @return void
+	 */
+	public function down()
+	{
+		Schema::drop('permissions');
+	}
 
 }

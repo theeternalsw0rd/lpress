@@ -2,8 +2,8 @@
 
 class LPressPermissionsTableSeeder extends Seeder {
 
-    public function run()
-    {
+	public function run()
+	{
 		$permissions = array(
 			array(
 				'label' => 'Root',
@@ -35,8 +35,8 @@ class LPressPermissionsTableSeeder extends Seeder {
 			)
 		);
 
-        // Uncomment the below to run the seeder
+		// Uncomment the below to run the seeder
 		DB::table('permissions')->insert($permissions);
-    }
+	}
 
 }

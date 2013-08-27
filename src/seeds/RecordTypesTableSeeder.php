@@ -2,9 +2,9 @@
 
 class LPressRecordTypesTableSeeder extends Seeder {
 
-    public function run()
-    {
-        $record_types = array(
+	public function run()
+	{
+		$record_types = array(
 			array(
 				'label' => 'Post',
 				'description' => 'Default type for content.',
@@ -31,10 +31,10 @@ class LPressRecordTypesTableSeeder extends Seeder {
 				'depth' => 0
 
 			),
-        );
+		);
 
-        // Uncomment the below to run the seeder
+		// Uncomment the below to run the seeder
 		DB::table('record_types')->insert($record_types);
-    }
+	}
 
 }

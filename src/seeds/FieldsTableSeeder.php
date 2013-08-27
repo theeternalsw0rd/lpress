@@ -2,9 +2,9 @@
 
 class LPressFieldsTableSeeder extends Seeder {
 
-    public function run()
-    {
-        $fields = array(
+	public function run()
+	{
+		$fields = array(
 			array(
 				'label' => 'Post Content',
 				'slug' => 'post_content',
@@ -29,10 +29,10 @@ class LPressFieldsTableSeeder extends Seeder {
 				'field_type_id' => 2,
 				'record_type_id' => 3
 			),
-        );
+		);
 
-        // Uncomment the below to run the seeder
+		// Uncomment the below to run the seeder
 		DB::table('fields')->insert($fields);
-    }
+	}
 
 }

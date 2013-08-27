@@ -2,9 +2,9 @@
 
 class LPressGroupsTableSeeder extends Seeder {
 
-    public function run()
-    {
-        $groups = array(
+	public function run()
+	{
+		$groups = array(
 			array(
 				'label' => 'Root',
 				'description' => 'This group has full control over all sites.',
@@ -79,8 +79,8 @@ class LPressGroupsTableSeeder extends Seeder {
 			),
 		);
 
-        // Uncomment the below to run the seeder
+		// Uncomment the below to run the seeder
 		DB::table('groups')->insert($groups);
-    }
+	}
 
 }

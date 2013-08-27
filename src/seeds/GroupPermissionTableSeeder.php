@@ -2,8 +2,8 @@
 
 class LPressGroupPermissionTableSeeder extends Seeder {
 
-    public function run()
-    {
+	public function run()
+	{
 		$group_permissions = array(
 			array(
 				'group_id' => 1,
@@ -125,10 +125,10 @@ class LPressGroupPermissionTableSeeder extends Seeder {
 				'group_id' => 11,
 				'permission_id' => 7
 			)
-        );
+		);
 
-        // Uncomment the below to run the seeder
+		// Uncomment the below to run the seeder
 		DB::table('group_permission')->insert($group_permissions);
-    }
+	}
 
 }

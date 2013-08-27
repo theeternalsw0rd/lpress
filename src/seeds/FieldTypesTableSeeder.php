@@ -2,8 +2,8 @@
 
 class LPressFieldTypesTableSeeder extends Seeder {
 
-    public function run()
-    {
+	public function run()
+	{
 		$field_types = array(
 			array(
 				'label' => 'wysiwyg',
@@ -61,10 +61,10 @@ class LPressFieldTypesTableSeeder extends Seeder {
 				'label' => 'Checkbox',
 				'description' => 'This field type is for a true/false input.'
 			)
-        );
+		);
 
-        // Uncomment the below to run the seeder
+		// Uncomment the below to run the seeder
 		DB::table('field_types')->insert($field_types);
-    }
+	}
 
 }

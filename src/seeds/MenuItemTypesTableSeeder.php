@@ -2,8 +2,8 @@
 
 class LPressMenuItemTypesTableSeeder extends Seeder {
 
-    public function run()
-    {
+	public function run()
+	{
 		$menu_item_types = array(
 			array(
 				'label' => 'Text',
@@ -14,10 +14,10 @@ class LPressMenuItemTypesTableSeeder extends Seeder {
 			array(
 				'label' => 'Separator',
 			)
-        );
+		);
 
-        // Uncomment the below to run the seeder
+		// Uncomment the below to run the seeder
 		DB::table('menu_item_types')->insert($menu_item_types);
-    }
+	}
 
 }

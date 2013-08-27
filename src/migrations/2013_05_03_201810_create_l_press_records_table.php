@@ -5,15 +5,15 @@ use Illuminate\Database\Schema\Blueprint;
 
 class CreateLPressRecordsTable extends Migration {
 
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::create('records', function(Blueprint $table) {
-            $table->increments('id');
+	/**
+	 * Run the migrations.
+	 *
+	 * @return void
+	 */
+	public function up()
+	{
+		Schema::create('records', function(Blueprint $table) {
+			$table->increments('id');
 			$table->string('label');
 			$table->string('slug');
 			$table->boolean('public');
@@ -24,18 +24,18 @@ class CreateLPressRecordsTable extends Migration {
 			$table->dateTime('checked_out_time');
 			$table->dateTime('checked_in_time');
 			$table->integer('site_id');
-            $table->timestamps();
-        });
-    }
+			$table->timestamps();
+		});
+	}
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::drop('records');
-    }
+	/**
+	 * Reverse the migrations.
+	 *
+	 * @return void
+	 */
+	public function down()
+	{
+		Schema::drop('records');
+	}
 
 }
