@@ -17,7 +17,6 @@ class CreateLPressValuesTable extends Migration {
 			$table->integer('field_id');
 			$table->integer('record_id');
 			$table->integer('current_revision_id');
-			$table->integer('site_id');
 			$table->timestamps();
 		});
 	}
