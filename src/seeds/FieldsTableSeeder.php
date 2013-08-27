@@ -31,7 +31,6 @@ class LPressFieldsTableSeeder extends Seeder {
 			),
 		);
 
-		// Uncomment the below to run the seeder
 		DB::table('fields')->insert($fields);
 	}
 

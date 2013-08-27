@@ -13,7 +13,6 @@ class LPressUsersTableSeeder extends Seeder {
 			)
 		);
 
-		// Uncomment the below to run the seeder
 		DB::table('users')->insert($users);
 	}
 

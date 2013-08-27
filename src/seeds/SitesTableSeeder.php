@@ -12,7 +12,6 @@ class LPressSitesTableSeeder extends Seeder {
 			)
 		);
 
-		// Uncomment the below to run the seeder
 		DB::table('sites')->insert($sites);
 	}
 

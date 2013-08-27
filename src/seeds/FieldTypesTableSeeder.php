@@ -63,7 +63,6 @@ class LPressFieldTypesTableSeeder extends Seeder {
 			)
 		);
 
-		// Uncomment the below to run the seeder
 		DB::table('field_types')->insert($field_types);
 	}
 

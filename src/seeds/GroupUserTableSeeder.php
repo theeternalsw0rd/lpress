@@ -11,7 +11,6 @@ class LPressGroupUserTableSeeder extends Seeder {
 			)
 		);
 
-		// Uncomment the below to run the seeder
 		DB::table('group_user')->insert($group_user);
 	}
 

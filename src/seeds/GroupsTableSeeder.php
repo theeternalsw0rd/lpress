@@ -79,7 +79,6 @@ class LPressGroupsTableSeeder extends Seeder {
 			),
 		);
 
-		// Uncomment the below to run the seeder
 		DB::table('groups')->insert($groups);
 	}
 
