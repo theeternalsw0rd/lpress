@@ -16,6 +16,7 @@ class CreateLPressCommentsTable extends Migration {
 			$table->increments('id');
 			$table->integer('record_id');
 			$table->integer('author_id');
+			$table->integer('publisher_id');
 			$table->integer('parent_id');
 			$table->integer('depth');
 			$table->text('contents');
