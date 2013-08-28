@@ -51,11 +51,9 @@
 					</label>
 				";
 			});
-			Form::macro('faux_file', function($name, $label, $attributes = array()) {
+			Form::macro('faux_file', function($name, $label, $type, $attributes = array()) {
 				return "
-					<div class='upload'>
-						<input id='${name}' name='${name}' data-label='${label}' class='file' type='file'" . self::getAttributeString($attributes) . " />
-					</div>
+					<a href='#${name}' title='${label}' data-type='${type}' data-url='" . self::getRoutePrefix() . "/upload' class='single file' " . self::getAttributeString($attributes) . ">${label}</a>
 				";
 			});
 			HTML::macro('asset', function($type, $path, $attributes = array()) {
