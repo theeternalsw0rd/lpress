@@ -15,7 +15,8 @@ class CreateLPressValuesTable extends Migration {
 		Schema::create('values', function(Blueprint $table) {
 			$table->increments('id');
 			$table->integer('field_id');
-			$table->integer('record_id');
+			$table->integer('valuable_id');
+			$table->integer('valuable_type');
 			$table->integer('current_revision_id');
 			$table->timestamps();
 		});
