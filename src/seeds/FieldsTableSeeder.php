@@ -14,6 +14,14 @@ class LPressFieldsTableSeeder extends Seeder {
 				'record_type_id' => 1
 			),
 			array(
+				'label' => 'Comment Content',
+				'slug' => 'comment_content',
+				'description' => 'This is the editor for Comments.',
+				'required' => TRUE,
+				'field_type_id' => 15,
+				'record_type_id' => -1
+			),
+			array(
 				'label' => 'URL',
 				'slug' => 'url',
 				'description' => 'This is the url field for the Link record type.',

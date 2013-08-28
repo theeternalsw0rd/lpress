@@ -60,6 +60,10 @@ class LPressFieldTypesTableSeeder extends Seeder {
 			array(
 				'label' => 'Checkbox',
 				'description' => 'This field type is for a true/false input.'
+			),
+			array(
+				'label' => 'Commentbox',
+				'description' => 'This field type is for comments tied to records'
 			)
 		);
 
