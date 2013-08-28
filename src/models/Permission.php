@@ -15,4 +15,8 @@ class Permission extends \Eloquent {
 	 * @var array
 	 */
 	protected $hidden = array();
+
+	public function groups() {
+		return $this->belongsToMany('Group');
+	}
 }

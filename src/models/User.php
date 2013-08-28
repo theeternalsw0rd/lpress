@@ -24,8 +24,7 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
 	 *
 	 * @return mixed
 	 */
-	public function getAuthIdentifier()
-	{
+	public function getAuthIdentifier() {
 		return $this->getKey();
 	}
 
@@ -34,8 +33,7 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
 	 *
 	 * @return string
 	 */
-	public function getAuthPassword()
-	{
+	public function getAuthPassword() {
 		return $this->password;
 	}
 
@@ -44,18 +42,27 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
 	 *
 	 * @return string
 	 */
-	public function getReminderEmail()
-	{
+	public function getReminderEmail() {
 		return $this->email;
 	}
 
-	/**
-	 * Get the sites for this user.
-	 *
-	 * @return string
-	 */
-	public function sites()
-	{
-		return $this->belongsToMany('EternalSword\LPress\Sites')->withPivot('permission_id');
+	public function published_records() {
+		return $this->hasMany('Record', 'publisher_id');
+	}
+
+	public function authored_records() {
+		return $this->hasMany('Record', 'author_id');
+	}
+
+	public function published_revisions() {
+		return $this->hasMany('Revision', 'publisher_id');
+	}
+
+	public function authored_revisions() {
+		return $this->hasMany('Revision', 'author_id');
+	}
+
+	public function groups() {
+		return $this->belongsToMany('Group');
 	}
 }
