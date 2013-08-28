@@ -44,21 +44,24 @@ if $html.hasClass('lt-ie8')
       )
     #return
   )
-  $('label.checkbox').on(
-    'mousedown',
+  $(document).on(
+    'mousedown'
+    'label.checkbox'
     (event) ->
       $(this).find('input.checkbox').focus()
     #return
   )
-  $('a.submit').on(
+  $(document).on(
     'click'
+    'a.submit'
     (event) ->
       event.preventDefault()
       $(this).closest('form').submit()
     #return
   )
-  $('input, textarea').on(
+  $(document).on(
     'focus'
+    'input, textarea'
     (event) ->
       $this = $(this)
       if $this.hasClass('file') or $this.hasClass('checkbox')
@@ -67,8 +70,9 @@ if $html.hasClass('lt-ie8')
       $this.addClass('focused')
     #return
   )
-  $('input, textarea').on(
+  $(document).on(
     'blur'
+    'input, textarea'
     (event) ->
       $this = $(this)
       if $this.hasClass('file') or $this.hasClass('checkbox')
@@ -77,8 +81,9 @@ if $html.hasClass('lt-ie8')
       $this.removeClass('focused')
     #return
   )
-  $('input[type=file]').on(
+  $(document).on(
     'keydown'
+    'input[type=file]'
     (event) ->
       $this = $(this)
       if event.which in [13, 32]
@@ -87,8 +92,9 @@ if $html.hasClass('lt-ie8')
       #endif
     #return
   )
-  $('input[type=text], input[type=password]').on(
+  $(document).on(
     'keydown'
+    'input[type=text], input[type=password]'
     (event) ->
       $this = $(this)
       if event.which is 13 then $this.closest('form').submit()
@@ -145,44 +151,77 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
           #return
         )
       #endif
-      $this.find('input.file').each(
+      $this.find('a.file').each(
         ->
           $this = $(this)
-          if $html.hasClass('ie')
-            $this.after(
-              "<a unselectable='on' tabindex='#{$this.attr('tabindex')}' id='for-#{this.id}' class='button'>#{$this.attr('data-label')}</a>"
-            )
-            $this.prop('tabindex', '-1')
+          id = this.href.split('#')[1]
+          upload_url = $this.data('url')
+          if $this.hasClass('single')
+            $uploader = $("""
+              <div id='#{id}' class='colorbox'>
+                <div class='upload'>
+                  <input id='#{id}_input' class='file' type='file' name='file' data-url='#{upload_url}' />
+                </div>
+                <div class='progress'>
+                  <div class='bar'></div>
+                </div>
+              </div>
+            """)
           else
-            $this.after(
-              "<span unselectable='on' id='for-#{this.id}' class='button'>#{$this.attr('data-label')}</span>"
+            $uploader = $("""
+              <div id='#{id}' class='colorbox'>
+                <div class='upload'>
+                  <input id='#{id}_input' class='file' type='file' name='files[]' data-url='#{upload_url}' multiple />
+                </div>
+                <div class='progress'>
+                  <div class='bar'></div>
+                </div>
+              </div>
+            """)
+          #endif
+          if $html.hasClass('ie')
+            $uploader.find('.upload').append(
+              "<a unselectable='on' id='for-#{id}_input' class='button'>#{$this.attr('title')}</a>"
+            )
+          else
+            $uploader.find('.upload').append(
+              "<span unselectable='on' id='for-#{id}_input' class='button'>#{$this.attr('title')}</span>"
             )
           #endif
-          $this.parent().after(
-            "<p class='file'>File to be uploaded: <span id='label-#{this.id}'>none</span></p>"
-          )
+          if !!FileReader and Modernizr.draganddrop
+            $uploader.prepend("<p>This box is also a file drop zone.</p>")
+          #endif
+          $('body').append($uploader)
+          $this.colorbox({
+            inline: true
+            width: '50%'
+            height: '80%'
+            onComplete: ->
+              $colorbox = $(document.getElementById('cboxLoadedContent'))
+              $colorbox.find('a, input').first().focus()
+              $button = $colorbox.find('.upload')
+              midpoint = ($colorbox.width() - $button.width()) / 2
+              $button.css({'left': midpoint + 'px'})
+              $(document.getElementById('cboxTitle')).hide()
+            #return
+          })
         #return
       )
     #return
   )
   ### firefox doesn't support focus psuedo-class on input type file ###
-  $('input.file').on(
+  $(document).on(
     'focus'
+    'input.file'
     (event) ->
       $(this).next().addClass('focused-button')
     #return
   )
-  $('input.file').on(
+  $(document).on(
     'blur'
+    'input.file'
     (event) ->
       $(this).next().removeClass('focused-button')
-    #return
-  )
-  $('input.file').on(
-    'change'
-    (event) ->
-      filename = if this.files then this.files[0].name || this.files.item(0).fileName else this.value.replace(/^.*(\\|\/|\:)/, '')
-      document.getElementById('label-' + this.id).innerHTML = filename
     #return
   )
   ### workaround browsers that have two-tab focus on file input ###
@@ -233,8 +272,9 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
       #return
     )
     ### unify browser accessibility experience for opera ###
-    $('input.file').on(
+    $(document).on(
       'keydown'
+      'input.file'
       (event) ->
         if event.which in [13, 32]
           $this = $(this)
@@ -248,8 +288,9 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
   if $html.hasClass('ie')
     ### unify browser accessibility experience for ie ###
     ### this.id.substring(4) removes the 'for-' from the id ###
-    $('div.upload a.button').on(
+    $(document).on(
       'keydown'
+      'div.upload a.button'
       (event) ->
         if event.which in [13, 32]
           $this = $(this)
@@ -260,8 +301,9 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
       #return
     )
     ### this.id.substring(4) removes the 'for-' from the id ###
-    $('div.file a.button').on(
+    $(document).on(
       'click'
+      'div.upload a.button'
       (event) ->
         event.preventDefault()
         $file = $(document.getElementById(this.id.substring(4)))
@@ -271,16 +313,18 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
       #return
     )
   #endif
-  $('label.checkbox').on(
+  $(document).on(
     'click'
+    'label.checkbox'
     (event) ->
       event.preventDefault()
       $this = $(this)
       $('#' + $this.attr('for')).click()
     #return
   )
-  $('input.checkbox').on(
+  $(document).on(
     'click'
+    'input.checkbox'
     (event) ->
       event.stopPropagation()
       $this = $(this)

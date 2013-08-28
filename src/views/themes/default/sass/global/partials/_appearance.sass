@@ -60,6 +60,15 @@ h1
   border-width: 0 3px 0 3px
   border-style: double 
 
+.colorbox
+  display: none
+
+#colorbox
+  .colorbox
+    display: block
+  #cboxContent
+    background: url(#{$base_path}/images/backgrounds/page.png?v=1)
+
 .borderimage #page
   $border_width: 15
   border-width: 0 #{$border_width}px 0 #{$border_width}px
@@ -115,7 +124,7 @@ label.checkbox
   span.active-checkbox
     @extend %real-button:active
 
-.opacity div.file, .ie div.file 
+.opacity div.upload, .ie div.upload
   input.file
     cursor: pointer
     opacity: 0
@@ -123,8 +132,6 @@ label.checkbox
       @extend %real-button:active
     &:focus + span.button /* for mouse */
       @extend %real-button:focus
-  p.file
-    display: inline-block
 
 span.button, a.button
   @extend %unselectable

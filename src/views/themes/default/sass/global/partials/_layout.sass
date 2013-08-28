@@ -36,8 +36,20 @@ p
   margin: 0
   padding: 0.6em 0 0 0
 
+.colorbox
+  padding: 1em
+  height: 90%
+  text-align: center
+  position: relative
+  .upload
+    position: absolute
+    bottom: 0 
+
 .form
   padding: 0 0 1em 0
+  a
+    display: block
+    margin: 0.5em 0 0 0
 
 .text label
   display: block
@@ -110,14 +122,9 @@ p
   width: 0
   overflow: hidden
 
-.opacity div.file p, .ie div.file p
-  margin: 0.3em
-  padding-left: 1em
-
 .opacity div.upload, .ie div.upload 
   float: left
   padding: 0
-  position: relative
   overflow: hidden
   input.file
     z-index: 2
@@ -125,12 +132,13 @@ p
     position: absolute
     padding: 0
     right: 0
-    &:active + span.faux-file /* for mouse */
+    &:active + span.button /* for mouse */
       @extend input.button:active
+  span.button
+    margin: 0
 
 .ie div.upload
   overflow: visible
-  position: static
   input.file
     left: -1300px
     right: auto !important

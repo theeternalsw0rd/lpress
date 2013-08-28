@@ -45,8 +45,8 @@
 			{{ Form::label('Bio:') }}
 			{{ Form::textarea('bio', '', array('tabindex' => '10')) }}
 		</div>
-		<div class='file clearfix'>
-			{{ Form::faux_file('image', 'Upload Image', array('tabindex' => '11')) }}
+		<div class='file'>
+			{{ Form::faux_file('image', 'Upload Image', 'images', array('tabindex' => '11')) }}
 		</div>
 		<div class='submit'>
 			{{ Form::submit('Submit', array('class' => 'button', 'tabindex' => '12')) }}
