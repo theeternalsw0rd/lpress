@@ -47,22 +47,22 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
 	}
 
 	public function published_records() {
-		return $this->hasMany('Record', 'publisher_id');
+		return $this->hasMany('\EternalSword\LPress\Record', 'publisher_id');
 	}
 
 	public function authored_records() {
-		return $this->hasMany('Record', 'author_id');
+		return $this->hasMany('\EternalSword\LPress\Record', 'author_id');
 	}
 
 	public function published_revisions() {
-		return $this->hasMany('Revision', 'publisher_id');
+		return $this->hasMany('\EternalSword\LPress\Revision', 'publisher_id');
 	}
 
 	public function authored_revisions() {
-		return $this->hasMany('Revision', 'author_id');
+		return $this->hasMany('\EternalSword\LPress\Revision', 'author_id');
 	}
 
 	public function groups() {
-		return $this->belongsToMany('Group');
+		return $this->belongsToMany('\EternalSword\LPress\Group');
 	}
 }

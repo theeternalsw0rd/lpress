@@ -17,7 +17,7 @@ class FieldType extends \Eloquent {
 	protected $hidden = array();
 
 	public function fields() {
-		return $this->hasMany('Field');
+		return $this->hasMany('\EternalSword\LPress\Field');
 	}
 }
 

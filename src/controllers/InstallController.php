@@ -12,10 +12,9 @@
 
 	class InstallController extends BaseController {
 		public function getInstaller() {
+			extract(parent::prepareMake());	
 			$user = Auth::user();
 			if($user && $user->username == 'lpress') {
-				$view_prefix = 'l-press::themes.' . THEME;
-				parent::setMacros();
 				return View::make($view_prefix . '.installer.install',
 					array(
 						'view_prefix' => $view_prefix,

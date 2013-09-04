@@ -17,26 +17,26 @@ class Record extends \Eloquent {
 	protected $hidden = array();
 
 	public function values() {
-		return $this->morphMany('Value', 'valuable');
+		return $this->morphMany('\EternalSword\LPress\Value', 'valuable');
 	}
 
 	public function comments() {
-		return $this->hasMany('Comment');
+		return $this->hasMany('\EternalSword\LPress\Comment');
 	}
 
 	public function record_type() {
-		return $this->belongsTo('RecordType');
+		return $this->belongsTo('\EternalSword\LPress\RecordType');
 	}
 
 	public function author() {
-		return $this->belongsTo('User', 'author_id');
+		return $this->belongsTo('\EternalSword\LPress\User', 'author_id');
 	}
 
 	public function publisher() {
-		return $this->belongsTo('User', 'publisher_id');
+		return $this->belongsTo('\EternalSword\LPress\User', 'publisher_id');
 	}
 
 	public function site() {
-		return $this->belongsTo('Site');
+		return $this->belongsTo('\EternalSword\LPress\Site');
 	}
 }

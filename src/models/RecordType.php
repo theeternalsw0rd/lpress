@@ -17,11 +17,11 @@ class RecordType extends \Eloquent {
 	protected $hidden = array();
 
 	public function records() {
-		return $this->hasMany('Record');
+		return $this->hasMany('\EternalSword\LPress\Record');
 	}
 
 	public function fields() {
-		return $this->hasMany('Field');
+		return $this->hasMany('\EternalSword\LPress\Field');
 	}
 }
 

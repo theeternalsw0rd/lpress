@@ -20,18 +20,18 @@ class Comment extends \Eloquent {
 	protected $hidden = array();
 
 	public function record() {
-		return $this->belongsTo('Record');
+		return $this->belongsTo('\EternalSword\LPress\Record');
 	}
 
 	public function author() {
-		return $this->belongsTo('User', 'author_id');
+		return $this->belongsTo('\EternalSword\LPress\User', 'author_id');
 	}
 
 	public function publisher() {
-		return $this->belongsTo('User', 'publisher_id');
+		return $this->belongsTo('\EternalSword\LPress\User', 'publisher_id');
 	}
 
 	public function value() {
-		return $this->morphOne('Value', 'valuable');
+		return $this->morphOne('\EternalSword\LPress\Value', 'valuable');
 	}
 }

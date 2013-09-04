@@ -17,14 +17,14 @@ class Field extends \Eloquent {
 	protected $hidden = array();
 
 	public function values() {
-		return $this->hasMany('Value');
+		return $this->hasMany('\EternalSword\LPress\Value');
 	}
 
 	public function field_types() {
-		return $this->belongsTo('FieldType');
+		return $this->belongsTo('\EternalSword\LPress\FieldType');
 	}
 
 	public function record_types() {
-		return $this->belongsTo('RecordType');
+		return $this->belongsTo('\EternalSword\LPress\RecordType');
 	}
 }

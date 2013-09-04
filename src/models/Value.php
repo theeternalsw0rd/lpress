@@ -17,7 +17,7 @@ class Value extends \Eloquent {
 	protected $hidden = array();
 
 	public function field() {
-		return $this->belongsTo('Field');
+		return $this->belongsTo('\EternalSword\LPress\Field');
 	}
 
 	public function valuable() {
@@ -25,6 +25,6 @@ class Value extends \Eloquent {
 	}
 
 	public function revisions() {
-		return $this->hasMany('Revision');
+		return $this->hasMany('\EternalSword\LPress\Revision');
 	}
 }

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
@@ -14,74 +15,33 @@ use Illuminate\Support\Facades\View;
 $route_prefix = BaseController::getRoutePrefix();
 $admin_route = Config::get('l-press::admin_route');
 
-function supportsSHA2() {
-	$user_agent = $_SERVER['HTTP_USER_AGENT'];
-	if(preg_match('/(Windows NT 5)|(Windows XP)/i', $user_agent)
-		&& !preg_match('/firefox/i', $user_agent)
-	) {
-		return FALSE;
+App::missing(function($exception) {
+	// missing can't take filters like routes, so call needed stuff directly.
+	extract(BaseController::prepareMake());
+	switch($exception) {
+		default:
+		case '404': {
+			$template = Response::view($view_prefix . '.errors.404', array(
+				'view_prefix' => $view_prefix,
+				'title' => 'HttpError: 404 Not Found'
+			), 404);
+			break;
+		}
 	}
-	return TRUE;
-}
+	return $template;
+});
 
 Route::filter(
 	'theme',
 	function() {
-		define('DOMAIN', Request::server('HTTP_HOST'));
-		$site = NULL;
-		try { 
-			$site = Site::where('domain', DOMAIN)->first();
-		} catch(\Exception $e) {
-			$message = $e->getMessage();
-			$code = $e->getCode();
-			if($code == 2002) {
-				echo 'Could not connect to database.';
-				die();
-			}
-			if(substr_count($message, 'SQLSTATE[42S02]') > 0) {
-				echo 'Could not find sites table in the database, '
-					. 'please ensure all migrations have been run.';
-				die();
-			}
-			echo 'An unexpected error occurred, please try again later.';
-			die();
-		}
-		if(!$site) {
-			$site = Site::where('domain', 'wildcard')->first();
-		}
-		if(!$site) {
-			echo 'No valid site found for this domain, ' 
-				. 'if this is not on purpose you may need to seed the database, '
-				. 'or you have inadvertantly removed the wildcard domain site';
-			die();
-		}
-		define('SITE', $site->id);
-		define('PRODUCTION', $site->in_production == 1 ? 'compressed' : 'uncompressed');
-		try {
-			$theme = Theme::find($site->theme_id);
-		} catch(\Exception $e) {
-			$message = $e->getMessage();
-			$code = $e->getCode();
-			if(substr_count($message, 'SQLSTATE[42S02]') > 0) {
-				echo 'Could not find themes table in the database, '
-					. 'please ensure all migrations have been run.';
-				die();
-			}
-			echo 'An unexpected error occurred, please try again later.';
-			die();
-		}
-		define('THEME', $theme ? $theme->slug : 'default');
+		BaseController::verifyTheme();
 	}
 );
 
 Route::filter(
 	'general',
 	function() {
-		if(Config::get('l-press::require_ssl') && !Request::secure()) {
-			if(!Config::get('l-press::ssl_is_sha2') || supportsSHA2())
-				return Redirect::secure(Request::getRequestUri());
-			return Redirect::route('lpress-sha2');
-		}
+		return BaseController::checkSSL();
 	}
 );
 
@@ -93,22 +53,14 @@ Route::filter(
 			Session::set('redirect', URL::full());
 			return Redirect::route('lpress-login');
 		}
-		if(Config::get('l-press::admin_require_ssl') && !Request::secure()) {
-			if(!Config::get('l-press::ssl_is_sha2') || supportsSHA2())
-				return Redirect::secure(Request::getRequestUri());
-			return Redirect::route('lpress-sha2');
-		}
+		return BaseController::checkSSL('admin');
 	}
 );
 
 Route::filter(
 	'login',
 	function() {
-		if(Config::get('l-press::login_require_ssl') && !Request::secure()) {
-			if(!Config::get('l-press::ssl_is_sha2') || supportsSHA2())
-				return Redirect::secure(Request::getRequestUri());
-			return Redirect::route('lpress-sha2');
-		}
+		return BaseController::checkSSL('login');
 	}
 );
 
@@ -256,8 +208,19 @@ Route::group(array(
 	);
 });
 
-
-/*Route::get('{hierarchy}/{post}', array('as' => 'posts', function($hierarchy, $post) {
-	echo $hierarchy;
-	echo $post;
-}))->where('hierarchy', '[A-z\d\-\/]+');*/
+Route::get('{path}', array(
+	'before' => 'theme|general',
+	'as' => 'records',
+	function($path) {
+		$route = BaseController::slugsToRoute($path);
+		if($route->throw404) {
+			App::abort(404);
+		}
+		if($route->slug_types[0] == 'record') {
+			/* fill this out when at testing point */
+		}
+		if($route->slug_types[0] == 'record_type') {
+			return RecordController::getRecordsByRecordType($route->record_type, $route->json);
+		}
+	}
+))->where('path', '[A-z\d\-\/\.]+');

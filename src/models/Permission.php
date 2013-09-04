@@ -17,6 +17,6 @@ class Permission extends \Eloquent {
 	protected $hidden = array();
 
 	public function groups() {
-		return $this->belongsToMany('Group');
+		return $this->belongsToMany('\EternalSword\LPress\Group');
 	}
 }

@@ -17,22 +17,14 @@ class Revision extends \Eloquent {
 	protected $hidden = array();
 
 	public function value() {
-		return $this->belongsTo('Value');
-	}
-
-	public function previous_revision() {
-		return $this->belongsTo('Revision', 'previous_revision_id');
-	}
-
-	public function next_revision() {
-		return $this->hasOne('Revision', 'previous_revision_id');
+		return $this->belongsTo('\EternalSword\LPress\Value');
 	}
 
 	public function author() {
-		return $this->belongsTo('User', 'author_id');
+		return $this->belongsTo('\EternalSword\LPress\User', 'author_id');
 	}
 
 	public function publisher() {
-		return $this->belongsTo('User', 'publisher_id');
+		return $this->belongsTo('\EternalSword\LPress\User', 'publisher_id');
 	}
 }
