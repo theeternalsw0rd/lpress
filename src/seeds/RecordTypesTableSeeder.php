@@ -9,7 +9,6 @@ class LPressRecordTypesTableSeeder extends Seeder {
 				'label' => 'Post',
 				'description' => 'Default type for content.',
 				'slug' => 'post',
-				'hide_slug' => TRUE,
 				'parent_id' => 0,
 				'depth' => 0
 			),
@@ -17,20 +16,23 @@ class LPressRecordTypesTableSeeder extends Seeder {
 				'label' => 'Link',
 				'description' => 'Link to external resources easily by name.',
 				'slug' => 'link',
-				'hide_slug' => TRUE,
 				'parent_id' => 0,
 				'depth' => 0
-
 			),
 			array(
 				'label' => 'Attachment',
 				'description' => 'Default type for uploaded files.',
 				'slug' => 'attachment',
-				'hide_slug' => TRUE,
 				'parent_id' => 0,
 				'depth' => 0
-
 			),
+			array(
+				'label' => 'Images',
+				'description' => 'Attachments that are images.',
+				'slug' => 'image',
+				'parent_id' => 3,
+				'depth' => 1
+			)
 		);
 
 		DB::table('record_types')->insert($record_types);

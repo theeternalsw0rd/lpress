@@ -231,14 +231,15 @@ class BaseController extends Controller {
 	public static function slugsToRoute($path) {
 		$route = new \stdClass;
 		$route->throw404 = FALSE;
+		$route->json = FALSE;
 		$slugIsValidRecordType = function($i, $last_index, $segments, $slug) use(&$route) {
-			$record_type = RecordType::where('slug', '=', $slug)->where('hide_slug', '=', 0);
+			$record_type = RecordType::where('slug', '=', $slug);
 			if($record_type->count() === 0) {
 				return FALSE;
 			}
 			if($i > 0) {
 				$parent = RecordType::find($record_type->parent_id);
-				if($parent->hide_slug == 0 && $parent->slug != $segments[$i-1]) {
+				if($parent->depth > 0 && $parent->slug != $segments[$i-1]) {
 					return FALSE;
 				}
 			}

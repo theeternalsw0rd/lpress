@@ -16,7 +16,6 @@ class CreateLPressRecordTypesTable extends Migration {
 			$table->increments('id');
 			$table->string('label')->unique();
 			$table->string('slug')->unique();
-			$table->boolean('hide_slug');
 			$table->integer('parent_id');
 			$table->integer('depth');
 			$table->text('description');
