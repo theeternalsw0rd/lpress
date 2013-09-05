@@ -15,10 +15,11 @@
 			extract(parent::prepareMake());	
 			$user = Auth::user();
 			if($user && $user->username == 'lpress') {
-				return View::make($view_prefix . '.installer.install',
+				return View::make($view_prefix . '.admin.create_user',
 					array(
 						'view_prefix' => $view_prefix,
-						'title' => 'Create User'
+						'title' => 'Create User',
+						'install' => TRUE
 					)
 				);
 			}

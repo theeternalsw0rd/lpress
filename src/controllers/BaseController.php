@@ -223,9 +223,9 @@ class BaseController extends Controller {
 			echo 'An unknown error occured, please try again later.';
 			die();
 		}
-		$view_prefix = 'l-press::themes.' . THEME;
+		$view_prefix = 'l-press::themes.' . THEME . '.templates';
 		self::setMacros();
-		return array("view_prefix" => 'l-press::themes.' . THEME, "site" => self::getSite());
+		return array("view_prefix" => $view_prefix, "site" => self::getSite());
 	}
 
 	public static function slugsToRoute($path) {

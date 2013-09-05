@@ -16,30 +16,28 @@
 				echo 'An unknown error occured, please try again later.';
 				die();
 			}
-			parent::setMacros();
-			$view_prefix = 'l-press::themes.' . THEME;
+			extract(parent::prepareMake());	
 			$first_user = User::find(1);
 			$login_failed = Session::get('bad_login', false);
 			Session::forget('bad_login');
 			$user = Auth::user();
+			$title = 'Login';
+			$install = FALSE;
 			if($first_user->username == 'lpress') {
 				if($user) Auth::logout();
-				return View::make($view_prefix . '.installer.login',
-					array(
-						'login_failed' => $login_failed,
-						'view_prefix' => $view_prefix,
-						'title' => 'LPress Installer'
-					)
-				);
+				$user = FALSE;
+				$title = 'LPress Installer';
+				$install = TRUE;
 			}
 			if($user) {
 				return Redirect::route('lpress-logout-logged');
 			}
-			return View::make($view_prefix . '.login',
+			return View::make($view_prefix . '.authentication.login',
 				array(
 					'login_failed' => $login_failed,
 					'view_prefix' => $view_prefix,
-					'title' => 'Login'
+					'title' => $title,
+					'install' => $install
 				)
 			);
 		}
@@ -51,9 +49,8 @@
 		}
 
 		public function getLogoutLogged() {
-			parent::setMacros();
-			$view_prefix = 'l-press::themes.' . THEME;
-			return View::make($view_prefix . '.logged-in',
+			extract(parent::prepareMake());	
+			return View::make($view_prefix . '.authentication.logged-in',
 				array(
 					'view_prefix' => $view_prefix,
 					'title' => 'Already logged in'

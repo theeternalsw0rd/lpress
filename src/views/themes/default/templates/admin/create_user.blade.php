@@ -5,7 +5,11 @@
 @section('content')
 	<h1>Create User</h1>
 	<div class='form clearfix'>
-		{{ Form::open(array('route' => 'lpress-user-update')) }}
+		@if ($install)
+			{{ Form::open(array('route' => 'lpress-user-update')) }}
+		@else
+			{{ Form::open(array('route' => 'lpress-user-create')) }}
+		@endif
 		<div class='text'>
 			{{ Form::label('Username:') }}
 			{{ Form::text('username', '', array('autofocus' => 'autofocus', 'tabindex' => '1')) }}
@@ -48,6 +52,7 @@
 		<div class='file'>
 			{{ Form::faux_file('image', 'Upload Image', 'images', array('tabindex' => '11')) }}
 		</div>
+		{{ Form::hidden('install', $install) }}
 		<div class='submit'>
 			{{ Form::submit('Submit', array('class' => 'button', 'tabindex' => '12')) }}
 		</div>

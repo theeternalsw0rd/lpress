@@ -58,7 +58,7 @@ Route::filter(
 );
 
 Route::filter(
-	'login',
+	'login-ssl',
 	function() {
 		return BaseController::checkSSL('login');
 	}
@@ -82,8 +82,7 @@ Route::get(
 		'before' => 'theme',
 		'as' => 'lpress-sha2',
 		function() {
-			$view_prefix = 'l-press::themes.' . THEME;
-			BaseController::setMacros();
+			extract(BaseController::prepareMake());
 			return View::make($view_prefix . '.sha2', 
 				array(
 					'view_prefix' => $view_prefix,
@@ -133,7 +132,6 @@ Route::get(
 		'as' => 'lpress-admin',
 		function() {
 			echo "Hello username";
-
 		}
 	)
 );
@@ -141,7 +139,7 @@ Route::get(
 Route::get(
 	$route_prefix . 'login',
 	array(
-		'before' => 'theme|login',
+		'before' => 'theme|login-ssl',
 		'uses' => 'EternalSword\LPress\AuthenticationController@getLogin',
 		'as' => 'lpress-login'
 	)
@@ -150,7 +148,7 @@ Route::get(
 Route::get(
 	$route_prefix . 'logout',
 	array(
-		'before' => 'theme|login',
+		'before' => 'theme|login-ssl',
 		'uses' => 'EternalSword\LPress\AuthenticationController@getLogout',
 		'as' => 'lpress-logout'
 	)
@@ -159,7 +157,7 @@ Route::get(
 Route::get(
 	$route_prefix . 'logout/logged',
 	array(
-		'before' => 'theme|login',
+		'before' => 'theme|login-ssl',
 		'as' => 'lpress-logout-logged',
 		'uses' => 'EternalSword\LPress\AuthenticationController@getLogoutLogged'
 	)
@@ -169,8 +167,7 @@ Route::get(
 	$route_prefix . 'logout/login',
 	array(
 		'as' => 'lpress-logout-login',
-		function()
-		{
+		function() {
 			Auth::logout();
 			return Redirect::route('lpress-login');
 		}
@@ -182,18 +179,16 @@ Route::post(
 	array(
 		'before' => 'csrf|theme',
 		'uses' => 'EternalSword\LPress\AuthenticationController@verifyLogin'
-
 	)
 );
 
 Route::group(array(
-	'prefix' => $route_prefix . 'admin',
-	'before' => 'theme'
+	'prefix' => $route_prefix . $admin_route,
+	'before' => 'theme|admin'
 ), function() {
 	Route::get(
 		'install',
 		array(
-			'before' => 'login',
 			'as' => 'lpress-installer',
 			'uses' => 'EternalSword\LPress\InstallController@getInstaller'
 		)
