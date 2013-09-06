@@ -1,7 +1,6 @@
 {
 	"packages": {
 		"global/ready": {
-			"type": "jquery.ready",
 			"requires": [
 				"global/forms.coffee"
 			]
