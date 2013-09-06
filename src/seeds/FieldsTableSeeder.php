@@ -36,7 +36,7 @@ class LPressFieldsTableSeeder extends Seeder {
 				'required' => TRUE,
 				'field_type_id' => 2,
 				'record_type_id' => 3
-			),
+			)
 		);
 
 		DB::table('fields')->insert($fields);
