@@ -194,11 +194,11 @@ Route::group(array(
 		)
 	);
 	Route::post(
-		'update-user',
+		'install-user',
 		array(
-			'as' => 'lpress-user-update',
+			'as' => 'lpress-user-install',
 			'before' => 'csrf',
-			'uses' => 'EternalSword\LPress\UserController@updateUser'
+			'uses' => 'EternalSword\LPress\UserController@installUser'
 		)
 	);
 });
