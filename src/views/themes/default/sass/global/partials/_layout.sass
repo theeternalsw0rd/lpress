@@ -4,6 +4,17 @@ $button_hpadding: 2 * $input_padding
 $active_button_bottom_padding: 0.5 * $button_vpadding
 $active_button_top_padding: 2 * $button_vpadding - $active_button_bottom_padding
 
+/* Clearfix adapted from Nicolas Gallager's work at http://nicolasgallagher.com/micro-clearfix-hack/ */
+.clear-fix
+  *zoom: 1
+  &:before
+    content: " "
+    display: table
+  &:after
+    content: " "
+    display: table
+    clear: both
+
 %button-layout
   display: inline-block
   margin: 0.5em 0 0 0
@@ -36,14 +47,35 @@ p
   margin: 0
   padding: 0.6em 0 0 0
 
-.colorbox
-  padding: 1em
-  height: 90%
+p.center
+  width: 100%
   text-align: center
+
+ul.etabs
+  display: block
+  padding: 0
+  margin: 0
+  .tab
+    float: left
+    display: block
+    margin: 0 0.5em 0 0
+    a
+      padding: 0.5em 1em
+      display: block
+
+.tabs
+  height: 100%
+  width: 95%
+  margin: auto
+  .tab-contents
+    height: 100%
+
+.colorbox
+  height: 100% 
   position: relative
   .upload
     position: absolute
-    bottom: 0 
+    bottom: 1em 
 
 .form
   padding: 0 0 1em 0

@@ -35,6 +35,7 @@
 		@section('footer_scripts')
 			{{ HTML::asset('js', 'vendor/jquery/jquery.js') }}
 			{{ HTML::asset('js', 'vendor/colorbox/colorbox.js') }}
+			{{ HTML::asset('js', 'vendor/jquery-easytabs/jquery.easytabs.js') }}
 			{{ HTML::asset('js', 'compiled/global/ready.js') }}
 		@show
 	</body>

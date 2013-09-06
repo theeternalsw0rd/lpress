@@ -67,7 +67,16 @@ h1
   .colorbox
     display: block
   #cboxContent
+    background: url(#{$base_path}/images/backgrounds/body.png?v=1)
+  .tabs
     background: url(#{$base_path}/images/backgrounds/page.png?v=1)
+  ul.etabs
+    background: url(#{$base_path}/images/backgrounds/body.png?v=1)
+    a.active
+      background: url(#{$base_path}/images/backgrounds/page.png?v=1)
+      text-decoration: none
+      color: $text_color
+      cursor: default
 
 .borderimage #page
   $border_width: 15

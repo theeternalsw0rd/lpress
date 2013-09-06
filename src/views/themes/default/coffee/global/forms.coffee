@@ -2,9 +2,68 @@
 ###
  * open global/forms.coffee
 ###
+###
+ uppercase booleans easier to read, custom code in watcher to change it, not a coffee feature.
+###
 $html = $('html')
 $body = $('body')
 $page = $(document.getElementById('page'))
+getUploader = (id, upload_url, single, dragndrop) ->
+  if single 
+    input = "<input id='#{id}_input' class='file' type='file' name='file' data-url='#{upload_url}' />"
+  else
+    input = "<input id='#{id}_input' class='file' type='file' name='files[]' data-url='#{upload_url}' multiple />"
+  #endif
+  if dragndrop
+    dropzone = "<p class='center'>This box is also a file drop zone.</p>"
+  else
+    dropzone = ""
+  #endif
+  $("""
+    <div id='#{id}' class='colorbox'>
+      <div id='#{id}-tabs' class='tabs'>
+        <ul class='etabs clear-fix'>
+          <li class='tab'><a href='##{id}-new'>New</a></li>
+          <li class='tab'><a href='##{id}-existing'>Existing</a></li>
+        </ul>
+        <div id='#{id}-new' class='tab-contents'>#{dropzone}
+          <div class='upload'>
+            #{input}
+          </div>
+          <div class='progress'>
+            <div class='bar'></div>
+          </div>
+        </div>
+        <div id='#{id}-existing' class='tab-contents'>
+        </div>
+      </div>
+    </div>
+  """)
+#return
+$(document).on(
+  'click'
+  'ul.etabs'
+  (event) ->
+    target = event.target
+    if target.tagName is 'A'
+      skip = FALSE
+      $(this).find("[data-href]").each(
+        ->
+          if this isnt target
+            $this = $(this)
+            $this.attr('href', $this.data('href')).removeAttr('data-href')
+          else
+            skip = TRUE
+          #endif
+        #return
+      )
+      if not skip
+        $target = $(target)
+        $target.attr('data-href', $target.attr('href')).removeAttr('href')
+      #endif
+    #endif
+  #return
+)
 if $html.hasClass('lt-ie8')
   css = '*{noFocusLine: expression(this.hideFocus=true);}'
   head = document.getElementsByTagName('head')[0]
@@ -155,54 +214,43 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
         ->
           $this = $(this)
           id = this.href.split('#')[1]
-          upload_url = $this.data('url')
-          if $this.hasClass('single')
-            $uploader = $("""
-              <div id='#{id}' class='colorbox'>
-                <div class='upload'>
-                  <input id='#{id}_input' class='file' type='file' name='file' data-url='#{upload_url}' />
-                </div>
-                <div class='progress'>
-                  <div class='bar'></div>
-                </div>
-              </div>
-            """)
-          else
-            $uploader = $("""
-              <div id='#{id}' class='colorbox'>
-                <div class='upload'>
-                  <input id='#{id}_input' class='file' type='file' name='files[]' data-url='#{upload_url}' multiple />
-                </div>
-                <div class='progress'>
-                  <div class='bar'></div>
-                </div>
-              </div>
-            """)
-          #endif
+          dragndrop = !!FileReader and Modernizr.draganddrop
+          $uploader = getUploader(id, $this.data('url'), $this.hasClass('single'), dragndrop)
+          label = $this.attr('title').replace(/Select/, 'Upload')
           if $html.hasClass('ie')
             $uploader.find('.upload').append(
-              "<a unselectable='on' id='for-#{id}_input' class='button'>#{$this.attr('title')}</a>"
+              "<a unselectable='on' id='for-#{id}_input' class='button'>#{label}</a>"
             )
           else
             $uploader.find('.upload').append(
-              "<span unselectable='on' id='for-#{id}_input' class='button'>#{$this.attr('title')}</span>"
+              "<span unselectable='on' id='for-#{id}_input' class='button'>#{label}</span>"
             )
           #endif
-          if !!FileReader and Modernizr.draganddrop
-            $uploader.prepend("<p>This box is also a file drop zone.</p>")
-          #endif
           $('body').append($uploader)
+          $tabs = $(document.getElementById(id + '-tabs'))
+          $tabs.easytabs()
+          $first_tab = $tabs.find('ul.etabs a').first()
+          $first_tab.attr('data-href', $first_tab.attr('href')).removeAttr('href')
           $this.colorbox({
-            inline: true
+            inline: TRUE
+            fixed: TRUE
             width: '50%'
             height: '80%'
+            scrolling: FALSE
             onComplete: ->
+              $('body').css({'overflow': 'hidden'})
               $colorbox = $(document.getElementById('cboxLoadedContent'))
-              $colorbox.find('a, input').first().focus()
+              $colorbox.find('.colorbox')
+                .css({'height': $colorbox.height() + 'px'})
+              $colorbox.find('a.file, input.file')
+                .first().focus()
               $button = $colorbox.find('.upload')
               midpoint = ($colorbox.width() - $button.width()) / 2
               $button.css({'left': midpoint + 'px'})
-              $(document.getElementById('cboxTitle')).hide()
+              $colorbox.get(0).scrollTop = 0
+            #return
+            onClosed: ->
+              $('body').css({'overflow': 'auto'})
             #return
           })
         #return
