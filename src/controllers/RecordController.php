@@ -12,6 +12,8 @@ class RecordController extends BaseController {
 		$record_type = $route->record_type;
 		$slugs = $route->slugs;
 		if($record_type->records->count() > 0) {
+			$record_type->records()->load('author');
+			$record_type->records()->load('publisher');
 			$record_type->records()->load('values');
 			$record_type->records()->values()->load(
 				array(
