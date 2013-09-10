@@ -206,16 +206,5 @@ Route::group(array(
 Route::get('{path}', array(
 	'before' => 'theme|general',
 	'as' => 'records',
-	function($path) {
-		$route = BaseController::slugsToRoute($path);
-		if($route->throw404) {
-			App::abort(404);
-		}
-		if($route->slug_types[0] == 'record') {
-			/* fill this out when at testing point */
-		}
-		if($route->slug_types[0] == 'record_type') {
-			return RecordController::getRecordsByRecordType($route);
-		}
-	}
+	'uses' => 'EternalSword\LPress\RecordController@parseRoute'
 ))->where('path', '[A-z\d\-\/\.]+');

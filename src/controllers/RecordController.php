@@ -1,12 +1,26 @@
 <?php namespace EternalSword\LPress;
 
 use Illuminate\Routing\Controllers\Controller;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\HTML;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
 
 class RecordController extends BaseController {
+	public static function parseRoute($path) {
+		$route = BaseController::slugsToRoute($path);
+		if($route->throw404) {
+			App::abort(404);
+		}
+		if($route->slug_types[0] == 'record') {
+			/* fill this out when at testing point */
+		}
+		if($route->slug_types[0] == 'record_type') {
+			return self::getRecordsByRecordType($route);
+		}
+	}
+
 	public static function getRecordsByRecordType($route) {
 		$json = $route->json;
 		$record_type = $route->record_type;
