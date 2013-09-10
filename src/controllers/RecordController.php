@@ -7,7 +7,10 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
 
 class RecordController extends BaseController {
-	public static function getRecordsByRecordType($record_type, $json = FALSE) {
+	public static function getRecordsByRecordType($route) {
+		$json = $route->json;
+		$record_type = $route->record_type;
+		$slugs = $route->slugs;
 		if($record_type->records->count() > 0) {
 			$record_type->records()->load('values');
 			$record_type->records()->values()->load(

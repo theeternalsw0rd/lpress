@@ -215,7 +215,7 @@ Route::get('{path}', array(
 			/* fill this out when at testing point */
 		}
 		if($route->slug_types[0] == 'record_type') {
-			return RecordController::getRecordsByRecordType($route->record_type, $route->json);
+			return RecordController::getRecordsByRecordType($route);
 		}
 	}
 ))->where('path', '[A-z\d\-\/\.]+');
