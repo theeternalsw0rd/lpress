@@ -28,11 +28,15 @@ class RecordController extends BaseController {
 		}
 		else {
 			extract(parent::prepareMake());
+			$label = $record_type->label;
 			return View::make($view_prefix . '.collections', 
 				array(
 					'domain' => DOMAIN,
 					'view_prefix' => $view_prefix,
-					'title' => $site[0]['label'],
+					'title' => $site[0]['label'] . '::' . $label,
+					'label' => $label,
+					'slugs' => $slugs,
+					'record_type' => $record_type,
 					'route_prefix' => Config::get('l-press::route_prefix')
 				)
 			);
