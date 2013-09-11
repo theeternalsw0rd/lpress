@@ -15,6 +15,7 @@ class CreateLPressRecordTypesTable extends Migration {
 		Schema::create('record_types', function(Blueprint $table) {
 			$table->increments('id');
 			$table->string('label')->unique();
+			$table->string('label_plural')->unique();
 			$table->string('slug')->unique();
 			$table->integer('parent_id');
 			$table->integer('depth');

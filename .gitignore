@@ -11,5 +11,5 @@ node_modules
 /src/views/themes/default/assets/css/uncompressed/compiled/*
 /src/views/themes/default/assets/css/compressed/compiled
 /src/views/themes/default/assets/css/compressed/compiled/*
-/src/uploads/*
-!/src/uploads/.gitkeep
+/src/attachments/*
+!/src/attachments/.gitkeep

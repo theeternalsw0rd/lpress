@@ -20,10 +20,6 @@ class RecordType extends \Eloquent {
 		return $this->hasMany('\EternalSword\LPress\Record');
 	}
 
-	public function parent_type() {
-		return $this->belongsTo('\EternalSword\LPress\RecordType');
-	}
-
 	public function fields() {
 		return $this->hasMany('\EternalSword\LPress\Field');
 	}

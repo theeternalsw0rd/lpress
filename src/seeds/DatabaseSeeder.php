@@ -19,6 +19,9 @@ class LPressSeeder extends Seeder {
 		$this->call('LPressGroupsTableSeeder');
 		$this->call('LPressGroupPermissionTableSeeder');
 		$this->call('LPressRecordTypesTableSeeder');
+		$this->call('LPressRecordsTableSeeder');
+		$this->call('LPressValuesTableSeeder');
+		$this->call('LPressRevisionsTableSeeder');
 		$this->call('LPressMenuItemTypesTableSeeder');
 		$this->call('LPressUsersTableSeeder');
 		$this->call('LPressGroupUserTableSeeder');

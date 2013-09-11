@@ -2,8 +2,7 @@
 
 class LPressFieldsTableSeeder extends Seeder {
 
-	public function run()
-	{
+	public function run() {
 		$fields = array(
 			array(
 				'label' => 'Post Content',

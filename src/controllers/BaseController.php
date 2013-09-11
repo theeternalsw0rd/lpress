@@ -233,7 +233,7 @@ class BaseController extends Controller {
 		$route->throw404 = FALSE;
 		$route->json = FALSE;
 		$slugIsValidRecordType = function($i, $last_index, $segments, $slug) use(&$route) {
-			$record_type = RecordType::where('slug', '=', $slug);
+			$record_type = RecordType::where('slug', '=', $slug)->first();
 			if($record_type->count() === 0) {
 				return FALSE;
 			}
@@ -243,8 +243,8 @@ class BaseController extends Controller {
 					return FALSE;
 				}
 			}
-			if($i >= $last_index - 1) {
-				$route->record_type = $record_type->first();
+			if($i >= $last_index) {
+				$route->record_type = $record_type;
 			}
 			return TRUE;
 		};

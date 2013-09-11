@@ -17,7 +17,6 @@ class CreateLPressRecordsTable extends Migration {
 			$table->string('label');
 			$table->string('slug');
 			$table->boolean('public');
-			$table->integer('parent_id');
 			$table->integer('author_id');
 			$table->integer('publisher_id');
 			$table->integer('record_type_id');
