@@ -28,7 +28,6 @@ class RecordController extends BaseController {
 		$record_type->load('records');
 		if(count($record_type->records) > 0) {
 			$record_type->records->load('author', 'publisher', 'values');
-			echo "<pre>"; var_dump($record_type->records->values()); die();
 			$record_type->records->values->load(
 				array(
 					'revisions' => function($query) {
