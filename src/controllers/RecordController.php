@@ -27,14 +27,7 @@ class RecordController extends BaseController {
 		$slugs = $route->slugs;
 		$record_type->load('records');
 		if(count($record_type->records) > 0) {
-			$record_type->records->load('author', 'publisher', 'values');
-			$record_type->records->values->load(
-				array(
-					'revisions' => function($query) {
-						$query->where('id', '=', $value->current_revision_id);
-					}
-				)
-			);
+			$record_type->records->load('author', 'publisher', 'values.current_revision');
 		}
 		if($json) {
 			return Response::json($record_type);

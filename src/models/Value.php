@@ -24,6 +24,10 @@ class Value extends \Eloquent {
 		return $this->morphTo();
 	}
 
+	public function current_revision() {
+		return $this->belongsTo('\EternalSword\LPress\Revision', 'current_revision_id');
+	}
+
 	public function revisions() {
 		return $this->hasMany('\EternalSword\LPress\Revision');
 	}

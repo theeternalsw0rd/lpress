@@ -8,7 +8,7 @@ class LPressValuesTableSeeder extends Seeder {
 			array(
 				'field_id' => 4,
 				'valuable_id' => 1,
-				'valuable_type' => 'Record',
+				'valuable_type' => 'EternalSword\\LPress\\Record',
 				'current_revision_id' => 1,
 				'created_at' => $now,
 				'updated_at' => $now
