@@ -3,7 +3,8 @@
 	@parent
 @stop
 @section('content')
-	<h1>HttpError: 404 Not Found</h1>
+	<h1>HttpError: {{ $code }}</h1>
+	<div class='error'>{{ $message }}</div>
 @stop
 @section('footer_scripts')
 	@parent

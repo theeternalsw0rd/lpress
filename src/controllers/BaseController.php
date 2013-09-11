@@ -1,6 +1,7 @@
 <?php namespace EternalSword\LPress;
 
 use Illuminate\Routing\Controllers\Controller;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\HTML;
 use Illuminate\Support\Facades\Form;
@@ -182,22 +183,22 @@ class BaseController extends Controller {
 		});
 	}
 
-	public static function getAssetPath($upload = FALSE) {
+	public static function getAssetPath($attachment = FALSE) {
 		$path = '';
-		if($upload) {
-			$upload_config = Config::get('l-press::uploads');
-			$upload_path_base = $upload_config['path_base'];
-			switch($upload_path_base) {
+		if($attachment) {
+			$attachment_config = Config::get('l-press::attachments');
+			$attachment_path_base = $attachment_config['path_base'];
+			switch($attachment_path_base) {
 				case 'package': {
-					$path = PATH . '/' . $upload_config['path'] . '/';
+					$path = PATH . '/';
 					break;
 				}
 				case 'laravel': {
-					$path = base_path() . '/' . $upload_config['path'] . '/';
+					$path = base_path() . '/';
 					break;
 				}
 				default: {
-					$path = $upload_path_base . '/' . $upload_config['path'] . '/';
+					$path = $attachment_path_base . '/';
 				}
 			}
 		}
@@ -232,16 +233,20 @@ class BaseController extends Controller {
 		$route = new \stdClass;
 		$route->throw404 = FALSE;
 		$route->json = FALSE;
+		$route->download = FALSE;
 		$slugIsValidRecordType = function($i, $last_index, $segments, $slug) use(&$route) {
 			$record_type = RecordType::where('slug', '=', $slug)->first();
-			if($record_type->count() === 0) {
+			if(count($record_type) === 0) {
 				return FALSE;
 			}
+			$parent = RecordType::find($record_type->parent_id);
 			if($i > 0) {
-				$parent = RecordType::find($record_type->parent_id);
 				if($parent->depth > 0 && $parent->slug != $segments[$i-1]) {
 					return FALSE;
 				}
+			}
+			else {
+				$route->root_record_type = $parent;
 			}
 			if($i >= $last_index) {
 				$route->record_type = $record_type;
@@ -252,16 +257,27 @@ class BaseController extends Controller {
 		$slugs = array();
 		$slug_types = array();
 		$last_index = count($segments) - 1;
-		$last_slug = explode('.', $segments[$last_index]);
-		if(count($last_slug) > 1) {
-			$segments[$last_index] = $last_slug[0];
-			$route->json = TRUE;
+		$last_slug = $segments[$last_index];
+		if($last_slug == 'download') {
+			$route->download = TRUE;
+			array_pop($segments);
+			$last_slug = explode('.', $segments[--$last_index]);
+			if(count($last_slug) > 1) {
+				App::abort('403', 'JSON is meant for API use only');
+			}
+		}
+		else {
+			$last_slug = explode('.', $last_slug);
+			if(count($last_slug) > 1) {
+				$segments[$last_index] = $last_slug[0];
+				$route->json = TRUE;
+			}
 		}
 		for($i=$last_index;$i>=0;$i--) {
 			$slug = $segments[$i];
 			if($i == $last_index) {
-				$records = Record::where('slug', '=', $slug);
-				if($records->count() === 0) {
+				$records = Record::where('slug', '=', $slug)->get();
+				if(count($records) === 0) {
 					$route->throw404 = !$slugIsValidRecordType($i, $last_index, $segments, $slug);
 					if($route->throw404) {
 						break;
@@ -273,7 +289,7 @@ class BaseController extends Controller {
 					if($i > 0) {
 						$found = FALSE;
 						foreach($records as $record) {
-							$record_type_slug = Record::find($record->record_type_id)->slug;
+							$record_type_slug = RecordType::find($record->record_type_id)->slug;
 							if($segments[$i-1] == $record_type_slug) {
 								$found = TRUE;
 								$route->record = $record;

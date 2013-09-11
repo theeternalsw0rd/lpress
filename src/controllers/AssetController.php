@@ -36,7 +36,7 @@
 
 		private function verifyWoff($path) {
 			$file = fopen($path, 'rb');
-			if($file === false) return '';
+			if($file === FALSE) return '';
 			$signature = fread($file, 4);
 			fclose($file);
 			if(strtolower($signature) == 'woff')
@@ -55,6 +55,7 @@
 				@finfo_file(finfo_open(FILEINFO_MIME_TYPE), $path);
 			if($mime == '') {
 				header('HTTP/1.0 404 Not Found');
+				echo $path;
 				echo '<h1>File could not be found</h1>';
 				die();
 			}
@@ -107,7 +108,8 @@
 			$segments = explode('/', $path);
 			$count = count($segments);
 			$path = $this->verifyPath($segments, $count);
-			$path = BaseController::getAssetPath($segments[0] == 'uploads') . $path;
+			$attachment_config = Config::get('l-press::attachments');
+			$path = BaseController::getAssetPath($segments[0] == $attachment_config['path']) . $path;
 			$download = $segments[--$count] == 'download';
 			if($download) {
 				$file_name = $segments[--$count];

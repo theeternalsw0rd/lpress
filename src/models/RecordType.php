@@ -16,6 +16,14 @@ class RecordType extends \Eloquent {
 		*/
 	protected $hidden = array();
 
+	public function parent_type() {
+		return $this->belongsTo('\EternalSword\LPress\RecordType', 'parent_id');
+	}
+
+	public function children() {
+		return $this->hasMany('\EternalSword\LPress\RecordType', 'parent_id');
+	}
+
 	public function records() {
 		return $this->hasMany('\EternalSword\LPress\Record');
 	}

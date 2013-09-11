@@ -2,7 +2,8 @@
 	"packages": {
 		"global/ready": {
 			"requires": [
-				"global/forms.coffee"
+				"global/forms.coffee",
+				"global/gallery.coffee"
 			]
 		}
 	}

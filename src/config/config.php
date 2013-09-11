@@ -1,6 +1,6 @@
 <?php
 	return array(
-		'uploads' => array('path_base' => 'package', 'path' => 'uploads'),
+		'attachments' => array('path_base' => 'package', 'path' => 'attachments'),
 		'themes' => array('path_base' => 'package', 'path' => 'views/themes'),
 		'route_index' => array(
 			'controller' => 'EternalSword\LPress\IndexController',

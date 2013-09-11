@@ -11,24 +11,22 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 $route_prefix = BaseController::getRoutePrefix();
 $admin_route = Config::get('l-press::admin_route');
 
-App::missing(function($exception) {
+App::error(function(HttpException $exception) {
 	// missing can't take filters like routes, so call needed stuff directly.
 	extract(BaseController::prepareMake());
-	switch($exception) {
-		default:
-		case '404': {
-			$template = Response::view($view_prefix . '.errors.404', array(
-				'view_prefix' => $view_prefix,
-				'title' => 'HttpError: 404 Not Found'
-			), 404);
-			break;
-		}
-	}
-	return $template;
+	$code = $exception->getStatusCode();
+	$message = $exception->getMessage() ?: 'An error occurred and your request could not be processed.';
+	return Response::view($view_prefix . '.errors', array(
+		'view_prefix' => $view_prefix,
+		'title' => 'HttpError: ' + $code,
+		'code' => $code,
+		'message' => $message
+	), $code);
 });
 
 Route::filter(
