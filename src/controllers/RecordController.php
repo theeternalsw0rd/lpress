@@ -37,12 +37,22 @@ class RecordController extends BaseController {
 		}
 		if($route->root_record_type->slug == 'attachments') {
 			$path = dirname($route->path);
+			$found = FALSE;
 			$download = $route->download;
 			if($download) {
 				$path = dirname($path);
 			}
 			$path = 'attachments/' . $path;
-			$path .= '/' . $record->values[0]->current_revision->contents;
+			foreach($record->values as $value) {
+				if($value->field->slug == 'file') {
+					$path .= '/' . $value->current_revision->contents;
+					$found = TRUE;
+					break;
+				}
+			}
+			if(!$found) {
+				App::abort('404', 'Record was found, but associated value is missing.');
+			}
 			if($download) {
 				$path .= '/download';
 			}
