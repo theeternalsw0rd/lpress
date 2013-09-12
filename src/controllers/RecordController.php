@@ -25,7 +25,13 @@ class RecordController extends BaseController {
 	public static function getRecord($route) {
 		$json = $route->json;
 		$record = $route->record;
-		$record->load('author', 'publisher', 'values.current_revision.author', 'values.current_revision.publisher');
+		$record->load(
+			'author',
+			'publisher',
+			'values.field',
+			'values.current_revision.author',
+			'values.current_revision.publisher'
+		);
 		if($json) {
 			return Response::json($record);
 		}
@@ -50,7 +56,13 @@ class RecordController extends BaseController {
 		$record_type = $route->record_type;
 		$record_type->load('records');
 		if(count($record_type->records) > 0) {
-			$record_type->records->load('author', 'publisher', 'values.current_revision.author', 'values.current_revision.publisher');
+			$record_type->records->load(
+				'author',
+				'publisher',
+				'values.field',
+				'values.current_revision.author',
+				'values.current_revision.publisher'
+			);
 		}
 		if($json) {
 			return Response::json($record_type);

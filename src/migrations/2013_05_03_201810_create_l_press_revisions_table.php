@@ -19,6 +19,7 @@ class CreateLPressRevisionsTable extends Migration {
 			$table->integer('publisher_id');
 			$table->integer('prev_revision_id');
 			$table->text('contents');
+			$table->string('commit');
 			$table->timestamps();
 		});
 	}

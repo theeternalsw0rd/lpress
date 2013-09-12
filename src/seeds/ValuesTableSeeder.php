@@ -10,6 +10,7 @@ class LPressValuesTableSeeder extends Seeder {
 				'valuable_id' => 1,
 				'valuable_type' => 'EternalSword\\LPress\\Record',
 				'current_revision_id' => 1,
+				'description' => 'Key avatar preloaded for use at installation.',
 				'created_at' => $now,
 				'updated_at' => $now
 			)

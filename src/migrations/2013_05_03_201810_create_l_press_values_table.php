@@ -18,6 +18,7 @@ class CreateLPressValuesTable extends Migration {
 			$table->integer('valuable_id');
 			$table->string('valuable_type');
 			$table->integer('current_revision_id');
+			$table->text('description');
 			$table->timestamps();
 		});
 	}
