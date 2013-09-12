@@ -185,3 +185,34 @@ input.button
   @extend %button-layout
   &:active
     padding: $active_button_top_padding $button_hpadding $active_button_bottom_padding $button_hpadding
+
+#gallery
+  width: 95%
+  padding: 0
+  overflow-x: hidden
+  li
+    display: inline-block
+    vertical-align: top
+    width: 30%
+    padding: 0
+    margin: 0 3% 1em 0
+    a
+      display: block
+      width: 100%
+      padding: 0
+      margin: 0
+    img
+      display: block
+      margin: 3% auto
+      max-width: 94%
+    .caption
+      display: block
+      margin: 0 auto
+      width: 94%
+      overflow-x: hidden
+      padding: 0.5em 3%
+
+.lt-ie7 #gallery
+  li
+    img
+      width: 95%

@@ -156,3 +156,17 @@ span.button, a.button
 
 input.button, button
   @extend %real-button
+
+#gallery
+  list-style: none
+  a
+    @include background_opacity($gallery_item_background, 0.3)
+    &:hover
+      @include background_opacity($gallery_item_hover_background, 0.3)
+  span.caption
+    @include background_opacity($gallery_item_background, 0.8)
+
+.lt-ie7 #gallery
+  li
+    .caption
+      cursor: hand
