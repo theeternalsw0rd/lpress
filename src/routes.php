@@ -16,6 +16,16 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 $route_prefix = BaseController::getRoutePrefix();
 $admin_route = Config::get('l-press::admin_route');
 
+// filtering placement thanks to http://markvaneijk.com/minify-the-html-output-in-laravel-4
+App::after(function($request, $response) {
+	if($response instanceof \Illuminate\Http\Response) {
+		$output = $response->getOriginalContent();
+		// remove whitespace between tags to avoid issues with inline-block
+		$output = preg_replace('/>[\r\n\s]*</', '><', $output);
+		$response->setContent($output);
+	}
+});
+
 App::error(function(HttpException $exception) {
 	// missing can't take filters like routes, so call needed stuff directly.
 	extract(BaseController::prepareMake());
