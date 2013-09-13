@@ -141,10 +141,29 @@ class BaseController extends Controller {
 				</label>
 			";
 		});
-		Form::macro('faux_file', function($name, $label, $type, $attributes = array()) {
-			return "
-				<a href='#${name}' title='${label}' data-type='${type}' data-url='" . self::getRoutePrefix() . "/upload' class='single file' " . self::getAttributeString($attributes) . ">${label}</a>
-			";
+		Form::macro('faux_file', function($slug, $attributes = array()) {
+			$type = RecordType::where('slug', '=', $slug)->first();
+			if(count($type) === 0) {
+				return "<div class='error'>Could not find RecordType ${type_slug} for file input.</div>";
+			}
+			$label = "Select {$type->label}";
+			$file_path = $slug;
+			$url_path = $slug;
+			while($type->depth > 0) {
+				$type = $type->parent_type()->first();
+				$file_path = $type->slug . '/' . $file_path;
+				if($type->depth > 0) {
+					$url_path = $type->slug . '/' . $url_path;
+				}
+			}
+			if ($type->slug != 'attachments') {
+				return "<div class='error'>RecordType ${slug} is not valid for file input.</div>";
+			}
+			$prefix = self::getRoutePrefix();
+			$url = $prefix . '/upload?path=' . $file_path;
+			$url_path = $prefix . '/' . $url_path;
+			$attributes = self::getAttributeString($attributes);
+			return "<a href='#${slug}' title='${label}' data-path='${url_path}' data-url='${url}' class='single file' ${attributes}>${label}</a>";
 		});
 		HTML::macro('asset', function($type, $path, $attributes = array()) {
 			$asset_domain = Config::get('l-press::asset_domain');

@@ -12,7 +12,13 @@ class RecordController extends BaseController {
 		$route = BaseController::slugsToRoute($path);
 		$route->path = $path;
 		if($route->throw404) {
-			App::abort(404, 'Could not locate object from path.');
+			if($route->json) {
+				$json = new \stdClass;
+				$json->code = 404;
+				$json->reason = 'Could not locate object from path.';
+				return Response::json($json, 404);
+			}
+			return App::abort(404, 'Could not locate object from path.');
 		}
 		if($route->slug_types[0] == 'record') {
 			return self::getRecord($route);

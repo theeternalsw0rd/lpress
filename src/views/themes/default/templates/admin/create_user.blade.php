@@ -52,7 +52,7 @@
 			{{ Form::textarea('bio', '', array('tabindex' => '10')) }}
 		</div>
 		<div class='file'>
-			{{ Form::faux_file('image', 'Select Image', 'image', array('tabindex' => '11')) }}
+			{{ Form::faux_file('avatars', array('tabindex' => '11')) }}
 		</div>
 		{{ Form::token() }}
 		<div class='submit'>

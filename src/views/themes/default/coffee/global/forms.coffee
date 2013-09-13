@@ -8,7 +8,7 @@
 $html = $('html')
 $body = $('body')
 $page = $(document.getElementById('page'))
-getUploader = (id, upload_url, single, dragndrop) ->
+getUploader = (id, upload_url, path, single, dragndrop) ->
   if single 
     input = "<input id='#{id}_input' class='file' type='file' name='file' data-url='#{upload_url}' />"
   else
@@ -34,7 +34,7 @@ getUploader = (id, upload_url, single, dragndrop) ->
             <div class='bar'></div>
           </div>
         </div>
-        <div id='#{id}-existing' class='tab-contents'>
+        <div id='#{id}-existing' class='tab-contents' data-url='#{path}'>
         </div>
       </div>
     </div>
@@ -60,6 +60,43 @@ $(document).on(
       if not skip
         $target = $(target)
         $target.attr('data-href', $target.attr('href')).removeAttr('href')
+        id = $target.data('href')
+        $id = $(id)
+        url = $id.data('url')
+        if /existing/.test(id)
+          $.ajax({
+            url: url + '.json'
+            dataType: 'json'
+            success:  (data) ->
+              $gallery = $("<ul id='gallery'></ul>")
+              $.each(data.records, (index, item) ->
+                record = item
+                caption = ""
+                $.each(record.values, (index, item) ->
+                  value = item
+                  if value.field.slug is 'file' and value.description isnt ""
+                    caption = "<span class='caption'>#{value.description}</span>"
+                    return false
+                  #endif
+                )
+                $gallery.append("""
+                  <li>
+                    <a title='#{record.label}' href='#{url}/#{record.slug}'>
+                      <img src='#{url}/#{record.slug}' />#{caption}
+                    </a>
+                  </li>
+                """)
+              )
+              $id.append($gallery)
+            #return
+            error: (data) ->
+              if data.status is 404
+                json = $.parseJSON(data.responseText)
+                $id.html("<h1>HttpError: 404</h1><div class='error'>#{json.reason}</div>")
+              #endif
+            #return
+          })
+        #endif
       #endif
     #endif
   #return
@@ -215,7 +252,13 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
           $this = $(this)
           id = this.href.split('#')[1]
           dragndrop = !!FileReader and Modernizr.draganddrop
-          $uploader = getUploader(id, $this.data('url'), $this.hasClass('single'), dragndrop)
+          $uploader = getUploader(
+            id
+            $this.data('url')
+            $this.data('path')
+            $this.hasClass('single')
+            dragndrop
+          )
           label = $this.attr('title').replace(/Select/, 'Upload')
           if $html.hasClass('ie')
             $uploader.find('.upload').append(
@@ -228,7 +271,7 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
           #endif
           $('body').append($uploader)
           $tabs = $(document.getElementById(id + '-tabs'))
-          $tabs.easytabs()
+          $tabs.easytabs({updateHash: false})
           $first_tab = $tabs.find('ul.etabs a').first()
           $first_tab.attr('data-href', $first_tab.attr('href')).removeAttr('href')
           $this.colorbox({
