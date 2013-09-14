@@ -62,17 +62,9 @@ class RecordController extends BaseController {
 		}
 		if($route->root_record_type->slug == 'attachments') {
 			$path = dirname($route->path);
-			$found = FALSE;
-			$download = $route->download;
-			if($download) {
-				$path = dirname($path);
-			}
 			$path = 'attachments/' . $path;
 			if(!$verifyAttachment($record)) {
 				App::abort('404', 'Record was found, but associated value is missing.');
-			}
-			if($download) {
-				$path .= '/.download';
 			}
 			$asset = new AssetController;
 			return $asset->getAsset($path);

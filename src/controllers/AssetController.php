@@ -2,6 +2,7 @@
 
 	use Illuminate\Routing\Controllers\Controller;
 	use Illuminate\Support\Facades\Config;
+	use Illuminate\Support\Facades\Input;
 	
 	class AssetController extends BaseController {
 		private $allowed_mime_parts = array(
@@ -27,9 +28,7 @@
 					echo '<h1>Access Denied</h1>';
 					die();
 				}
-				if($segment != '.download') {
-					$path .= '/' . $segment;
-				}
+				$path .= '/' . $segment;
 			}
 			return $path;
 		}
@@ -61,7 +60,7 @@
 			return $mime;
 		}
 
-		private function sendFile($path, $file_name, $download) {
+		private function sendFile($path, $file_name) {
 			$mime = $this->getMime($path);
 			$ext = pathinfo($file_name, PATHINFO_EXTENSION);
 			// source files are detected as text/plain
@@ -89,7 +88,7 @@
 			}
 			if(extension_loaded('zlib')){ob_start('ob_gzhandler');}
 			header('Content-Type: ' . $mime);
-			if($download) {
+			if(array_key_exists('download', Input::all())) {
 				header('X-Download-Options: noopen'); // disable directly opening download on IE
 				header('Content-Disposition: attachment; filename="' . $file_name . '"');
 			}
@@ -109,14 +108,8 @@
 			$path = $this->verifyPath($segments, $count);
 			$attachment_config = Config::get('l-press::attachments');
 			$path = BaseController::getAssetPath($segments[0] == $attachment_config['path']) . $path;
-			$download = $segments[--$count] == '.download';
-			if($download) {
-				$file_name = $segments[--$count];
-			}
-			else {
-				$file_name = $segments[$count];
-			}
-			$this->sendFile($path, $file_name, $download);
+			$file_name = $segments[--$count];
+			$this->sendFile($path, $file_name);
 		}
 	}
 ?>

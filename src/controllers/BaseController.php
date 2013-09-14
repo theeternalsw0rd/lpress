@@ -252,7 +252,6 @@ class BaseController extends Controller {
 		$route = new \stdClass;
 		$route->throw404 = FALSE;
 		$route->json = FALSE;
-		$route->download = FALSE;
 		$slugIsValidRecordType = function($i, $last_index, $segments, $slug) use(&$route) {
 			$record_type = RecordType::where('slug', '=', $slug)->first();
 			if(count($record_type) === 0) {
@@ -277,20 +276,10 @@ class BaseController extends Controller {
 		$slug_types = array();
 		$last_index = count($segments) - 1;
 		$last_slug = $segments[$last_index];
-		if($last_slug == '.download') {
-			$route->download = TRUE;
-			array_pop($segments);
-			$last_slug = explode('.', $segments[--$last_index]);
-			if(count($last_slug) > 1) {
-				App::abort('403', 'JSON is meant for API use only');
-			}
-		}
-		else {
-			$last_slug = explode('.', $last_slug);
-			if(count($last_slug) > 1) {
-				$segments[$last_index] = $last_slug[0];
-				$route->json = TRUE;
-			}
+		$last_slug = explode('.', $last_slug);
+		if(count($last_slug) > 1 && $last_slug[1] == 'json') {
+			$segments[$last_index] = $last_slug[0];
+			$route->json = TRUE;
 		}
 		for($i=$last_index;$i>=0;$i--) {
 			$slug = $segments[$i];
