@@ -277,7 +277,7 @@ class BaseController extends Controller {
 		$slug_types = array();
 		$last_index = count($segments) - 1;
 		$last_slug = $segments[$last_index];
-		if($last_slug == 'download') {
+		if($last_slug == '.download') {
 			$route->download = TRUE;
 			array_pop($segments);
 			$last_slug = explode('.', $segments[--$last_index]);

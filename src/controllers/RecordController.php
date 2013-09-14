@@ -60,7 +60,7 @@ class RecordController extends BaseController {
 				App::abort('404', 'Record was found, but associated value is missing.');
 			}
 			if($download) {
-				$path .= '/download';
+				$path .= '/.download';
 			}
 			$asset = new AssetController;
 			$asset->getAsset($path);

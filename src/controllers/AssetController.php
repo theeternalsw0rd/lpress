@@ -27,7 +27,7 @@
 					echo '<h1>Access Denied</h1>';
 					die();
 				}
-				if($segment != 'download') {
+				if($segment != '.download') {
 					$path .= '/' . $segment;
 				}
 			}
@@ -109,7 +109,7 @@
 			$path = $this->verifyPath($segments, $count);
 			$attachment_config = Config::get('l-press::attachments');
 			$path = BaseController::getAssetPath($segments[0] == $attachment_config['path']) . $path;
-			$download = $segments[--$count] == 'download';
+			$download = $segments[--$count] == '.download';
 			if($download) {
 				$file_name = $segments[--$count];
 			}
