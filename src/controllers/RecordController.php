@@ -29,6 +29,17 @@ class RecordController extends BaseController {
 	}
 
 	public static function getRecord($route) {
+		$verifyAttachment = function($record) use (&$path) {
+			$found = FALSE;
+			foreach($record->values as $value) {
+				if($value->field->slug == 'file') {
+					$path .= '/' . $value->current_revision->contents;
+					$found = TRUE;
+					break;
+				}
+			}
+			return $found;
+		};
 		$json = $route->json;
 		$record = $route->record;
 		$record->load(
@@ -39,6 +50,14 @@ class RecordController extends BaseController {
 			'values.current_revision.publisher'
 		);
 		if($json) {
+			if($route->root_record_type->slug == 'attachments') {
+				if(!$verifyAttachment($record)) {
+					$json = new \stdClass;
+					$json->code = 404;
+					$json->reason = 'Record was found, but associated value is missing.';
+					return Response::json($json, 404);
+				}
+			}
 			return Response::json($record);
 		}
 		if($route->root_record_type->slug == 'attachments') {
@@ -49,21 +68,14 @@ class RecordController extends BaseController {
 				$path = dirname($path);
 			}
 			$path = 'attachments/' . $path;
-			foreach($record->values as $value) {
-				if($value->field->slug == 'file') {
-					$path .= '/' . $value->current_revision->contents;
-					$found = TRUE;
-					break;
-				}
-			}
-			if(!$found) {
+			if(!$verifyAttachment($record)) {
 				App::abort('404', 'Record was found, but associated value is missing.');
 			}
 			if($download) {
 				$path .= '/.download';
 			}
 			$asset = new AssetController;
-			$asset->getAsset($path);
+			return $asset->getAsset($path);
 		}
 	}
 
