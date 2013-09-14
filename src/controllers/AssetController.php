@@ -49,7 +49,7 @@
 			$segments = explode('.', $path);
 			$extension = $segments[count($segments) - 1];
 			$mime = '';
-			$mime = $extension == 'woff' ? 
+			$mime = $extension == 'woff' ?
 				$this->verifyWoff($path) :
 				@finfo_file(finfo_open(FILEINFO_MIME_TYPE), $path);
 			if($mime == '') {
