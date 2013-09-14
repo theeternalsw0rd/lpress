@@ -144,7 +144,7 @@ class BaseController extends Controller {
 		Form::macro('faux_file', function($slug, $attributes = array()) {
 			$type = RecordType::where('slug', '=', $slug)->first();
 			if(count($type) === 0) {
-				return "<div class='error'>Could not find RecordType ${type_slug} for file input.</div>";
+				return "<div class='error'>Could not find RecordType ${slug} for file input.</div>";
 			}
 			$label = "Select {$type->label}";
 			$file_path = $slug;
