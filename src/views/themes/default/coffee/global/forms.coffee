@@ -10,9 +10,9 @@ $body = $('body')
 $page = $(document.getElementById('page'))
 getUploader = (id, upload_url, path, single, dragndrop) ->
   if single 
-    input = "<input id='#{id}_input' class='file' type='file' name='file' data-url='#{upload_url}' />"
+    input = "<input id='#{id}-input' class='file' type='file' name='files' data-url='#{upload_url}' />"
   else
-    input = "<input id='#{id}_input' class='file' type='file' name='files[]' data-url='#{upload_url}' multiple />"
+    input = "<input id='#{id}-input' class='file' type='file' name='files[]' data-url='#{upload_url}' multiple />"
   #endif
   if dragndrop
     dropzone = "<p class='center'>This box is also a file drop zone.</p>"
@@ -262,14 +262,26 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
           label = $this.attr('title').replace(/Select/, 'Upload')
           if $html.hasClass('ie')
             $uploader.find('.upload').append(
-              "<a unselectable='on' id='for-#{id}_input' class='button'>#{label}</a>"
+              "<a unselectable='on' id='for-#{id}-input' class='button'>#{label}</a>"
             )
           else
             $uploader.find('.upload').append(
-              "<span unselectable='on' id='for-#{id}_input' class='button'>#{label}</span>"
+              "<span unselectable='on' id='for-#{id}-input' class='button'>#{label}</span>"
             )
           #endif
           $('body').append($uploader)
+          $(document.getElementById(id + '-input')).fileupload({
+            dataType: 'json'
+            done: (e, data) ->
+              console.log(data)
+              $.each(data.result.files, (index, file) ->
+                console.log(file.name)
+              )
+            #return
+            error: (e, data) ->
+              console.log(data)
+            #return
+          })
           $tabs = $(document.getElementById(id + '-tabs'))
           $tabs.easytabs({updateHash: false})
           $first_tab = $tabs.find('ul.etabs a').first()

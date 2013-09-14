@@ -264,7 +264,7 @@ class UploadHandler
 
 	protected function get_file_object($file_name) {
 		if ($this->is_valid_file_object($file_name)) {
-			$file = new stdClass();
+			$file = new \stdClass();
 			$file->name = $file_name;
 			$file->size = $this->get_file_size(
 				$this->get_upload_path($file_name)
@@ -680,8 +680,9 @@ class UploadHandler
 
 	protected function handle_file_upload($uploaded_file, $name, $size, $type, $error,
 			$index = null, $content_range = null) {
-		$file = new stdClass();
-		$file->name = $this->get_file_name($name, $type, $index, $content_range);
+		$file = new \stdClass();
+		$name = preg_replace('/[^A-Za-z0-9.]/', '-', strtolower($name));
+		$file->name = preg_replace('/\-+/', '-', $name);
 		$file->size = $this->fix_integer_overflow(intval($size));
 		$file->type = $type;
 		if ($this->validate($uploaded_file, $file, $error, $index)) {

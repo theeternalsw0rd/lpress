@@ -96,14 +96,6 @@ class BaseController extends Controller {
 		}
 	}
 
-	public static function getSite() {
-		$site = Site::where('domain', DOMAIN)->get()->toArray();
-		if(empty($site)) {
-			$site = Site::where('domain', 'wildcard')->get()->toArray();
-		}
-		return $site;
-	}
-
 	public static function getAttributeString($attributes) {
 		$attribute_string = '';
 		if(is_array($attributes) && count($attributes) > 0) {
@@ -149,18 +141,19 @@ class BaseController extends Controller {
 			$label = "Select {$type->label}";
 			$file_path = $slug;
 			$url_path = $slug;
-			while($type->depth > 0) {
+			while($type->depth > 1) {
 				$type = $type->parent_type()->first();
 				$file_path = $type->slug . '/' . $file_path;
-				if($type->depth > 0) {
-					$url_path = $type->slug . '/' . $url_path;
-				}
+				$url_path = $type->slug . '/' . $url_path;
 			}
-			if ($type->slug != 'attachments') {
+			$site = Site::find(SITE);
+			$root_type = $type->parent_type()->first();
+			$file_path = $root_type->slug . '/' . $site->domain . '/' . $file_path;
+			if ($root_type->slug != 'attachments') {
 				return "<div class='error'>RecordType ${slug} is not valid for file input.</div>";
 			}
 			$prefix = self::getRoutePrefix();
-			$url = $prefix . '/upload?path=' . $file_path;
+			$url = $prefix . "/upload?path=${file_path}/&uri=${prefix}/${url_path}/";
 			$url_path = $prefix . '/' . $url_path;
 			$attributes = self::getAttributeString($attributes);
 			return "<a href='#${slug}' title='${label}' data-path='${url_path}' data-url='${url}' class='single file' ${attributes}>${label}</a>";
@@ -245,7 +238,7 @@ class BaseController extends Controller {
 		}
 		$view_prefix = 'l-press::themes.' . THEME . '.templates';
 		self::setMacros();
-		return array("view_prefix" => $view_prefix, "site" => self::getSite());
+		return array("view_prefix" => $view_prefix, "site" => Site::find(SITE));
 	}
 
 	public static function slugsToRoute($path) {

@@ -61,8 +61,10 @@ class RecordController extends BaseController {
 			return Response::json($record);
 		}
 		if($route->root_record_type->slug == 'attachments') {
+			$site = Site::find(SITE);
 			$path = dirname($route->path);
-			$path = 'attachments/' . $path;
+			$attachment_config = Config::get('l-press::attachments');
+			$path = $attachment_config['path'] . '/' . $site->domain . '/' . $path;
 			if(!$verifyAttachment($record)) {
 				App::abort('404', 'Record was found, but associated value is missing.');
 			}

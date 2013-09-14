@@ -107,7 +107,7 @@
 			$count = count($segments);
 			$path = $this->verifyPath($segments, $count);
 			$attachment_config = Config::get('l-press::attachments');
-			$path = BaseController::getAssetPath($segments[0] == $attachment_config['path']) . $path;
+			$path = parent::getAssetPath($segments[0] == $attachment_config['path']) . $path;
 			$file_name = $segments[--$count];
 			$this->sendFile($path, $file_name);
 		}

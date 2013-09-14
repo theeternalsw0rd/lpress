@@ -3,6 +3,7 @@
 	use Illuminate\Routing\Controllers\Controller;
 	use Illuminate\Support\Facades\Response;
 	use Illuminate\Support\Facades\Config;
+	use Illuminate\Support\Facades\Input;
 	use EternalSword\LPress\ThirdParty\Blueimp\Uploader\UploadHandler as UploadHandler;
 
 	class UploadController extends BaseController {
@@ -10,28 +11,25 @@
 
 		protected function getOptions() {
 			$options = array();
-			$options['upload_dir'] = parent::getAssetPath(TRUE);
+			$options['image_versions'] = array();
+			$asset_path = parent::getAssetPath(TRUE);
+			$options['upload_dir'] = $asset_path . Input::get('path');
 			$asset_domain = Config::get('l-press::asset_domain');
 			$asset_domain = empty($asset_domain) ? DOMAIN : $asset_domain;
-			$route_prefix = self::getRoutePrefix();
-			$options['upload_url'] = "//" . $asset_domain . $route_prefix ."/uploads/";
-
+			$route_prefix = parent::getRoutePrefix();
+			$options['script_url'] = "//" . DOMAIN . $route_prefix . '/upload';
+			$uri = Input::get('uri');
+			$options['upload_url'] = "//" . $asset_domain . $uri ;
 			return $options;
 		}
 
-		public function postFile($filename) {
+		public function postFile() {
 			$options = $this->getOptions();
 			if(!$options) {
 				return Response::make($this->configuration_error, 500);
 			}
-
-			$options['filename'] = $filename;
-
-			$handler = new UploadHandler($options);
-			$response = Response::make(json_encode($handler->post(FALSE)), 200);
-			$response->headers->set('Content-Type', 'application/json');
-
-			return $response;
+			$handler = new UploadHandler($options, FALSE);
+			return Response::json($handler->post(FALSE));
 		}
 
 		public function getURL() {
@@ -39,12 +37,8 @@
 			if(!$options) {
 				return Response::make($this->configuration_error, 500);
 			}
-
 			$handler = new UploadHandler($options);
-			$response = Response::make(json_encode($handler->get(FALSE)), 200);
-			$response->headers->set('Content-Type', 'application/json');
-
-			return $response;
+			return Response::json($handler->get(FALSE));
 		}
 
 		public function deleteFile() {
@@ -52,13 +46,8 @@
 			if(!$options) {
 				return Response::make($this->configuration_error, 500);
 			}
-
-			$options['filename'] = $filename;
-
+			$options['filename'] = Input::get('file');
 			$handler = new UploadHandler($options);
-			$response = Response::make(json_encode($handler->delete(FALSE)), 200);
-			$response->headers->set('Content-Type', 'application/json');
-
-			return $response;
+			return Response::json($handler->delete(FALSE));
 		}
 	}
