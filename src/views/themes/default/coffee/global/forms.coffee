@@ -275,7 +275,6 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
           $(document.getElementById(id + '-input')).fileupload({
             dataType: 'json'
             done: (e, data) ->
-              console.log(data)
               $files = $("<ul class='files'></ul>")
               $.each(data.result.files, (index, file) ->
                 $files.append("""
@@ -284,12 +283,19 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
                     <p>#{record}</p>
                   </li>
                 """)
-                console.log(file)
               )
-              $(document.getElementById(id + '-new')).html($files)
             #return
             error: (e, data) ->
-              console.log(data)
+              $error = $("<div class='error' style='display:none'>500 Internal Server Error</div>")
+              $(document.getElementById(id + '-new')).prepend($error)
+              $error.slideDown('slow').delay(3000).animate({
+                height: 0
+                opacity: 0
+              }
+              'slow'
+              ->
+                $(this).remove()
+              )
             #return
           })
           $tabs = $(document.getElementById(id + '-tabs'))
