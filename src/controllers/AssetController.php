@@ -45,9 +45,7 @@
 			die();
 		}
 
-		private function getMime($path) {
-			$segments = explode('.', $path);
-			$extension = $segments[count($segments) - 1];
+		private function getMime($path, $extension) {
 			$mime = '';
 			$mime = $extension == 'woff' ?
 				$this->verifyWoff($path) :
@@ -61,10 +59,10 @@
 		}
 
 		private function sendFile($path, $file_name) {
-			$mime = $this->getMime($path);
-			$ext = pathinfo($file_name, PATHINFO_EXTENSION);
+			$extension = pathinfo($file_name, PATHINFO_EXTENSION);
+			$mime = $this->getMime($path, $extension);
 			// source files are detected as text/plain
-			switch($ext) {
+			switch($extension) {
 				case 'css': {
 					$mime = strpos($mime, 'text') !== FALSE ? 'text/css' : $mime;
 					break;
