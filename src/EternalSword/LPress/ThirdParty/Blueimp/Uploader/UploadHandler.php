@@ -483,12 +483,12 @@ class UploadHandler
 	protected function upcount_name_callback($matches) {
 		$index = isset($matches[1]) ? intval($matches[1]) + 1 : 1;
 		$ext = isset($matches[2]) ? $matches[2] : '';
-		return ' ('.$index.')'.$ext;
+		return '_'.$index.$ext;
 	}
 
 	protected function upcount_name($name) {
 		return preg_replace_callback(
-			'/(?:(?: \(([\d]+)\))?(\.[^.]+))?$/',
+			'/(?:(?:_([\d]+))?(\.[^.]+))?$/',
 			array($this, 'upcount_name_callback'),
 			$name,
 			1
@@ -682,7 +682,8 @@ class UploadHandler
 			$index = null, $content_range = null) {
 		$file = new \stdClass();
 		$name = preg_replace('/[^A-Za-z0-9.]/', '-', strtolower($name));
-		$file->name = preg_replace('/\-+/', '-', $name);
+		$name = preg_replace('/\-+/', '-', $name);
+		$file->name = $this->get_file_name($name, $type, $index, $content_range);
 		$file->size = $this->fix_integer_overflow(intval($size));
 		$file->type = $type;
 		if ($this->validate($uploaded_file, $file, $error, $index)) {
@@ -707,6 +708,7 @@ class UploadHandler
 				}
 			} else {
 				// Non-multipart uploads (PUT method support)
+				var_dump($file_path); die();
 				file_put_contents(
 					$file_path,
 					fopen('php://input', 'r'),
