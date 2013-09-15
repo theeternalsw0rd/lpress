@@ -156,7 +156,7 @@ class BaseController extends Controller {
 			$url = $prefix . "/upload?path=${file_path}/&uri=${prefix}/${url_path}/";
 			$url_path = $prefix . '/' . $url_path;
 			$attributes = self::getAttributeString($attributes);
-			return "<a href='#${slug}' title='${label}' data-path='${url_path}' data-url='${url}' class='single file' ${attributes}>${label}</a>";
+			return "<a href='#${slug}' title='${label}' data-prefix='${prefix}' data-path='${url_path}' data-url='${url}' class='single file' ${attributes}>${label}</a>";
 		});
 		HTML::macro('asset', function($type, $path, $attributes = array()) {
 			$asset_domain = Config::get('l-press::asset_domain');

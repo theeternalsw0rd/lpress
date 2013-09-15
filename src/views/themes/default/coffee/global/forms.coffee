@@ -252,6 +252,8 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
           $this = $(this)
           id = this.href.split('#')[1]
           dragndrop = !!FileReader and Modernizr.draganddrop
+          record = $this.data('prefix') + '/record.create?type=' + id
+          console.log(record)
           $uploader = getUploader(
             id
             $this.data('url')
@@ -274,9 +276,17 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
             dataType: 'json'
             done: (e, data) ->
               console.log(data)
+              $files = $("<ul class='files'></ul>")
               $.each(data.result.files, (index, file) ->
-                console.log(file.name)
+                $files.append("""
+                  <li>
+                    <h3>#{file.name}</h3>
+                    <p>#{record}</p>
+                  </li>
+                """)
+                console.log(file)
               )
+              $(document.getElementById(id + '-new')).html($files)
             #return
             error: (e, data) ->
               console.log(data)
