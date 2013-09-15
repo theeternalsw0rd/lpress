@@ -193,7 +193,9 @@ class UploadHandler
 			}
 			$version_path = $version.'/';
 		}
-		return $this->options['upload_dir'].$this->get_user_path()
+		$date = new \DateTime();
+		$date = $date->format('Y/m/');
+		return $this->options['upload_dir'].$this->get_user_path().$date
 			.$version_path.$file_name;
 	}
 
