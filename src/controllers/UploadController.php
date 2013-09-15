@@ -20,6 +20,7 @@
 			$options['script_url'] = "//" . DOMAIN . $route_prefix . '/upload';
 			$uri = Input::get('uri');
 			$options['upload_url'] = "//" . $asset_domain . $uri;
+			$options['mkdir_mode'] = 0770;
 			return $options;
 		}
 
