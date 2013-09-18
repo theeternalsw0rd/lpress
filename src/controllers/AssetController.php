@@ -5,7 +5,7 @@
 	use Illuminate\Support\Facades\Input;
 	
 	class AssetController extends BaseController {
-		private $allowed_mime_parts = array(
+		protected $allowed_mime_parts = array(
 			'image',
 			'video',
 			'audio',
@@ -18,7 +18,25 @@
 			'plain'
 		);
 
-		private function verifyPath($segments, $count) {
+		// Start from Blueimp UploadHandler
+		// Fix for overflowing signed 32 bit integers,
+		// works for sizes up to 2^32-1 bytes (4 GiB - 1):
+		protected function fix_integer_overflow($size) {
+			if ($size < 0) {
+				$size += 2.0 * (PHP_INT_MAX + 1);
+			}
+			return $size;
+		}
+
+		protected function get_file_size($file_path, $clear_stat_cache = false) {
+			if ($clear_stat_cache) {
+				clearstatcache(true, $file_path);
+			}
+			return $this->fix_integer_overflow(filesize($file_path));
+		}
+		// End from Blueimp UploadHandler
+
+		protected function verifyPath($segments, $count) {
 			$path = '';
 			$i=0;
 			while($i < $count) {
@@ -33,7 +51,7 @@
 			return $path;
 		}
 
-		private function verifyWoff($path) {
+		protected function verifyWoff($path) {
 			$file = fopen($path, 'rb');
 			if($file === FALSE) return '';
 			$signature = fread($file, 4);
@@ -45,7 +63,7 @@
 			die();
 		}
 
-		private function getMime($path, $extension) {
+		protected function getMime($path, $extension) {
 			$mime = '';
 			$mime = $extension == 'woff' ?
 				$this->verifyWoff($path) :
@@ -58,7 +76,7 @@
 			return $mime;
 		}
 
-		private function sendFile($path, $file_name) {
+		protected function sendFile($path, $file_name) {
 			$extension = pathinfo($file_name, PATHINFO_EXTENSION);
 			$mime = $this->getMime($path, $extension);
 			// source files are detected as text/plain
@@ -90,6 +108,9 @@
 				header('X-Download-Options: noopen'); // disable directly opening download on IE
 				header('Content-Disposition: attachment; filename="' . $file_name . '"');
 			}
+			header('Content-Length: '.$this->get_file_size($path));
+			header('Last-Modified: '.gmdate('D, d M Y H:i:s T', filemtime($path)));
+			header('Expires: Sun, 17-Jan-2038 19:14:07 GMT');
 			readfile($path);
 			if(extension_loaded('zlib')){ob_end_flush();}
 			exit;

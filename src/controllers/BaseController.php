@@ -167,18 +167,18 @@ class BaseController extends Controller {
 			switch($type) {
 				case 'css': {
 					$path = "css/" . PRODUCTION . '/' . $path;
-					$open .= "<link rel='stylesheet' type='text/css' href='//" . $asset_domain . $route_prefix ."/+assets/" . $path . "?v=";
+					$open .= "<link rel='stylesheet' type='text/css' href='//" . $asset_domain . $route_prefix ."/+assets/" . $path . "?v";
 					$close .= "'>";
 					break;
 				}
 				case 'js': {
 					$path = "js/" . PRODUCTION . '/' . $path;
-					$open .= "<script type='text/javascript' src='//" . $asset_domain . $route_prefix . "/+assets/" . $path . "?v=";
+					$open .= "<script type='text/javascript' src='//" . $asset_domain . $route_prefix . "/+assets/" . $path . "?v";
 					$close .= "'></script>";
 					break;
 				}
 				case 'img': {
-					$open .= "<img src='//" . $asset_domain . $route_prefix . "/+assets" . $path . "?v=";
+					$open .= "<img src='//" . $asset_domain . $route_prefix . "/+assets" . $path . "?v";
 					$close .= "'" . self::getAttributeString($attributes) . "/>";
 					break;
 				}
