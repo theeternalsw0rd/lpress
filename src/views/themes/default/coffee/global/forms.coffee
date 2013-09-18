@@ -252,7 +252,7 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
           $this = $(this)
           id = this.href.split('#')[1]
           dragndrop = !!FileReader and Modernizr.draganddrop
-          record = $this.data('prefix') + '/record.create?type=' + id
+          record = $this.data('prefix') + '/+record/create?type=' + id
           console.log(record)
           $uploader = getUploader(
             id

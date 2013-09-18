@@ -17,7 +17,7 @@
 			$asset_domain = Config::get('l-press::asset_domain');
 			$asset_domain = empty($asset_domain) ? DOMAIN : $asset_domain;
 			$route_prefix = parent::getRoutePrefix();
-			$options['script_url'] = "//" . DOMAIN . $route_prefix . '/upload';
+			$options['script_url'] = "//" . DOMAIN . $route_prefix . '/+upload';
 			$uri = Input::get('uri');
 			$options['upload_url'] = "//" . $asset_domain . $uri;
 			$options['mkdir_mode'] = 0770;

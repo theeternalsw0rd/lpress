@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\View;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 $route_prefix = BaseController::getRoutePrefix();
-$admin_route = Config::get('l-press::admin_route');
+$admin_route = '+' . Config::get('l-press::admin_route');
 
 // filtering placement thanks to http://markvaneijk.com/minify-the-html-output-in-laravel-4
 App::after(function($request, $response) {
@@ -85,7 +85,7 @@ Route::get(
 );
 
 Route::get(
-	$route_prefix . 'sha2',
+	$route_prefix . '+sha2',
 	array(
 		'before' => 'theme',
 		'as' => 'lpress-sha2',
@@ -103,7 +103,7 @@ Route::get(
 );
 
 Route::get(
-	$route_prefix . 'assets/{path}',
+	$route_prefix . '+assets/{path}',
 	array(
 		'before' => 'theme',
 		'uses' => 'EternalSword\LPress\AssetController@getAsset',
@@ -112,23 +112,23 @@ Route::get(
 )->where('path', '(.*)');
 
 Route::get(
-	$route_prefix . 'upload',
+	$route_prefix . '+upload',
 	array(
-		'before' => 'theme',
+		'before' => 'theme|admin',
 		'uses' => 'EternalSword\LPress\UploadController@getURL'
 	)
 );
 Route::post(
-	$route_prefix . 'upload',
+	$route_prefix . '+upload',
 	array(
-		'before' => 'theme',
+		'before' => 'theme|admin',
 		'uses' => 'EternalSword\LPress\UploadController@postFile'
 	)
 );
 Route::delete(
-	$route_prefix . 'upload',
+	$route_prefix . '+upload',
 	array(
-		'before' => 'theme',
+		'before' => 'theme|admin',
 		'uses' => 'EternalSword\LPress\UploadController@deleteFile'
 	)
 );
@@ -145,7 +145,7 @@ Route::get(
 );
 
 Route::get(
-	$route_prefix . 'login',
+	$route_prefix . '+login',
 	array(
 		'before' => 'theme|login-ssl',
 		'uses' => 'EternalSword\LPress\AuthenticationController@getLogin',
@@ -154,7 +154,7 @@ Route::get(
 );
 
 Route::get(
-	$route_prefix . 'logout',
+	$route_prefix . '+logout',
 	array(
 		'before' => 'theme|login-ssl',
 		'uses' => 'EternalSword\LPress\AuthenticationController@getLogout',
@@ -163,7 +163,7 @@ Route::get(
 );
 
 Route::get(
-	$route_prefix . 'logout/logged',
+	$route_prefix . '+logout/logged',
 	array(
 		'before' => 'theme|login-ssl',
 		'as' => 'lpress-logout-logged',
@@ -172,7 +172,7 @@ Route::get(
 );
 
 Route::get(
-	$route_prefix . 'logout/login',
+	$route_prefix . '+logout/login',
 	array(
 		'as' => 'lpress-logout-login',
 		function() {

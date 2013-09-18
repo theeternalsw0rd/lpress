@@ -153,7 +153,7 @@ class BaseController extends Controller {
 				return "<div class='error'>RecordType ${slug} is not valid for file input.</div>";
 			}
 			$prefix = self::getRoutePrefix();
-			$url = $prefix . "/upload?path=${file_path}/&uri=${prefix}/${url_path}/";
+			$url = $prefix . "/+upload?path=${file_path}/&uri=${prefix}/${url_path}/";
 			$url_path = $prefix . '/' . $url_path;
 			$attributes = self::getAttributeString($attributes);
 			return "<a href='#${slug}' title='${label}' data-prefix='${prefix}' data-path='${url_path}' data-url='${url}' class='single file' ${attributes}>${label}</a>";
@@ -167,18 +167,18 @@ class BaseController extends Controller {
 			switch($type) {
 				case 'css': {
 					$path = "css/" . PRODUCTION . '/' . $path;
-					$open .= "<link rel='stylesheet' type='text/css' href='//" . $asset_domain . $route_prefix ."/assets/" . $path . "?v=";
+					$open .= "<link rel='stylesheet' type='text/css' href='//" . $asset_domain . $route_prefix ."/+assets/" . $path . "?v=";
 					$close .= "'>";
 					break;
 				}
 				case 'js': {
 					$path = "js/" . PRODUCTION . '/' . $path;
-					$open .= "<script type='text/javascript' src='//" . $asset_domain . $route_prefix . "/assets/" . $path . "?v=";
+					$open .= "<script type='text/javascript' src='//" . $asset_domain . $route_prefix . "/+assets/" . $path . "?v=";
 					$close .= "'></script>";
 					break;
 				}
 				case 'img': {
-					$open .= "<img src='//" . $asset_domain . $route_prefix . "/assets" . $path . "?v=";
+					$open .= "<img src='//" . $asset_domain . $route_prefix . "/+assets" . $path . "?v=";
 					$close .= "'" . self::getAttributeString($attributes) . "/>";
 					break;
 				}
