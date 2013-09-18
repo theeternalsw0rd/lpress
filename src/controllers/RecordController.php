@@ -99,7 +99,7 @@ class RecordController extends BaseController {
 					array(
 						'domain' => DOMAIN,
 						'view_prefix' => $view_prefix,
-						'title' => $site[0]['label'] . '::' . $label,
+						'title' => $site['label'] . '::' . $label,
 						'label' => $label,
 						'slugs' => $slugs,
 						'path' => $route->path,
