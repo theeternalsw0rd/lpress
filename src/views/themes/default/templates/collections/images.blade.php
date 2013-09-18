@@ -11,8 +11,8 @@
 					<a class='gallery' title='{{ $record->label }}' href='/{{ $path }}/{{ $record->slug }}'>
 						<img src='/{{ $path }}/{{ $record->slug }}' />
 						@foreach ($record->values as $value)
-							@if ($value->field->slug == 'file' && !empty($value->description))
-								<span class='caption'>{{ $value->description }}</span>{{ ''; break }}
+							@if ($value->field->slug == 'file-description')
+								<span class='caption'>{{ $value->current_revision->contents }}</span>{{ ''; break }}
 							@endif
 						@endforeach
 					</a>

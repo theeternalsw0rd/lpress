@@ -6,7 +6,7 @@ class LPressFieldsTableSeeder extends Seeder {
 		$fields = array(
 			array(
 				'label' => 'Post Content',
-				'slug' => 'post_content',
+				'slug' => 'post-content',
 				'description' => 'This is the wysiwig for the Post record type.',
 				'required' => TRUE,
 				'field_type_id' => 1,
@@ -14,7 +14,7 @@ class LPressFieldsTableSeeder extends Seeder {
 			),
 			array(
 				'label' => 'Comment Content',
-				'slug' => 'comment_content',
+				'slug' => 'comment-content',
 				'description' => 'This is the editor for Comments.',
 				'required' => TRUE,
 				'field_type_id' => 15,
@@ -34,6 +34,14 @@ class LPressFieldsTableSeeder extends Seeder {
 				'description' => 'This is the file input for the Attachment record type.',
 				'required' => TRUE,
 				'field_type_id' => 2,
+				'record_type_id' => 3
+			),
+			array(
+				'label' => 'File Description',
+				'slug' => 'file-description',
+				'description' => 'This is the textbox for description/caption for associated Attachment',
+				'required' => FALSE,
+				'field_type_id' => 3,
 				'record_type_id' => 3
 			)
 		);
