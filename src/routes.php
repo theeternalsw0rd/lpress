@@ -183,33 +183,57 @@ Route::get(
 );
 
 Route::post(
-	$route_prefix . 'login',
+	$route_prefix . '+login',
 	array(
 		'before' => 'csrf|theme',
 		'uses' => 'EternalSword\LPress\AuthenticationController@verifyLogin'
 	)
 );
 
-Route::group(array(
-	'prefix' => $route_prefix . $admin_route,
-	'before' => 'theme|admin'
-), function() {
-	Route::get(
-		'install',
-		array(
-			'as' => 'lpress-installer',
-			'uses' => 'EternalSword\LPress\InstallController@getInstaller'
-		)
-	);
-	Route::post(
-		'install-user',
-		array(
-			'as' => 'lpress-user-install',
-			'before' => 'csrf',
-			'uses' => 'EternalSword\LPress\UserController@installUser'
-		)
-	);
-});
+Route::group(
+	array(
+		'prefix' => $route_prefix . $admin_route,
+		'before' => 'theme|admin'
+	), 
+	function() {
+		Route::get(
+			'install',
+			array(
+				'as' => 'lpress-installer',
+				'uses' => 'EternalSword\LPress\InstallController@getInstaller'
+			)
+		);
+		Route::post(
+			'install-user',
+			array(
+				'as' => 'lpress-user-install',
+				'before' => 'csrf',
+				'uses' => 'EternalSword\LPress\UserController@installUser'
+			)
+		);
+	}
+);
+
+Route::group(
+	array(
+		'prefix' => $route_prefix . '/+record',
+		'before' => 'theme|admin'
+	),
+	function() {
+		Route::get(
+			'create',
+			array(
+				'uses' => 'EternalSword\LPress\RecordController@getRecordForm'
+			)
+		);
+		Route::post(
+			'create',
+			array(
+				'uses' => 'EternalSword\LPress\RecordController@createRecord'
+			)
+		);
+	}
+);
 
 Route::get(
 	'{path}',

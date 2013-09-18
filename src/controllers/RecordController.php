@@ -114,4 +114,10 @@ class RecordController extends BaseController {
 		}
 		return App::abort(404, 'Could not locate object from path.');
 	}
+
+	public static function getRecordForm() {
+	}
+
+	public static function createRecord() {
+	}
 }
