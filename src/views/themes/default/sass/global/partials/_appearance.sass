@@ -56,7 +56,7 @@ h1
   color: $heading_color
 
 #page
-  background: url(#{$base_path}/images/backgrounds/page.png?v=1)
+  background: url(#{$base_path}/images/backgrounds/page.png?v1)
   border-width: 0 3px 0 3px
   border-style: double 
 
@@ -67,13 +67,13 @@ h1
   .colorbox
     display: block
   #cboxContent
-    background: url(#{$base_path}/images/backgrounds/body.png?v=1)
+    background: url(#{$base_path}/images/backgrounds/body.png?v1)
   .tabs
-    background: url(#{$base_path}/images/backgrounds/page.png?v=1)
+    background: url(#{$base_path}/images/backgrounds/page.png?v1)
   ul.etabs
-    background: url(#{$base_path}/images/backgrounds/body.png?v=1)
+    background: url(#{$base_path}/images/backgrounds/body.png?v1)
     a.active
-      background: url(#{$base_path}/images/backgrounds/page.png?v=1)
+      background: url(#{$base_path}/images/backgrounds/page.png?v1)
       text-decoration: none
       color: $text_color
       cursor: default
@@ -81,7 +81,7 @@ h1
 .borderimage #page
   $border_width: 15
   border-width: 0 #{$border_width}px 0 #{$border_width}px
-  $url: "#{$base_path}/images/borders/page.png?v=1"
+  $url: "#{$base_path}/images/borders/page.png?v1"
   @include border_image($url, $height: 0, $width: $border_width, $type: repeat)
 
 .error
