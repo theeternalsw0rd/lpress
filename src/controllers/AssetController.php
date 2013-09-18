@@ -104,13 +104,20 @@
 			}
 			if(extension_loaded('zlib')){ob_start('ob_gzhandler');}
 			header('Content-Type: ' . $mime);
+			$modified = gmdate('D, d M Y H:i:s T', filemtime($path));
+			header('Content-Length: ' . $this->get_file_size($path));
+			header('Last-Modified: ' . $modified);
+			header('Expires: Sun, 17-Jan-2038 19:14:07 GMT');
 			if(array_key_exists('download', Input::all())) {
 				header('X-Download-Options: noopen'); // disable directly opening download on IE
 				header('Content-Disposition: attachment; filename="' . $file_name . '"');
 			}
-			header('Content-Length: '.$this->get_file_size($path));
-			header('Last-Modified: '.gmdate('D, d M Y H:i:s T', filemtime($path)));
-			header('Expires: Sun, 17-Jan-2038 19:14:07 GMT');
+			else {
+				if(isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && $_SERVER['HTTP_IF_MODIFIED_SINCE'] == $modified) {
+					header('HTTP/1.1 304 Not Modified');
+					exit();
+				}
+			}
 			readfile($path);
 			if(extension_loaded('zlib')){ob_end_flush();}
 			exit;
