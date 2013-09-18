@@ -211,8 +211,11 @@ Route::group(array(
 	);
 });
 
-Route::get('{path}', array(
-	'before' => 'theme|general',
-	'as' => 'records',
-	'uses' => 'EternalSword\LPress\RecordController@parseRoute'
-))->where('path', '[A-z\d\-\/\.]+');
+Route::get(
+	'{path}',
+	array(
+		'before' => 'theme|general',
+		'as' => 'records',
+		'uses' => 'EternalSword\LPress\RecordController@parseRoute'
+	)
+)->where('path', '[A-z\d\-\/\.]+');
