@@ -253,7 +253,6 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
           id = this.href.split('#')[1]
           dragndrop = !!FileReader and Modernizr.draganddrop
           record = $this.data('prefix') + '/+record/create?type=' + id
-          console.log(record)
           $uploader = getUploader(
             id
             $this.data('url')
@@ -275,7 +274,26 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
           $(document.getElementById(id + '-input')).fileupload({
             dataType: 'json'
             done: (e, data) ->
-              $files = $("<ul class='files'></ul>")
+              $uploaded = $(document.getElementById(id + '-uploaded'))
+              if $uploaded.length is 0
+                $uploaded = $("<div id='#{id}-uploaded' class='tab-contents'><ul class='files'></ul></div>")
+                $tabs = $(document.getElementById(id + '-tabs'))
+                $tabs.append($uploaded)
+                easytabs = $tabs.data('easytabs')
+                $tablist = $tabs.find('ul.etabs')
+                $newtab = $("<li class='tab'><a href='##{id}-uploaded'>Uploaded</a></li>")
+                $tablist.append($newtab)
+                easytabs.tabs.removeClass(easytabs.settings.tabActiveClass)
+                easytabs.panels.removeClass(easytabs.settings.panelActiveClass)
+                $tablist.find("[data-href]").each(
+                  ->
+                    $this = $(this)
+                    $this.attr('href', $this.data('href')).removeAttr('data-href')
+                  #return
+                )
+                easytabs.init()
+              #endif
+              $files = $uploaded.find('ul.files')
               $.each(data.result.files, (index, file) ->
                 $files.append("""
                   <li>
@@ -284,6 +302,7 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
                   </li>
                 """)
               )
+              $("a[href=##{id}-uploaded]").click()
             #return
             error: (e, data) ->
               $error = $("<div class='error' style='display:none'>500 Internal Server Error</div>")
