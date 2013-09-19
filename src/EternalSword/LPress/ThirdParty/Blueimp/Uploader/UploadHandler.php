@@ -706,7 +706,9 @@ class UploadHandler
 						FILE_APPEND
 					);
 				} else {
-					move_uploaded_file($uploaded_file, $file_path);
+					if(move_uploaded_file($uploaded_file, $file_path)) {
+						\EternalSword\LPress\RecordController::createAttachmentRecord($file_path);
+					}
 				}
 			} else {
 				// Non-multipart uploads (PUT method support)

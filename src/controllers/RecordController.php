@@ -2,6 +2,7 @@
 
 use Illuminate\Routing\Controllers\Controller;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\HTML;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
@@ -119,5 +120,50 @@ class RecordController extends BaseController {
 	}
 
 	public static function createRecord() {
+	}
+
+	public static function createAttachmentRecord($path) {
+		$attachment_config = Config::get('l-press::attachments');
+		$relative_path = explode($attachment_config['path'], $path);
+		$segments = explode('/', $relative_path[1]);
+		array_shift($segments);
+		$domain = array_shift($segments);
+		$site = Site::where('domain', '=', $domain)->first();
+		$count = count($segments);
+		$file_name = $segments[--$count];
+		$record_type_slug = $segments[$count-3];
+		$label = explode('.', $file_name);
+		$record_type = RecordType::where('slug', '=', $record_type_slug)->first();
+		$user = Auth::user();
+		$record = new Record();
+		$record->label = $label[0];
+		$record->slug = $label[0];
+		$record->author_id = $user->id;
+		$record->record_type_id = $record_type->id;
+		$record->site_id = $site->id;
+		if(!$record->save()) {
+			return App::abort(500, 'Could not save record to database.');
+		}
+		$value = new Value();
+		$value->valuable_id = $record->id;
+		$value->valuable_type = 'EternalSword\\LPress\\Record';
+		$value->field_id = 4;
+		$value->current_revision_id = 0;
+		if(!$value->save()) {
+			return App::abort(500, 'Could not save value to database.');
+		}
+		$revision = new Revision();
+		$revision->value_id = $value->id;
+		$revision->author_id = $user->id;
+		$revision->prev_revision_id = 0;
+		$revision->contents = $file_name;
+		if(!$revision->save()) {
+			return App::abort(500, 'Could not save revision to database.');
+		}
+		// move following code to permissioned area when fleshed out
+		$value->current_revision_id = $revision->id;
+		if(!$value->save()) {
+			return App::abort(500, 'Could not save current revision to value in database.');
+		}
 	}
 }

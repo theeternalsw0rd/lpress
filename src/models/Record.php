@@ -16,6 +16,13 @@ class Record extends \Eloquent {
 		*/
 	protected $hidden = array();
 
+	/**
+		* The attributes which are guarded from new instances
+		*
+		* @var array
+		*/
+	protected $guarded = array('*');
+
 	public function values() {
 		return $this->morphMany('\EternalSword\LPress\Value', 'valuable');
 	}
