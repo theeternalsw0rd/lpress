@@ -273,7 +273,7 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
           $('body').append($uploader)
           $(document.getElementById(id + '-input')).fileupload({
             dataType: 'json'
-            done: (e, data) ->
+            done: (event, data) ->
               $uploaded = $(document.getElementById(id + '-uploaded'))
               if $uploaded.length is 0
                 $uploaded = $("<div id='#{id}-uploaded' class='tab-contents'><ul class='files'></ul></div>")
@@ -304,7 +304,7 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
               )
               $("a[href=##{id}-uploaded]").click()
             #return
-            error: (e, data) ->
+            error: (event, data) ->
               $error = $("<div class='error' style='display:none'>500 Internal Server Error</div>")
               $(document.getElementById(id + '-new')).prepend($error)
               $error.slideDown('slow').delay(3000).animate({
