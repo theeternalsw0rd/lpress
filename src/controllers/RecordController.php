@@ -34,6 +34,11 @@ class RecordController extends BaseController {
 			$found = FALSE;
 			foreach($record->values as $value) {
 				if($value->field->slug == 'file') {
+					if($record->id > 1) {
+						$date = new \DateTime($value->current_revision->updated_at);
+						$date = $date->format('/Y/m');
+						$path .= $date;
+					}
 					$path .= '/' . $value->current_revision->contents;
 					$found = TRUE;
 					break;
