@@ -97,7 +97,7 @@ Route::get(
 					'title' => 'SSL Requires SHA2',
 					'route_prefix' => Config::get('l-press::route_prefix')
 				)
-			);  
+			);
 		}
 	)
 );
