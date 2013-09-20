@@ -76,8 +76,8 @@ class BaseController extends Controller {
 
 	public static function checkSSL($type = 'all') {
 		switch($type) {
-			case 'admin': {
-				$config = 'l-press::admin_require_ssl';
+			case 'dashboard': {
+				$config = 'l-press::dashboard_require_ssl';
 				break;
 			}
 			case 'login': {

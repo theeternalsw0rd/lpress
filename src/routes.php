@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\View;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 $route_prefix = BaseController::getRoutePrefix();
-$admin_route = '+' . Config::get('l-press::admin_route');
+$dashboard_route = '+' . Config::get('l-press::dashboard_route');
 
 // filtering placement thanks to http://markvaneijk.com/minify-the-html-output-in-laravel-4
 App::after(function($request, $response) {
@@ -54,14 +54,14 @@ Route::filter(
 );
 
 Route::filter(
-	'admin',
+	'dashboard',
 	function() {
 		$user = Auth::user();
 		if(is_null($user)) {
 			Session::set('redirect', URL::full());
 			return Redirect::route('lpress-login');
 		}
-		return BaseController::checkSSL('admin');
+		return BaseController::checkSSL('dashboard');
 	}
 );
 
@@ -114,30 +114,30 @@ Route::get(
 Route::get(
 	$route_prefix . '+upload',
 	array(
-		'before' => 'theme|admin',
+		'before' => 'theme|dashboard',
 		'uses' => 'EternalSword\LPress\UploadController@getURL'
 	)
 );
 Route::post(
 	$route_prefix . '+upload',
 	array(
-		'before' => 'theme|admin',
+		'before' => 'theme|dashboard',
 		'uses' => 'EternalSword\LPress\UploadController@postFile'
 	)
 );
 Route::delete(
 	$route_prefix . '+upload',
 	array(
-		'before' => 'theme|admin',
+		'before' => 'theme|dashboard',
 		'uses' => 'EternalSword\LPress\UploadController@deleteFile'
 	)
 );
 
 Route::get(
-	$route_prefix . $admin_route,
+	$route_prefix . $dashboard_route,
 	array(
-		'before' => 'theme|admin',
-		'as' => 'lpress-admin',
+		'before' => 'theme|dashboard',
+		'as' => 'lpress-dashboard',
 		function() {
 			echo "Hello username";
 		}
@@ -192,8 +192,8 @@ Route::post(
 
 Route::group(
 	array(
-		'prefix' => $route_prefix . $admin_route,
-		'before' => 'theme|admin'
+		'prefix' => $route_prefix . $dashboard_route,
+		'before' => 'theme|dashboard'
 	), 
 	function() {
 		Route::get(
@@ -217,7 +217,7 @@ Route::group(
 Route::group(
 	array(
 		'prefix' => $route_prefix . '/+record',
-		'before' => 'theme|admin'
+		'before' => 'theme|dashboard'
 	),
 	function() {
 		Route::get(
