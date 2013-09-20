@@ -8,11 +8,11 @@
 $html = $('html')
 $body = $('body')
 $page = $(document.getElementById('page'))
-getUploader = (id, upload_url, path, single, dragndrop) ->
+getUploader = (id, upload_url, path, token, single, dragndrop = FALSE) ->
   if single 
-    input = "<input id='#{id}-input' class='file' type='file' name='files' data-url='#{upload_url}' />"
+    input = "<input id='#{id}-input' class='file' type='file' name='files' data-url='#{upload_url}' data-token='#{token}' />"
   else
-    input = "<input id='#{id}-input' class='file' type='file' name='files[]' data-url='#{upload_url}' multiple />"
+    input = "<input id='#{id}-input' class='file' type='file' name='files[]' data-url='#{upload_url}' data-token='#{token}' multiple />"
   #endif
   if dragndrop
     dropzone = "<p class='center'>This box is also a file drop zone.</p>"
@@ -257,6 +257,7 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
             id
             $this.data('url')
             $this.data('path')
+            $this.data('token')
             $this.hasClass('single')
             dragndrop
           )
@@ -273,6 +274,7 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
           $('body').append($uploader)
           $(document.getElementById(id + '-input')).fileupload({
             dataType: 'json'
+            formData: {_token: $(this).data('token')}
             done: (event, data) ->
               $uploaded = $(document.getElementById(id + '-uploaded'))
               if $uploaded.length is 0
@@ -305,7 +307,10 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
               $("a[href=##{id}-uploaded]").click()
             #return
             error: (event, data) ->
-              $error = $("<div class='error' style='display:none'>500 Internal Server Error</div>")
+              response = $.parseJSON(event.responseText)
+              if event.status
+                $error = $("<div class='error' style='display:none'>" + event.status + ": " + response.error + "</div>")
+              #endif
               $(document.getElementById(id + '-new')).prepend($error)
               $error.slideDown('slow').delay(3000).animate({
                 height: 0

@@ -2,13 +2,16 @@
 
 use EternalSword\LPress\ThirdParty\Blueimp\Uploader\UploadHandler as UploadHandler;
 use Illuminate\Routing\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Response;
 
 class UploadController extends BaseController {
-	private $configuration_error = "Error: couldn't load upload options from configuration so aborting upload.";
+	private $configuration_error = "Couldn't load upload options from configuration so aborting upload.";
+	private $notfound_error = "Valid RecordType could not be located from uri path.";
+	private $permission_error = "You do not have permission to upload files.";
+	private $record_error = "Record id not passed. Cannot process request.";
+	private $type_error = "Type of upload (new/update) not passed. Cannot process request.";
 
 	protected function getOptions() {
 		$options = array();
@@ -26,21 +29,62 @@ class UploadController extends BaseController {
 	}
 
 	public function postFile() {
-		$options = $this->getOptions();
-		if(!$options) {
-			return Response::json($this->configuration_error, 500);
+		$json = new \stdClass;
+		$code = 403;
+		$json->error = $this->permission_error;
+		$route = parent::slugsToRoute(Input::get('uri'));
+		if($route->throw404) {
+			$code = 404;
+			$json->error = $this->notfound_error;
 		}
-		$handler = new UploadHandler($options, FALSE);
-		return Response::json($handler->post(FALSE));
-	}
-
-	public function getURL() {
-		$options = $this->getOptions();
-		if(!$options) {
-			return Response::json($this->configuration_error, 500);
+		else {
+			$record_type = $route->record_type;
+			if(Input::has('type')) {
+				switch(Input::get('type')) {
+					case 'new': {
+						if(UserController::hasPermission('create')) {
+							$code = 200;
+						}
+						break;
+					}
+					case 'update': {
+						if(Input::has('record')) {
+							$record_id = Input::get('record');
+							$record = is_int($record_id) ? Record::find($record_id) : Record::find(0);
+							if($record->isEmpty()) {
+								$code = 404;
+								$json->error = $this->notfound_error;
+							}
+							else {
+							}
+						}
+						else {
+							$code = 500;
+							$json->error = $this->record_error;
+						}
+						break;
+					}
+					default: {
+						$code = 500;
+						$json->error = $this->type_error;
+					}
+				}
+				$options = $this->getOptions();
+				if(!$options) {
+					$code = 500;
+					$json->error = $this->configuration_error;
+				}
+				if($code == 200) {
+					$handler = new UploadHandler($options, FALSE);
+					$json = $handler->post(FALSE);
+				}
+			}
+			else {
+				$code = 500;
+				$json->error = $this->type_error;
+			}
 		}
-		$handler = new UploadHandler($options);
-		return Response::json($handler->get(FALSE));
+		return Response::json($json, $code);
 	}
 
 	public function deleteFile() {

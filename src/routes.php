@@ -39,6 +39,22 @@ App::error(function(HttpException $exception) {
 	), $code);
 });
 
+App::error(function(\Illuminate\Session\TokenMismatchException $exception) {
+	$code = 403;
+	$message = 'Permission denied. Tokens do not match.';
+	if(Request::ajax()) {
+		$json = new \stdClass;
+		$json->error = $message;
+		return Response::json($json, $code);
+	}
+	return Response::view($view_prefix . '.errors', array(
+		'view_prefix' => $view_prefix,
+		'title' => 'HttpError: ' + $code,
+		'code' => $code,
+		'message' => $message
+	), $code);
+});
+
 Route::filter(
 	'theme',
 	function() {
@@ -56,8 +72,13 @@ Route::filter(
 Route::filter(
 	'dashboard',
 	function() {
-		$user = Auth::user();
-		if(is_null($user)) {
+		if(!Auth::check()) {
+			if(Request::ajax()) {
+				$json = new \stdClass;
+				$json->error = "Permission denied. Not logged in.";
+				$code = 403;
+				return Response::json($json, $code);
+			}
 			Session::set('redirect', URL::full());
 			return Redirect::route('lpress-login');
 		}
@@ -114,21 +135,21 @@ Route::get(
 Route::get(
 	$route_prefix . '+upload',
 	array(
-		'before' => 'theme|dashboard',
+		'before' => 'csrf|theme|dashboard',
 		'uses' => 'EternalSword\LPress\UploadController@getURL'
 	)
 );
 Route::post(
 	$route_prefix . '+upload',
 	array(
-		'before' => 'theme|dashboard',
+		'before' => 'csrf|theme|dashboard',
 		'uses' => 'EternalSword\LPress\UploadController@postFile'
 	)
 );
 Route::delete(
 	$route_prefix . '+upload',
 	array(
-		'before' => 'theme|dashboard',
+		'before' => 'csrf|theme|dashboard',
 		'uses' => 'EternalSword\LPress\UploadController@deleteFile'
 	)
 );

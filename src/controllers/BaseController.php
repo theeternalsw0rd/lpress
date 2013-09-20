@@ -133,7 +133,7 @@ class BaseController extends Controller {
 				</label>
 			";
 		});
-		Form::macro('faux_file', function($slug, $attributes = array()) {
+		Form::macro('faux_file', function($slug, $upload_type = 'new', $attributes = array()) {
 			$type = RecordType::where('slug', '=', $slug)->first();
 			if(count($type) === 0) {
 				return "<div class='error'>Could not find RecordType ${slug} for file input.</div>";
@@ -153,10 +153,11 @@ class BaseController extends Controller {
 				return "<div class='error'>RecordType ${slug} is not valid for file input.</div>";
 			}
 			$prefix = self::getRoutePrefix();
-			$url = $prefix . "/+upload?path=${file_path}/&uri=${prefix}/${url_path}/";
+			$url = $prefix . "/+upload?path=${file_path}/&uri=${prefix}/${url_path}/&type=${upload_type}";
 			$url_path = $prefix . '/' . $url_path;
 			$attributes = self::getAttributeString($attributes);
-			return "<a href='#${slug}' title='${label}' data-prefix='${prefix}' data-path='${url_path}' data-url='${url}' class='single file' ${attributes}>${label}</a>";
+			$token = csrf_token();
+			return "<a href='#${slug}' title='${label}' data-token='${token}' data-prefix='${prefix}' data-path='${url_path}' data-url='${url}' class='single file' ${attributes}>${label}</a>";
 		});
 		HTML::macro('asset', function($type, $path, $attributes = array()) {
 			$asset_domain = Config::get('l-press::asset_domain');
@@ -264,7 +265,15 @@ class BaseController extends Controller {
 			}
 			return TRUE;
 		};
-		$segments = preg_split('@/@', $path, NULL, PREG_SPLIT_NO_EMPTY);
+		$route_prefix = self::getRoutePrefix();
+		if(!empty($route_prefix)) {
+			$real_path = explode(self::getRoutePrefix(), $path);
+			$real_path = $real_path[1];
+		}
+		else {
+			$real_path = $path;
+		}
+		$segments = preg_split('@/@', $real_path, NULL, PREG_SPLIT_NO_EMPTY);
 		$slugs = array();
 		$slug_types = array();
 		$last_index = count($segments) - 1;

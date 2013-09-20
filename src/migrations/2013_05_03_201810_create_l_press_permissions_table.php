@@ -15,6 +15,7 @@ class CreateLPressPermissionsTable extends Migration {
 		Schema::create('permissions', function(Blueprint $table) {
 			$table->increments('id');
 			$table->string('label')->unique();
+			$table->string('slug')->unique();
 			$table->text('description');
 			$table->timestamps();
 		});

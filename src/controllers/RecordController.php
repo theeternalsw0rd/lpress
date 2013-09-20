@@ -29,7 +29,7 @@ class RecordController extends BaseController {
 		}
 	}
 
-	public static function getRecord($route) {
+	public static function getRecord($route, $private = FALSE) {
 		$verifyAttachment = function($record) use (&$path) {
 			$found = FALSE;
 			foreach($record->values as $value) {
@@ -48,6 +48,17 @@ class RecordController extends BaseController {
 		};
 		$json = $route->json;
 		$record = $route->record;
+		if(!$private && !$record->public) {
+			if($json) {
+				$json = new \stdClass;
+				$json->code = 403;
+				$json->reason = 'Permission denied. Your user does not have access to this content.';
+				return Response::json($json, 403);
+			}
+			else {
+				return App::abort('403', 'Permission denied. Your user does not have access to this content.');
+			}
+		}
 		$record->load(
 			'author',
 			'publisher',
@@ -60,7 +71,7 @@ class RecordController extends BaseController {
 				if(!$verifyAttachment($record)) {
 					$json = new \stdClass;
 					$json->code = 404;
-					$json->reason = 'Record was found, but associated value is missing.';
+					$json->error = 'Record was found, but associated value is missing.';
 					return Response::json($json, 404);
 				}
 			}
@@ -72,17 +83,24 @@ class RecordController extends BaseController {
 			$attachment_config = Config::get('l-press::attachments');
 			$path = $attachment_config['path'] . '/' . $site->domain . '/' . $path;
 			if(!$verifyAttachment($record)) {
-				App::abort('404', 'Record was found, but associated value is missing.');
+				return App::abort('404', 'Record was found, but associated value is missing.');
 			}
 			$asset = new AssetController;
 			return $asset->getAsset($path);
 		}
 	}
 
-	public static function getRecordsByRecordType($route) {
+	public static function getRecordsByRecordType($route, $private = FALSE) {
 		$json = $route->json;
 		$record_type = $route->record_type;
-		$record_type->load('records');
+		if($private) {
+			$record_type->load('records');
+		}
+		else {
+			$record_type->load(array('records' => function($query) {
+				$query->where('public', '=', TRUE);
+			}));
+		}
 		if(count($record_type->records) > 0) {
 			$record_type->records->load(
 				'author',
@@ -144,6 +162,9 @@ class RecordController extends BaseController {
 		$record->label = $label[0];
 		$record->slug = $label[0];
 		$record->author_id = $user->id;
+		if(UserController::hasPermission(array('publish', 'publish-own'))) {
+			$record->publisher_id = $user->id;
+		}
 		$record->record_type_id = $record_type->id;
 		$record->site_id = $site->id;
 		if(!$record->save()) {
@@ -159,7 +180,8 @@ class RecordController extends BaseController {
 		}
 		$revision = new Revision();
 		$revision->value_id = $value->id;
-		$revision->author_id = $user->id;
+		$revision->author_id = $record->author_id;
+		$revision->publisher_id = $record->publisher_id;
 		$revision->prev_revision_id = 0;
 		$revision->contents = $file_name;
 		if(!$revision->save()) {
@@ -169,6 +191,10 @@ class RecordController extends BaseController {
 		$value->current_revision_id = $revision->id;
 		if(!$value->save()) {
 			return App::abort(500, 'Could not save current revision to value in database.');
+		}
+		$record->public = TRUE;
+		if(!$record->save()) {
+			return App::abort(500, 'Could make record public in database.');
 		}
 	}
 }
