@@ -2,13 +2,13 @@
 
 use Illuminate\Routing\Controllers\Controller;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\View;
-use Illuminate\Support\Facades\HTML;
-use Illuminate\Support\Facades\Form;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Form;
+use Illuminate\Support\Facades\HTML;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\View;
 
 class BaseController extends Controller {
 	private function supportsSHA2() {

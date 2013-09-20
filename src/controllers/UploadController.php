@@ -1,10 +1,11 @@
 <?php namespace EternalSword\LPress;
 
+	use EternalSword\LPress\ThirdParty\Blueimp\Uploader\UploadHandler as UploadHandler;
 	use Illuminate\Routing\Controllers\Controller;
-	use Illuminate\Support\Facades\Response;
+	use Illuminate\Support\Facades\Auth;
 	use Illuminate\Support\Facades\Config;
 	use Illuminate\Support\Facades\Input;
-	use EternalSword\LPress\ThirdParty\Blueimp\Uploader\UploadHandler as UploadHandler;
+	use Illuminate\Support\Facades\Response;
 
 	class UploadController extends BaseController {
 		private $configuration_error = "Error: couldn't load upload options from configuration so aborting upload.";

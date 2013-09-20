@@ -3,8 +3,8 @@
 use Illuminate\Routing\Controllers\Controller;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\HTML;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\HTML;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
 

@@ -1,9 +1,9 @@
 <?php namespace EternalSword\LPress;
 
 use Illuminate\Routing\Controllers\Controller;
-use Illuminate\Support\Facades\View;
-use Illuminate\Support\Facades\HTML;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\HTML;
+use Illuminate\Support\Facades\View;
 
 class IndexController extends BaseController {
 	public function getIndex() {
