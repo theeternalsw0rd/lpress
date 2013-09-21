@@ -7,11 +7,11 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Response;
 
 class UploadController extends BaseController {
-	private $configuration_error = "Couldn't load upload options from configuration so aborting upload.";
-	private $notfound_error = "Valid RecordType could not be located from uri path.";
-	private $permission_error = "You do not have permission to upload files.";
-	private $record_error = "Record id not passed. Cannot process request.";
-	private $type_error = "Type of upload (new/update) not passed. Cannot process request.";
+	protected $configuration_error = "Couldn't load upload options from configuration so aborting upload.";
+	protected $notfound_error = "Valid RecordType could not be located from uri path.";
+	protected $permission_error = "You do not have permission to upload files.";
+	protected $record_error = "Record id not passed. Cannot process request.";
+	protected $type_error = "Type of upload (new/update) not passed. Cannot process request.";
 
 	protected function getOptions() {
 		$options = array();

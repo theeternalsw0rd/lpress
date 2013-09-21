@@ -9,10 +9,10 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
 
 class RecordController extends BaseController {
-	private $permission_error = 'Permission denied. Your user does not have access to this content.';
-	private $attachment_missing = 'Record was found, but filename value is missing.';
-	private $invalid_url = 'No records could be found for this url.';
-	private $template_missing = 'No template could be found for this RecordType.';
+	protected $permission_error = 'Permission denied. Your user does not have access to this content.';
+	protected $attachment_missing = 'Record was found, but filename value is missing.';
+	protected $invalid_url = 'No records could be found for this url.';
+	protected $template_missing = 'No template could be found for this RecordType.';
 
 	public static function parseRoute($path) {
 		$route = BaseController::slugsToRoute($path);

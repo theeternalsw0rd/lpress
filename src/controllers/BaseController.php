@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 
 class BaseController extends Controller {
-	private function supportsSHA2() {
+	protected function supportsSHA2() {
 		$user_agent = $_SERVER['HTTP_USER_AGENT'];
 		if(preg_match('/(Windows NT 5)|(Windows XP)/i', $user_agent)
 			&& !preg_match('/firefox/i', $user_agent)
