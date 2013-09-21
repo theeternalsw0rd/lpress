@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
 
 class RecordController extends BaseController {
+	private $permission_error = 'Permission denied. Your user does not have access to this content.';
+	private $attachment_missing = 'Record was found, but filename value is missing.';
+	private $invalid_url = 'No records could be found for this url.';
+	private $template_missing = 'No template could be found for this RecordType.';
+
 	public static function parseRoute($path) {
 		$route = BaseController::slugsToRoute($path);
 		$route->path = $path;
@@ -16,10 +21,10 @@ class RecordController extends BaseController {
 			if($route->json) {
 				$json = new \stdClass;
 				$json->code = 404;
-				$json->reason = 'Could not locate object from path.';
+				$json->reason = $invalid_url;
 				return Response::json($json, 404);
 			}
-			return App::abort(404, 'Could not locate object from path.');
+			return App::abort(404, $invalid_url);
 		}
 		if($route->slug_types[0] == 'record') {
 			return self::getRecord($route);
@@ -52,11 +57,11 @@ class RecordController extends BaseController {
 			if($json) {
 				$json = new \stdClass;
 				$json->code = 403;
-				$json->reason = 'Permission denied. Your user does not have access to this content.';
+				$json->reason = $this->permission_error;
 				return Response::json($json, 403);
 			}
 			else {
-				return App::abort('403', 'Permission denied. Your user does not have access to this content.');
+				return App::abort('403', $this->permission_error);
 			}
 		}
 		$record->load(
@@ -71,7 +76,7 @@ class RecordController extends BaseController {
 				if(!$verifyAttachment($record)) {
 					$json = new \stdClass;
 					$json->code = 404;
-					$json->error = 'Record was found, but associated value is missing.';
+					$json->error = $this->attachment_missing;
 					return Response::json($json, 404);
 				}
 			}
@@ -83,7 +88,7 @@ class RecordController extends BaseController {
 			$attachment_config = Config::get('l-press::attachments');
 			$path = $attachment_config['path'] . '/' . $site->domain . '/' . $path;
 			if(!$verifyAttachment($record)) {
-				return App::abort('404', 'Record was found, but associated value is missing.');
+				return App::abort('404', $this->attachment_missing);
 			}
 			$asset = new AssetController;
 			return $asset->getAsset($path);
@@ -136,7 +141,7 @@ class RecordController extends BaseController {
 				$record_type = $record_type->parent_type;
 			}
 		}
-		return App::abort(404, 'Could not locate object from path.');
+		return App::abort(404, $this->template_missing);
 	}
 
 	public static function getRecordForm() {
