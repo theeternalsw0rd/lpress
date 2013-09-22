@@ -194,6 +194,15 @@ class BaseController extends Controller {
 			}
 			return $open . $version . $close;
 		});
+		HTML::macro('imageAlt', function($record) {
+			$alt = $record->label;
+			foreach($record->values as $value) {
+				if($value->field->slug == 'file-description') {
+					$alt = $value->current_revision->contents;
+				}
+			}
+			return $alt;
+		});
 	}
 
 	public static function getAssetPath($attachment = FALSE) {

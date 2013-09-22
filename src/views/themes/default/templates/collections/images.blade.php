@@ -9,12 +9,8 @@
 			@foreach ($record_type->records as $record)
 				<li>
 					<a class='gallery' title='{{ $record->label }}' href='/{{ $path }}/{{ $record->slug }}'>
-						<img src='/{{ $path }}/{{ $record->slug }}?v{{ strtotime($record->updated_at) }}' />
-						@foreach ($record->values as $value)
-							@if ($value->field->slug == 'file-description')
-								<span class='caption'>{{ $value->current_revision->contents }}</span>{{ ''; break }}
-							@endif
-						@endforeach
+						<img src='/{{ $path }}/{{ $record->slug }}?v{{ strtotime($record->updated_at) }}' alt='{{ HTML::imageAlt($record) }}' />
+						<span class='caption'>{{ $record->label }}</span>{{ ''; break }}
 					</a>
 				</li>
 			@endforeach
