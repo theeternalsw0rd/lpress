@@ -31,6 +31,10 @@ class Record extends \Eloquent {
 		return $this->hasMany('\EternalSword\LPress\Comment');
 	}
 
+	public function aliases() {
+		return $this->hasMany('\EternalSword\LPress\Record', 'alias_id');
+	}
+
 	public function record_type() {
 		return $this->belongsTo('\EternalSword\LPress\RecordType');
 	}

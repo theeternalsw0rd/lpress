@@ -3,14 +3,28 @@
 	@parent
 @stop
 @section('content')
-	<h1>{{ $label }}</h1>
-	@if (count($record_type->records) > 0)
+	@if (count($record_type->children) > 0)
+		<h1>{{ $label }} / <span data-dropdown='#type-children'>Children</span></h1>
+		<div id='type-children' class='dropdown'>
+			<ul class='dropdown-menu types'>
+				<li class='hide'>Subcollections</li>
+				@foreach ($record_type->children as $child)
+					<li>
+						<a title='{{ $child->label}}' href='/{{ $path }}/{{ $child->slug }}'>{{ $child->label }}</a>
+					</li>
+				@endforeach
+			</ul>
+		</div>
+	@else
+		<h1>{{ $label }}</h1>
+	@endif
+	@if (count($record_type->filtered_records) > 0)
 		<ul id='gallery'>
-			@foreach ($record_type->records as $record)
+			@foreach ($record_type->filtered_records as $record)
 				<li>
 					<a class='gallery' title='{{ $record->label }}' href='/{{ $path }}/{{ $record->slug }}'>
 						<img src='/{{ $path }}/{{ $record->slug }}?v{{ strtotime($record->updated_at) }}' alt='{{ HTML::imageAlt($record) }}' />
-						<span class='caption'>{{ $record->label }}</span>{{ ''; break }}
+						<span class='caption'>{{ $record->label }}</span>
 					</a>
 				</li>
 			@endforeach
@@ -20,7 +34,4 @@
 			<p>No records found in this collection.</p>
 		</div>
 	@endif
-@stop
-@section('footer_scripts')
-	@parent
 @stop

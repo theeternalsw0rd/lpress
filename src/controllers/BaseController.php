@@ -195,10 +195,20 @@ class BaseController extends Controller {
 			return $open . $version . $close;
 		});
 		HTML::macro('imageAlt', function($record) {
-			$alt = $record->label;
-			foreach($record->values as $value) {
-				if($value->field->slug == 'file-description') {
-					$alt = $value->current_revision->contents;
+			if(is_array($record)) {
+				$alt = $record['label'];
+				foreach($record['values'] as $value) {
+					if($value['field']['slug'] == 'file-description') {
+						$alt = $value['current_revision']['contents'];
+					}
+				}
+			}
+			else {
+				$alt = $record->label;
+				foreach($record->values as $value) {
+					if($value->field->slug == 'file-description') {
+						$alt = $value->current_revision->contents;
+					}
 				}
 			}
 			return $alt;
@@ -293,42 +303,50 @@ class BaseController extends Controller {
 			$route->json = TRUE;
 		}
 		for($i=$last_index;$i>=0;$i--) {
+			$is_record_type = TRUE;
 			$slug = $segments[$i];
 			if($i == $last_index) {
-				$records = Record::where('slug', '=', $slug)->get();
+				$records = Record::where('slug', '=', $slug)
+					->where('site_id', '=', SITE)->get();
 				if(count($records) === 0) {
-					$route->throw404 = !$slugIsValidRecordType($i, $last_index, $segments, $slug);
-					if($route->throw404) {
-						break;
+					$wildcard_site = Site::where('domain', '=', 'wildcard')->first();
+					if(count($wildcard_site) > 0) {
+						$records = Record::where('slug', '=', $slug)
+							->where('site_id', '=', $wildcard_site->id)->get();
+						if(count($records) > 0) {
+							$is_record_type = FALSE;
+						}
 					}
-					array_push($slug_types, 'record_type');
 				}
 				else {
-					$route->records = $records;
-					if($i > 0) {
-						$found = FALSE;
-						foreach($records as $record) {
-							$record_type_slug = RecordType::find($record->record_type_id)->slug;
-							if($segments[$i-1] == $record_type_slug) {
-								$found = TRUE;
-								$route->record = $record;
-								break;
-							}
-						}
-						$route->throw404 = !$found;
-						if(!$found) {
-							break;
-						}
-					}
-					array_push($slug_types, 'record');
+					$is_record_type = FALSE;
 				}
 			}
-			else {
+			if($is_record_type) {
 				$route->throw404 = !$slugIsValidRecordType($i, $last_index, $segments, $slug);
 				if($route->throw404) {
 					break;
 				}
 				array_push($slug_types, 'record_type');
+			}
+			else {
+				$route->records = $records;
+				if($i > 0) {
+					$found = FALSE;
+					foreach($records as $record) {
+						$record_type_slug = RecordType::find($record->record_type_id)->slug;
+						if($segments[$i-1] == $record_type_slug) {
+							$found = TRUE;
+							$route->record = $record;
+							break;
+						}
+					}
+					$route->throw404 = !$found;
+					if(!$found) {
+						break;
+					}
+				}
+				array_push($slug_types, 'record');
 			}
 			array_push($slugs, $slug);
 		}

@@ -31,7 +31,8 @@
 			<![endif]-->
 			@yield('content')
 		</div>
-
+		@section('hidden')
+		@show
 		@section('footer_scripts')
 			{{ HTML::asset('js', 'vendor/jquery/jquery.js') }}
 			{{ HTML::asset('js', 'vendor/colorbox/colorbox.js') }}

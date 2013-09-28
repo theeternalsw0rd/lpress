@@ -4,7 +4,8 @@
 			"requires": [
 				"global/helpers.coffee",
 				"global/forms.coffee",
-				"global/gallery.coffee"
+				"global/gallery.coffee",
+				"global/flexnav.coffee"
 			]
 		}
 	}

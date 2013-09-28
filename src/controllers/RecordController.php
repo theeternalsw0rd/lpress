@@ -9,10 +9,10 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
 
 class RecordController extends BaseController {
-	protected $permission_error = 'Permission denied. Your user does not have access to this content.';
-	protected $attachment_missing = 'Record was found, but filename value is missing.';
-	protected $invalid_url = 'No records could be found for this url.';
-	protected $template_missing = 'No template could be found for this RecordType.';
+	const permission_error = 'Permission denied. Your user does not have access to this content.';
+	const attachment_missing = 'Record was found, but filename value is missing.';
+	const invalid_url = 'No records could be found for this url.';
+	const template_missing = 'No template could be found for this RecordType.';
 
 	public static function parseRoute($path) {
 		$route = BaseController::slugsToRoute($path);
@@ -21,10 +21,10 @@ class RecordController extends BaseController {
 			if($route->json) {
 				$json = new \stdClass;
 				$json->code = 404;
-				$json->reason = $invalid_url;
+				$json->reason = self::invalid_url;
 				return Response::json($json, 404);
 			}
-			return App::abort(404, $invalid_url);
+			return App::abort(404, self::invalid_url);
 		}
 		if($route->slug_types[0] == 'record') {
 			return self::getRecord($route);
@@ -34,7 +34,7 @@ class RecordController extends BaseController {
 		}
 	}
 
-	public static function getRecord($route, $private = FALSE) {
+	public static function getRecord($route, $public = TRUE) {
 		$verifyAttachment = function($record) use (&$path) {
 			$found = FALSE;
 			foreach($record->values as $value) {
@@ -53,15 +53,15 @@ class RecordController extends BaseController {
 		};
 		$json = $route->json;
 		$record = $route->record;
-		if(!$private && !$record->public) {
+		if($record->public != $public) {
 			if($json) {
 				$json = new \stdClass;
 				$json->code = 403;
-				$json->reason = $this->permission_error;
+				$json->reason = self::permission_error;
 				return Response::json($json, 403);
 			}
 			else {
-				return App::abort('403', $this->permission_error);
+				return App::abort('403', self::permission_error);
 			}
 		}
 		$record->load(
@@ -76,45 +76,30 @@ class RecordController extends BaseController {
 				if(!$verifyAttachment($record)) {
 					$json = new \stdClass;
 					$json->code = 404;
-					$json->error = $this->attachment_missing;
+					$json->error = self::attachment_missing;
 					return Response::json($json, 404);
 				}
 			}
 			return Response::json($record);
 		}
 		if($route->root_record_type->slug == 'attachments') {
-			$site = Site::find(SITE);
+			$site = $record->site()->first();
 			$path = dirname($route->path);
 			$attachment_config = Config::get('l-press::attachments');
 			$path = $attachment_config['path'] . '/' . $site->domain . '/' . $path;
 			if(!$verifyAttachment($record)) {
-				return App::abort('404', $this->attachment_missing);
+				return App::abort('404', self::attachment_missing);
 			}
 			$asset = new AssetController;
 			return $asset->getAsset($path);
 		}
 	}
 
-	public static function getRecordsByRecordType($route, $private = FALSE) {
+	public static function getRecordsByRecordType($route, $public = TRUE) {
 		$json = $route->json;
 		$record_type = $route->record_type;
-		if($private) {
-			$record_type->load('records');
-		}
-		else {
-			$record_type->load(array('records' => function($query) {
-				$query->where('public', '=', TRUE);
-			}));
-		}
-		if(count($record_type->records) > 0) {
-			$record_type->records->load(
-				'author',
-				'publisher',
-				'values.field',
-				'values.current_revision.author',
-				'values.current_revision.publisher'
-			);
-		}
+		$record_type->load('children');
+		$record_type->filtered_records($public);
 		if($json) {
 			return Response::json($record_type);
 		}
@@ -137,11 +122,10 @@ class RecordController extends BaseController {
 					)
 				);
 			} catch (\InvalidArgumentException $e) {
-				$record_type->load('parent_type');
-				$record_type = $record_type->parent_type;
+				$record_type = RecordType::find($record_type->parent_id);
 			}
 		}
-		return App::abort(404, $this->template_missing);
+		return App::abort(404, self::template_missing);
 	}
 
 	public static function getRecordForm() {
