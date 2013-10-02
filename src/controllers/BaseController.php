@@ -133,7 +133,7 @@ class BaseController extends Controller {
 				</label>
 			";
 		});
-		Form::macro('faux_file', function($slug, $upload_type = 'new', $attributes = array()) {
+		Form::macro('faux_file', function($slug, $upload_type = 'new', $single = TRUE, $attributes = array()) {
 			$type = RecordType::where('slug', '=', $slug)->first();
 			if(count($type) === 0) {
 				return "<div class='error'>Could not find RecordType ${slug} for file input.</div>";
@@ -157,7 +157,8 @@ class BaseController extends Controller {
 			$url_path = $prefix . '/' . $url_path;
 			$attributes = self::getAttributeString($attributes);
 			$token = csrf_token();
-			return "<a href='#${slug}' title='${label}' data-token='${token}' data-prefix='${prefix}' data-path='${url_path}' data-url='${url}' class='single file' ${attributes}>${label}</a>";
+			$class = $single ? 'single file' : 'multiple file';
+			return "<a href='#${slug}' title='${label}' data-token='${token}' data-prefix='${prefix}' data-path='${url_path}' data-url='${url}' class='${class}' ${attributes}>${label}</a>";
 		});
 		HTML::macro('asset', function($type, $path, $attributes = array()) {
 			$asset_domain = Config::get('l-press::asset_domain');
