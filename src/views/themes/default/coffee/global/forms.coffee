@@ -69,20 +69,19 @@ $(document).on(
             dataType: 'json'
             success:  (data) ->
               $gallery = $("<ul id='gallery'></ul>")
-              $.each(data.records, (index, item) ->
-                record = item
-                caption = ""
-                $.each(record.values, (index, item) ->
-                  value = item
-                  if value.field.slug is 'file' and value.description isnt ""
-                    caption = "<span class='caption'>#{value.description}</span>"
+              $.each(data.filtered_records, (index, record) ->
+                alt = record.label
+                $.each(record.values, (index, value) ->
+                  if value.field.slug is 'file-description'
+                    alt = value.current_revision.contents
                     return false
                   #endif
                 )
                 $gallery.append("""
                   <li>
                     <a title='#{record.label}' href='#{url}/#{record.slug}'>
-                      <img src='#{url}/#{record.slug}' />#{caption}
+                      <img src='#{url}/#{record.slug}' alt='#{alt}' />
+                      <span class='caption'>#{record.label}</span>
                     </a>
                   </li>
                 """)
