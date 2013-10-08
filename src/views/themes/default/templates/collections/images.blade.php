@@ -18,11 +18,11 @@
 	@else
 		<h1>{{ $label }}</h1>
 	@endif
-	@if (count($record_type->filtered_records) > 0)
+	@if (count($record_type->records) > 0)
 		<ul id='gallery'>
-			@foreach ($record_type->filtered_records as $record)
+			@foreach ($record_type->records as $record)
 				<li>
-					<a class='gallery' title='{{ $record->label }}' href='/{{ $path }}/{{ $record->slug }}'>
+					<a class='gallery' title='{{ $record->label }}' href='/{{ $path }}/{{ $record->slug }}?v{{ strtotime($record->updated_at) }}'>
 						<img src='/{{ $path }}/{{ $record->slug }}?v{{ strtotime($record->updated_at) }}' alt='{{ HTML::imageAlt($record) }}' />
 						<span class='caption'>{{ $record->label }}</span>
 					</a>
