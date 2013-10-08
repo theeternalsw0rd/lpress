@@ -99,7 +99,35 @@ class RecordController extends BaseController {
 		$json = $route->json;
 		$record_type = $route->record_type;
 		$record_type->load('children');
-		$record_type->filtered_records($public);
+		$record_type->load(array('aliases' => function($query) {
+			$query->where('site_id', '=', SITE);
+		}));
+		$aliases = $record_type->aliases->lists('record_id');
+		$record_type->load(array('records' => function($query) use($public, $aliases) {
+			if($public) {
+				$query
+				->where('public', '=', TRUE)
+				->where(function($query) use($aliases) {
+					$query
+					->whereIn('id', count($aliases) > 0 ? $aliases : array(0))
+					->orWhere('site_id', '=', SITE);
+				})
+				->orderBy('updated_at');
+			}
+			else {
+				$query
+				->whereIn('id', count($aliases) > 0 ? $aliases : array(0))
+				->orWhere('site_id', '=', SITE)
+				->orderBy('updated_at');
+			}
+		}));
+		$record_type->records->load(
+			'author',
+			'publisher',
+			'values.field',
+			'values.current_revision.author',
+			'values.current_revision.publisher'
+		);
 		if($json) {
 			return Response::json($record_type);
 		}

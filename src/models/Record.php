@@ -32,7 +32,7 @@ class Record extends \Eloquent {
 	}
 
 	public function aliases() {
-		return $this->hasMany('\EternalSword\LPress\Record', 'alias_id');
+		return $this->hasMany('\EternalSword\LPress\Alias');
 	}
 
 	public function record_type() {
