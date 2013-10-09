@@ -5,6 +5,8 @@
 
 $ = jQuery
 
+$('body').removeClass('nojs')
+
 parseURI = (uri) ->
   query_string = uri.split('?')[1]
   queries = {}

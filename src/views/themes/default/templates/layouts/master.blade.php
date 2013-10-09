@@ -22,7 +22,7 @@
 			{{ HTML::asset('css', 'compiled/global/master.css') }}
 		@show
 	</head>
-	<body>
+	<body class='nojs'>
 		<div id='page'>
 			<!--[if lt IE 8]>
 				<div class="message">

@@ -19,7 +19,7 @@ getUploader = (id, upload_url, path, token, single, dragndrop = FALSE) ->
   else
     dropzone = ""
   #endif
-  $("""
+  return $("""
     <div id='#{id}' class='colorbox'>
       <div id='#{id}-tabs' class='tabs'>
         <ul class='etabs clear-fix'>
@@ -68,6 +68,9 @@ $(document).on(
             url: url + '.json'
             dataType: 'json'
             success:  (data) ->
+              $gallery = $(document.getElementById('gallery'))
+              if $gallery.length > 0
+                $gallery.remove()
               $gallery = $("<ul id='gallery'></ul>")
               $.each(data.records, (index, record) ->
                 alt = record.label
@@ -342,6 +345,14 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
               midpoint = ($colorbox.width() - $button.width()) / 2
               $button.css({'left': midpoint + 'px'})
               $colorbox.get(0).scrollTop = 0
+              tab_bar_height = $colorbox.find('.etabs').first().outerHeight()
+              $colorbox.find('.tab-contents').each(
+                ->
+                  $this = $(this)
+                  spacing = $this.outerHeight() - $this.height()
+                  $(this).height($colorbox.height() - tab_bar_height - spacing)
+                #return
+              )
             #return
             onClosed: ->
               $('body').css({'overflow': 'auto'})
