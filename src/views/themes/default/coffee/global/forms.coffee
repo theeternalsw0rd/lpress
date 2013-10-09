@@ -69,7 +69,7 @@ $(document).on(
             dataType: 'json'
             success:  (data) ->
               $gallery = $("<ul id='gallery'></ul>")
-              $.each(data.filtered_records, (index, record) ->
+              $.each(data.records, (index, record) ->
                 alt = record.label
                 $.each(record.values, (index, value) ->
                   if value.field.slug is 'file-description'
