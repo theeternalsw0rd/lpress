@@ -20,5 +20,4 @@ class LPressRecordsTableSeeder extends Seeder {
 
 		DB::table('records')->insert($records);
 	}
-
 }

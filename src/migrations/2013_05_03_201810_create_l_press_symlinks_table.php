@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateLPressAliasesTable extends Migration {
+class CreateLPressSymlinksTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,7 +12,7 @@ class CreateLPressAliasesTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('aliases', function(Blueprint $table) {
+		Schema::create('symlinks', function(Blueprint $table) {
 			$table->increments('id');
 			$table->string('label');
 			$table->string('slug');
@@ -29,7 +29,7 @@ class CreateLPressAliasesTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('aliases');
+		Schema::drop('symlinks');
 	}
 
 }

@@ -1,13 +1,13 @@
 <?php namespace EternalSword\LPress;
 
-class Alias extends \Eloquent {
+class Symlink extends \Eloquent {
 
 	/**
 		* The database table used by the model.
 		*
 		* @var string
 		*/
-	protected $table = 'aliases';
+	protected $table = 'symlinks';
 
 	/**
 		* The attributes excluded from the model's JSON form.

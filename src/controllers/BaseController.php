@@ -334,15 +334,15 @@ class BaseController extends Controller {
 					}
 				}
 				if(!$found) {
-					$alias = Alias::where('site_id', '=', SITE)
+					$symlink = Symlink::where('site_id', '=', SITE)
 					->where('record_type_id', '=', $base_type->id)
 					->where('slug', '=', $slug)
 					->first();
-					if(count($alias) > 0) {
+					if(count($symlink) > 0) {
 						array_unshift($slug_types, 'record');
 						array_unshift($slugs, $slug);
 						$found = TRUE;
-						$route->record = $alias->record;
+						$route->record = $symlink->record;
 					}
 				}
 				if($found) {

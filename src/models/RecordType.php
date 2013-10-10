@@ -27,8 +27,8 @@ class RecordType extends \Eloquent {
 		return $this->hasMany('\EternalSword\LPress\Record');
 	}
 
-	public function aliases() {
-		return $this->hasMany('\EternalSword\LPress\Alias');
+	public function symlinks() {
+		return $this->hasMany('\EternalSword\LPress\Symlink');
 	}
 
 	public function fields() {

@@ -31,8 +31,8 @@ class Record extends \Eloquent {
 		return $this->hasMany('\EternalSword\LPress\Comment');
 	}
 
-	public function aliases() {
-		return $this->hasMany('\EternalSword\LPress\Alias');
+	public function symlinks() {
+		return $this->hasMany('\EternalSword\LPress\Symlink');
 	}
 
 	public function record_type() {

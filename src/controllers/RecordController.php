@@ -99,24 +99,24 @@ class RecordController extends BaseController {
 		$json = $route->json;
 		$record_type = $route->record_type;
 		$record_type->load('children');
-		$record_type->load(array('aliases' => function($query) {
+		$record_type->load(array('symlinks' => function($query) {
 			$query->where('site_id', '=', SITE);
 		}));
-		$aliases = $record_type->aliases->lists('record_id');
-		$record_type->load(array('records' => function($query) use($public, $aliases) {
+		$symlinks = $record_type->symlinks->lists('record_id');
+		$record_type->load(array('records' => function($query) use($public, $symlinks) {
 			if($public) {
 				$query
 				->where('public', '=', TRUE)
-				->where(function($query) use($aliases) {
+				->where(function($query) use($symlinks) {
 					$query
-					->whereIn('id', count($aliases) > 0 ? $aliases : array(0))
+					->whereIn('id', count($symlinks) > 0 ? $symlinks : array(0))
 					->orWhere('site_id', '=', SITE);
 				})
 				->orderBy('updated_at');
 			}
 			else {
 				$query
-				->whereIn('id', count($aliases) > 0 ? $aliases : array(0))
+				->whereIn('id', count($symlinks) > 0 ? $symlinks : array(0))
 				->orWhere('site_id', '=', SITE)
 				->orderBy('updated_at');
 			}
