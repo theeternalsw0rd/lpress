@@ -64,40 +64,40 @@ $(document).on(
         $id = $(id)
         url = $id.data('url')
         if /existing/.test(id)
-          $.ajax({
-            url: url + '.json'
-            dataType: 'json'
-            success:  (data) ->
-              $gallery = $(document.getElementById('gallery'))
-              if $gallery.length > 0
-                $gallery.remove()
-              $gallery = $("<ul id='gallery'></ul>")
-              $.each(data.records, (index, record) ->
-                alt = record.label
-                $.each(record.values, (index, value) ->
-                  if value.field.slug is 'file-description'
-                    alt = value.current_revision.contents
-                    return false
-                  #endif
+          $gallery = $(document.getElementById('gallery'))
+          if $gallery.length is 0
+            $.ajax({
+              url: url + '.json'
+              dataType: 'json'
+              success:  (data) ->
+                $gallery = $("<ul id='gallery'></ul>")
+                $.each(data.records, (index, record) ->
+                  alt = record.label
+                  $.each(record.values, (index, value) ->
+                    if value.field.slug is 'file-description'
+                      alt = value.current_revision.contents
+                      return false
+                    #endif
+                  )
+                  $gallery.append("""
+                    <li>
+                      <a title='#{record.label}' href='#{url}/#{record.slug}'>
+                        <img src='#{url}/#{record.slug}' alt='#{alt}' />
+                        <span class='caption'>#{record.label}</span>
+                      </a>
+                    </li>
+                  """)
                 )
-                $gallery.append("""
-                  <li>
-                    <a title='#{record.label}' href='#{url}/#{record.slug}'>
-                      <img src='#{url}/#{record.slug}' alt='#{alt}' />
-                      <span class='caption'>#{record.label}</span>
-                    </a>
-                  </li>
-                """)
-              )
-              $id.append($gallery)
-            #return
-            error: (data) ->
-              if data.status is 404
-                json = $.parseJSON(data.responseText)
-                $id.html("<h1>HttpError: 404</h1><div class='error'>#{json.reason}</div>")
-              #endif
-            #return
-          })
+                $id.append($gallery)
+              #return
+              error: (data) ->
+                if data.status is 404
+                  json = $.parseJSON(data.responseText)
+                  $id.html("<h1>HttpError: 404</h1><div class='error'>#{json.reason}</div>")
+                #endif
+              #return
+            })
+          #endif
         #endif
       #endif
     #endif
