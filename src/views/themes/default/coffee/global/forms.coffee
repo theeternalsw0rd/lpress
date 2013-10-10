@@ -83,7 +83,7 @@ $(document).on(
                   if attachment_type is 'images'
                     $gallery.append("""
                       <li>
-                        <a title='#{record.label}' href='#{url}/#{record.slug}'>
+                        <a title='#{record.label}' href='#{url}/#{record.slug}' data-id='#{record.id}'>
                           <img src='#{url}/#{record.slug}' alt='#{alt}' />
                           <span class='caption'>#{record.label}</span>
                         </a>
