@@ -8,7 +8,7 @@
 $html = $('html')
 $body = $('body')
 $page = $(document.getElementById('page'))
-getUploader = (id, upload_url, path, token, single, dragndrop = FALSE) ->
+getUploader = (id, upload_url, path, token, attachment_type, single, dragndrop = FALSE) ->
   if single 
     input = "<input id='#{id}-input' class='file' type='file' name='files' data-url='#{upload_url}' data-token='#{token}' />"
   else
@@ -34,7 +34,7 @@ getUploader = (id, upload_url, path, token, single, dragndrop = FALSE) ->
             <div class='bar'></div>
           </div>
         </div>
-        <div id='#{id}-existing' class='tab-contents' data-url='#{path}'>
+        <div id='#{id}-existing' class='tab-contents' data-url='#{path}' data-attachment_type='#{attachment_type}'>
         </div>
       </div>
     </div>
@@ -61,8 +61,9 @@ $(document).on(
         $target = $(target)
         id = $target.attr('href')
         $target.attr('data-href', id).removeAttr('href')
-        $id = $(id)
-        url = $id.data('url')
+        $content_box = $(id)
+        attachment_type = $content_box.data('attachment_type')
+        url = $content_box.data('url')
         if /existing/.test(id)
           $gallery = $(document.getElementById('gallery'))
           if $gallery.length is 0
@@ -79,16 +80,18 @@ $(document).on(
                       return false
                     #endif
                   )
-                  $gallery.append("""
-                    <li>
-                      <a title='#{record.label}' href='#{url}/#{record.slug}'>
-                        <img src='#{url}/#{record.slug}' alt='#{alt}' />
-                        <span class='caption'>#{record.label}</span>
-                      </a>
-                    </li>
-                  """)
+                  if attachment_type is 'images'
+                    $gallery.append("""
+                      <li>
+                        <a title='#{record.label}' href='#{url}/#{record.slug}'>
+                          <img src='#{url}/#{record.slug}' alt='#{alt}' />
+                          <span class='caption'>#{record.label}</span>
+                        </a>
+                      </li>
+                    """)
+                  #endif
                 )
-                $id.append($gallery)
+                $content_box.append($gallery)
               #return
               error: (data) ->
                 if data.status is 404
@@ -260,6 +263,7 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
             $this.data('url')
             $this.data('path')
             $this.data('token')
+            $this.data('attachment_type')
             $this.hasClass('single')
             dragndrop
           )

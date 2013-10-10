@@ -143,8 +143,9 @@ class BaseController extends Controller {
 			$url_path = $slug;
 			while($type->depth > 1) {
 				$type = $type->parent_type()->first();
-				$file_path = $type->slug . '/' . $file_path;
-				$url_path = $type->slug . '/' . $url_path;
+				$attachment_type = $type->slug;
+				$file_path = $attachment_type . '/' . $file_path;
+				$url_path = $attachment_type . '/' . $url_path;
 			}
 			$site = Site::find(SITE);
 			$root_type = $type->parent_type()->first();
@@ -158,7 +159,7 @@ class BaseController extends Controller {
 			$attributes = self::getAttributeString($attributes);
 			$token = csrf_token();
 			$class = $single ? 'single file' : 'multiple file';
-			return "<a href='#${slug}' title='${label}' data-token='${token}' data-prefix='${prefix}' data-path='${url_path}' data-url='${url}' class='${class}' ${attributes}>${label}</a>";
+			return "<a href='#${slug}' title='${label}' data-token='${token}' data-attachment_type='${attachment_type}' data-prefix='${prefix}' data-path='${url_path}' data-url='${url}' class='${class}' ${attributes}>${label}</a>";
 		});
 		HTML::macro('asset', function($type, $path, $attributes = array()) {
 			$asset_domain = Config::get('l-press::asset_domain');
