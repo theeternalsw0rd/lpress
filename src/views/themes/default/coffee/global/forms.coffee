@@ -59,8 +59,8 @@ $(document).on(
       )
       if not skip
         $target = $(target)
-        $target.attr('data-href', $target.attr('href')).removeAttr('href')
-        id = $target.data('href')
+        id = $target.attr('href')
+        $target.attr('data-href', id).removeAttr('href')
         $id = $(id)
         url = $id.data('url')
         if /existing/.test(id)
