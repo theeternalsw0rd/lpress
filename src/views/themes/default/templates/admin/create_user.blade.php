@@ -52,8 +52,9 @@
 			{{ Form::textarea('bio', '', array('tabindex' => '10')) }}
 		</div>
 		<div class='file'>
-			{{ Form::faux_file('avatars', 'new', array('tabindex' => '11')) }}
+			{{ Form::faux_file('avatars', 'new', TRUE, array('tabindex' => '11', 'data-target_id' => 'user_image')) }}
 		</div>
+		{{ Form::hidden('user_image', '', array('id' => 'user_image')) }}
 		{{ Form::token() }}
 		<div class='submit'>
 			{{ Form::submit('Submit', array('class' => 'button', 'tabindex' => '12')) }}

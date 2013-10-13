@@ -8,7 +8,7 @@
 $html = $('html')
 $body = $('body')
 $page = $(document.getElementById('page'))
-getUploader = (id, upload_url, path, token, attachment_type, single, dragndrop = FALSE) ->
+getUploader = (id, upload_url, path, token, target_id, attachment_type, single, dragndrop = FALSE) ->
   if single 
     input = "<input id='#{id}-input' class='file' type='file' name='files' data-url='#{upload_url}' data-token='#{token}' />"
   else
@@ -34,7 +34,7 @@ getUploader = (id, upload_url, path, token, attachment_type, single, dragndrop =
             <div class='bar'></div>
           </div>
         </div>
-        <div id='#{id}-existing' class='tab-contents' data-url='#{path}' data-attachment_type='#{attachment_type}'>
+        <div id='#{id}-existing' class='tab-contents' data-url='#{path}' data-attachment_type='#{attachment_type}' data-target_id='#{target_id}'>
         </div>
       </div>
     </div>
@@ -73,6 +73,7 @@ $(document).on(
               success:  (data) ->
                 $gallery = $("<ul id='gallery'></ul>")
                 $.each(data.records, (index, record) ->
+                  target_id = $content_box.data('target_id')
                   alt = record.label
                   $.each(record.values, (index, value) ->
                     if value.field.slug is 'file-description'
@@ -83,7 +84,7 @@ $(document).on(
                   if attachment_type is 'images'
                     $gallery.append("""
                       <li>
-                        <a title='#{record.label}' href='#{url}/#{record.slug}' data-id='#{record.id}'>
+                        <a class='file_select' title='#{record.label}' href='#{url}/#{record.slug}' data-record_id='#{record.id}' data-target_id='#{target_id}'>
                           <img src='#{url}/#{record.slug}' alt='#{alt}' />
                           <span class='caption'>#{record.label}</span>
                         </a>
@@ -104,6 +105,17 @@ $(document).on(
         #endif
       #endif
     #endif
+  #return
+)
+$(document).on(
+  'click',
+  'a.file_select',
+  (event) ->
+    event.preventDefault()
+    $this = $(this)
+    $target = $(document.getElementById($this.data('target_id')))
+    $target.val($this.data('record_id'))
+    $.colorbox.close()
   #return
 )
 if $html.hasClass('lt-ie8')
@@ -263,6 +275,7 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
             $this.data('url')
             $this.data('path')
             $this.data('token')
+            $this.data('target_id')
             $this.data('attachment_type')
             $this.hasClass('single')
             dragndrop
@@ -283,6 +296,7 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
             formData: {_token: $(this).data('token')}
             done: (event, data) ->
               $uploaded = $(document.getElementById(id + '-uploaded'))
+              target_id = $(document.getElementById(id + '-existing')).data('target_id')
               if $uploaded.length is 0
                 $uploaded = $("<div id='#{id}-uploaded' class='tab-contents'><ul class='files'></ul></div>")
                 $tabs = $(document.getElementById(id + '-tabs'))
@@ -357,6 +371,10 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
                   $(this).height($colorbox.height() - tab_bar_height - spacing)
                 #return
               )
+            #return
+            onCleanup: ->
+              id = $this.closest('.colorbox').attr('id')
+              $("a[href=##{id}-new]").click()
             #return
             onClosed: ->
               $('body').css({'overflow': 'auto'})
