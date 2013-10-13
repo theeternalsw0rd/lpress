@@ -22,7 +22,7 @@ class CreateLPressUsersTable extends Migration {
 			$table->string('name_suffix');
 			$table->string('name_prefix');
 			$table->text('bio');
-			$table->text('image');
+			$table->integer('image');
 			$table->string('password', 100);
 			$table->timestamps();
 		});
