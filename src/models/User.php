@@ -46,6 +46,23 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
 		return $this->email;
 	}
 
+	public function hasPermission($permission) {
+		$user = $this;
+		$permission_array = is_string($permission) ? array($permission) : $permission;
+		$user->load('groups.permissions');
+		foreach($user->groups as $group) {
+			if(($group->site_id === 0 || $group->site_id == SITE) /* site check (value of 0 is wildcard) */
+			&& ($group->record_type_id === 0 || $group->record_type_id === $record_type->id) /* record type check (value of 0 is wildcard) */ ) {
+				foreach($group->permissions as $permission) {
+					if($permission->slug === 'root' || in_array($permission_array, $permission->slug)) {
+						return TRUE;
+					}
+				}
+			}
+		}
+		return FALSE;
+	}
+
 	public function published_records() {
 		return $this->hasMany('\EternalSword\LPress\Record', 'publisher_id');
 	}

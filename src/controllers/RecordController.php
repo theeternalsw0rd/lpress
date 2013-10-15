@@ -163,7 +163,8 @@ class RecordController extends BaseController {
 	}
 
 	public static function createAttachmentRecord($path) {
-		if(!UserController::hasPermission('create')) {
+		$user = Auth::user();
+		if(!$user->hasPermission('create')) {
 			return App::abort(403, "Your account doesn't have permission to create records");
 		}
 		$attachment_config = Config::get('l-press::attachments');
@@ -177,13 +178,12 @@ class RecordController extends BaseController {
 		$record_type_slug = $segments[$count-3];
 		$label = explode('.', $file_name);
 		$record_type = RecordType::where('slug', '=', $record_type_slug)->first();
-		$user = Auth::user();
 		$record = new Record();
 		$record->label = $label[0];
 		$record->slug = $label[0];
 		$record->author_id = $user->id;
 		$can_publish = FALSE;
-		if(UserController::hasPermission(array('publish', 'publish-own'))) {
+		if($user->hasPermission(array('publish', 'publish-own'))) {
 			$record->publisher_id = $user->id;
 			$can_publish = TRUE;
 		}

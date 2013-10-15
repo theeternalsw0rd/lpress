@@ -2,6 +2,7 @@
 
 use EternalSword\LPress\ThirdParty\Blueimp\Uploader\UploadHandler as UploadHandler;
 use Illuminate\Routing\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Response;
@@ -29,6 +30,7 @@ class UploadController extends BaseController {
 	}
 
 	public function postFile() {
+		$user = Auth::user();
 		$json = new \stdClass;
 		$code = 403;
 		$json->error = $this->permission_error;
@@ -42,7 +44,7 @@ class UploadController extends BaseController {
 			if(Input::has('type')) {
 				switch(Input::get('type')) {
 					case 'new': {
-						if(UserController::hasPermission('create')) {
+						if($user->hasPermission('create')) {
 							$code = 200;
 						}
 						break;
