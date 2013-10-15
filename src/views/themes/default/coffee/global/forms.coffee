@@ -296,9 +296,12 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
             formData: {_token: $(this).data('token')}
             done: (event, data) ->
               $uploaded = $(document.getElementById(id + '-uploaded'))
-              target_id = $(document.getElementById(id + '-existing')).data('target_id')
+              $existing = $(document.getElementById(id + '-existing'))
+              target_id = $existing.data('target_id')
               if $uploaded.length is 0
+                height = $existing.css('height')
                 $uploaded = $("<div id='#{id}-uploaded' class='tab-contents'><ul class='files'></ul></div>")
+                $uploaded.css('height', height)
                 $tabs = $(document.getElementById(id + '-tabs'))
                 $tabs.append($uploaded)
                 easytabs = $tabs.data('easytabs')
