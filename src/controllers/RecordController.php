@@ -163,6 +163,9 @@ class RecordController extends BaseController {
 	}
 
 	public static function createAttachmentRecord($path) {
+		if(!UserController::hasPermission('create')) {
+			return App::abort(403, "Your account doesn't have permission to create records");
+		}
 		$attachment_config = Config::get('l-press::attachments');
 		$relative_path = explode($attachment_config['path'], $path);
 		$segments = explode('/', $relative_path[1]);
@@ -179,8 +182,10 @@ class RecordController extends BaseController {
 		$record->label = $label[0];
 		$record->slug = $label[0];
 		$record->author_id = $user->id;
+		$can_publish = FALSE;
 		if(UserController::hasPermission(array('publish', 'publish-own'))) {
 			$record->publisher_id = $user->id;
+			$can_publish = TRUE;
 		}
 		$record->record_type_id = $record_type->id;
 		$record->site_id = $site->id;
@@ -204,14 +209,15 @@ class RecordController extends BaseController {
 		if(!$revision->save()) {
 			return App::abort(500, 'Could not save revision to database.');
 		}
-		// move following code to permissioned area when fleshed out
-		$value->current_revision_id = $revision->id;
-		if(!$value->save()) {
-			return App::abort(500, 'Could not save current revision to value in database.');
-		}
-		$record->public = TRUE;
-		if(!$record->save()) {
-			return App::abort(500, 'Could make record public in database.');
+		if($can_publish) {
+			$value->current_revision_id = $revision->id;
+			if(!$value->save()) {
+				return App::abort(500, 'Could not save current revision to value in database.');
+			}
+			$record->public = TRUE;
+			if(!$record->save()) {
+				return App::abort(500, 'Could make record public in database.');
+			}
 		}
 	}
 }
