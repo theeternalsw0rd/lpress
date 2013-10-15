@@ -31,6 +31,7 @@ class UploadController extends BaseController {
 
 	public function postFile() {
 		$user = Auth::user();
+		$user->load('groups.permissions');
 		$json = new \stdClass;
 		$code = 403;
 		$json->error = $this->permission_error;

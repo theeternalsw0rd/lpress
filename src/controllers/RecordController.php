@@ -164,6 +164,7 @@ class RecordController extends BaseController {
 
 	public static function createAttachmentRecord($path) {
 		$user = Auth::user();
+		$user->load('groups.permissions');
 		if(!$user->hasPermission('create')) {
 			return App::abort(403, "Your account doesn't have permission to create records");
 		}

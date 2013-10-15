@@ -49,7 +49,16 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
 	public function hasPermission($permission) {
 		$user = $this;
 		$permission_array = is_string($permission) ? array($permission) : $permission;
-		$user->load('groups.permissions');
+		if(!isset($user->groups)) {
+			$user->load('groups.permissions');
+		}
+		else {
+			foreach($user->groups as &$group) {
+				if(!isset($group->permissions)) {
+					$group->load('permissions');
+				}
+			}
+		}
 		foreach($user->groups as $group) {
 			if(($group->site_id === 0 || $group->site_id == SITE) /* site check (value of 0 is wildcard) */
 			&& ($group->record_type_id === 0 || $group->record_type_id === $record_type->id) /* record type check (value of 0 is wildcard) */ ) {
