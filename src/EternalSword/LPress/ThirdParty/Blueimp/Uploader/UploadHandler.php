@@ -706,8 +706,10 @@ class UploadHandler
 						FILE_APPEND
 					);
 				} else {
+					$file->status = 500;
 					if(move_uploaded_file($uploaded_file, $file_path)) {
-						\EternalSword\LPress\RecordController::createAttachmentRecord($file_path);
+						$file->status = 200;
+						$file->path = $file_path;
 					}
 				}
 			} else {

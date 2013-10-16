@@ -65,13 +65,13 @@ $(document).on(
         attachment_type = $content_box.data('attachment_type')
         url = $content_box.data('url')
         if /existing/.test(id)
-          $gallery = $(document.getElementById('gallery'))
-          if $gallery.length is 0
+          $existing_files = $(document.getElementById("existing-files-#{id}"))
+          if $existing_files.length is 0
             $.ajax({
               url: url + '.json'
               dataType: 'json'
               success:  (data) ->
-                $gallery = $("<ul id='gallery'></ul>")
+                $existing_files = $("<ul id='existing-files-#{id}' class='files'></ul>")
                 $.each(data.records, (index, record) ->
                   target_id = $content_box.data('target_id')
                   alt = record.label
@@ -82,7 +82,7 @@ $(document).on(
                     #endif
                   )
                   if attachment_type is 'images'
-                    $gallery.append("""
+                    $existing_files.append("""
                       <li>
                         <a class='file_select' title='#{record.label}' href='#{url}/#{record.slug}' data-record_id='#{record.id}' data-target_id='#{target_id}'>
                           <img src='#{url}/#{record.slug}' alt='#{alt}' />
@@ -92,7 +92,7 @@ $(document).on(
                     """)
                   #endif
                 )
-                $content_box.append($gallery)
+                $content_box.append($existing_files)
               #return
               error: (data) ->
                 if data.status is 404
@@ -319,13 +319,26 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
                 easytabs.init()
               #endif
               $files = $uploaded.find('ul.files')
-              $.each(data.result.files, (index, file) ->
-                $files.append("""
-                  <li>
-                    <h3>#{file.name}</h3>
-                    <p>#{record}</p>
-                  </li>
-                """)
+              url = data.result.uri
+              $.each(data.result.statuses, (index, status) ->
+                if status is 200
+                  record = data.result.records[index]
+                  alt = record.label
+                  $.each(record.values, (index, value) ->
+                    if value.field.slug is 'file-description'
+                      alt = value.current_revision.contents
+                      return false
+                    #endif
+                  )
+                  $files.append("""
+                    <li>
+                      <a class='file_select' title='#{record.label}' href='#{url}/#{record.slug}' data-record_id='#{record.id}' data-target_id='#{target_id}'>
+                        <img src='#{url}/#{record.slug}' alt='#{alt}' />
+                        <span class='caption'>#{record.label}</span>
+                      </a>
+                    </li>
+                  """)
+                #endif
               )
               $("a[href=##{id}-uploaded]").click()
             #return

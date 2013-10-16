@@ -78,8 +78,24 @@ class UploadController extends BaseController {
 					$json->error = $this->configuration_error;
 				}
 				if($code == 200) {
+					$records = array();
+					$statuses = array();
 					$handler = new UploadHandler($options, FALSE);
-					$json = $handler->post(FALSE);
+					$files = $handler->post(FALSE);
+					foreach($files["files"] as $file) {
+						if($file->status == 200) {
+							$records[] = RecordController::createAttachmentRecord($file->path, $user)->toArray();
+							$statuses[] = 200;
+						}
+						else {
+							$records[] = NULL;
+							$statuses[] = 500;
+						}
+					}
+					$json->records = $records;
+					$json->uri = Input::get('uri');
+					$json->statuses = $statuses;
+					unset($json->error);
 				}
 			}
 			else {

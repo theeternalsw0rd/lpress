@@ -162,9 +162,7 @@ class RecordController extends BaseController {
 	public static function createRecord() {
 	}
 
-	public static function createAttachmentRecord($path) {
-		$user = Auth::user();
-		$user->load('groups.permissions');
+	public static function createAttachmentRecord($path, $user) {
 		if(!$user->hasPermission('create')) {
 			return App::abort(403, "Your account doesn't have permission to create records");
 		}
@@ -220,5 +218,13 @@ class RecordController extends BaseController {
 				return App::abort(500, 'Could make record public in database.');
 			}
 		}
+		$record->load(
+			'author',
+			'publisher',
+			'values.field',
+			'values.current_revision.author',
+			'values.current_revision.publisher'
+		);
+		return $record;
 	}
 }

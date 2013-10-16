@@ -160,7 +160,7 @@ span.button, a.button
 input.button, button
   @extend %real-button
 
-#gallery
+#gallery, .files
   list-style: none
   a
     @include background_opacity($gallery_item_background, 0.3)
@@ -169,7 +169,8 @@ input.button, button
   span.caption
     @include background_opacity($gallery_item_background, 0.8)
 
-.lt-ie7 #gallery
-  li
-    .caption
-      cursor: hand
+.lt-ie7 
+  #gallery, .files
+    li
+      .caption
+        cursor: hand

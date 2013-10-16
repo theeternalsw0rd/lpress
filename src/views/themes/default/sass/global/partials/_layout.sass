@@ -188,7 +188,7 @@ input.button
   &:active
     padding: $active_button_top_padding $button_hpadding $active_button_bottom_padding $button_hpadding
 
-#gallery
+#gallery, .files
   width: 95%
   padding: 0
   margin: 0
@@ -215,7 +215,8 @@ input.button
       overflow-x: hidden
       padding: 0.5em 3%
 
-.lt-ie7 #gallery
-  li
-    img
-      width: 95%
+.lt-ie7 
+  #gallery, .files
+    li
+      img
+        width: 95%
