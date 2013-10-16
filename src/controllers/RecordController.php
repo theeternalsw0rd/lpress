@@ -215,7 +215,7 @@ class RecordController extends BaseController {
 			}
 			$record->public = TRUE;
 			if(!$record->save()) {
-				return App::abort(500, 'Could make record public in database.');
+				return App::abort(500, 'Could not make record public in database.');
 			}
 		}
 		$record->load(
