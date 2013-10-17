@@ -1,3 +1,6 @@
 [submodule "src/views/themes/default/assets/fonts/fanwood"]
 	path = src/views/themes/default/assets/fonts/fanwood
 	url = git://github.com/eternalsword/fanwood.git
+[submodule "src/views/themes/default/assets/fonts/font-awesome"]
+	path = src/views/themes/default/assets/fonts/font-awesome
+	url = git://github.com/eternalsword/Font-Awesome.git
