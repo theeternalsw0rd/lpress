@@ -18,12 +18,19 @@
   color: $form_input_text
   @if $button
     cursor: pointer
+    text-decoration: underline
+    .button-icon
+      text-decoration: none
+      display: inline-block
   @if $button and $real_button
     &:active
       @include background_opacity($form_input_rgba_background, $fallback: $form_input_focused_background)
       outline: 2px inset $input_outline_color !important /* need to override focus on IE for .active class */
     &:focus
       @include background_opacity($form_input_rgba_background, $fallback: $form_input_focused_background)
+  @if $button
+    &:hover
+      text-decoration: none
   @if $button == false
     &:focus
       @include background_opacity($form_input_rgba_background, $fallback: $form_input_focused_background)
@@ -149,7 +156,7 @@ span.button, a.button
   @extend %unselectable
   @extend %faux-button
 
-.js 
+.js
   label.checked span.faux-checkbox span.checkmark
     visibility: visible
   span.active-button, a.active-button

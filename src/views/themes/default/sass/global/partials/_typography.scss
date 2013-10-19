@@ -1,5 +1,6 @@
 $text_family: 'Fanwood', Serif;
 $header_family: 'Fanwood', Serif;
+$icon_font: 'FontAwesome';
 $base_size: 18px;
 $base_weight: 400;
 @mixin base_font($base_size, $base_weight: normal) {
@@ -28,6 +29,17 @@ $base_weight: 400;
     font-style: italic;
 }
 
+@font-face {
+    font-family: 'FontAwesome';
+    src: url('#{$base_path}/fonts/font-awesome/font/fontawesome-webfont.eot?v=3.2.1');
+    src: url('#{$base_path}/fonts/font-awesome/font/fontawesome-webfont.eot?#iefix&v=3.2.1') format('embedded-opentype'),
+         url('#{$base_path}/fonts/font-awesome/font/fontawesome-webfont.woff?v=3.2.1') format('woff'),
+         url('#{$base_path}/fonts/font-awesome/font/fontawesome-webfont.ttf?v=3.2.1') format('truetype'),
+         url('#{$base_path}/fonts/font-awesome/font/fontawesome-webfont.svg#fontawesomeregular?v=3.2.1') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
 body, input, textarea {
     font-family: $text_family;
     @include base_font(18px)
@@ -35,6 +47,10 @@ body, input, textarea {
 /* some browsers don't automatically fallback if character doesn't exist in webfont */
 input[type=password], span.checkmark {
     font-family: Serif
+}
+.button-icon {
+    font-family: $icon_font;
+    font-size: 1em;
 }
 h1 {
     font-size: 1.7em;

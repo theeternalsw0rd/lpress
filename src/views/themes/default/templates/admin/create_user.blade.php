@@ -57,7 +57,7 @@
 		{{ Form::hidden('user_image', '', array('id' => 'user_image')) }}
 		{{ Form::token() }}
 		<div class='submit'>
-			{{ Form::submit('Submit', array('class' => 'button', 'tabindex' => '12')) }}
+			{{ Form::button('OK', 'submit', array('class' => 'button', 'tabindex' => '12'), 'icon-ok') }}
 		</div>
 		{{ Form::close() }}
 	</div>

@@ -161,6 +161,14 @@ class BaseController extends Controller {
 			$class = $single ? 'single file' : 'multiple file';
 			return "<a href='#${slug}' title='${label}' data-token='${token}' data-attachment_type='${attachment_type}' data-prefix='${prefix}' data-path='${url_path}' data-url='${url}' class='${class}' ${attributes}>${label}</a>";
 		});
+		Form::macro('icon_button', function($label, $type = 'button', $attributes = array(), $icon = '') {
+			$icon_font = new IconFont;
+			$icon = $icon_font->getIcon($icon);
+			if($icon !== '') {
+				$icon = "<span class='button-icon'>$icon</span>";
+			}
+			return "<button type='$type'>$icon<span class='button-label'>$label</span></button>";
+		});
 		HTML::macro('asset', function($type, $path, $attributes = array()) {
 			$asset_domain = Config::get('l-press::asset_domain');
 			$asset_domain = empty($asset_domain) ? DOMAIN : $asset_domain;

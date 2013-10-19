@@ -16,7 +16,8 @@
             "src/migrations",
             "src/seeds",
             "src/controllers",
-            "src/models"
+            "src/models",
+            "src/lib"
         ],
         "psr-0": {
             "EternalSword\\LPress": "src/"
