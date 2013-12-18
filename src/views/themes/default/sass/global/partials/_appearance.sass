@@ -167,6 +167,10 @@ span.button, a.button
 input.button, button
   @extend %real-button
 
+input.file:hover + a.button,
+input.file:hover + span.button
+  text-decoration: none
+
 #gallery, .files
   list-style: none
   a
