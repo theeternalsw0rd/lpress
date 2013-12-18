@@ -9,7 +9,7 @@
 ###
  start icon codes from font awesome
 ###
-icon_upload = "&#xf01b;"
+icon_upload = "&#xf093;"
 ###
  end icon codes
 ###
