@@ -16,6 +16,23 @@ var watch = require('watch'),
     sass_last_save_file = '',
     sass_last_save_time = '';
 
+var getTimeString = function() {
+    var current_time = new Date();
+    var hours = current_time.getHours();
+    var minutes = current_time.getMinutes();
+    var seconds = current_time.getSeconds();
+    if (hours < 10) {
+        hours = "0" + hours
+    }
+    if (minutes < 10) {
+        minutes = "0" + minutes
+    }
+    if (seconds < 10) {
+        seconds = "0" + seconds
+    }
+    return hours + ":" + minutes + ":" + seconds
+};
+
 var mkdirp = function(real_path, mode, callback) {
     process.nextTick(function() {
         var path_from_root = real_path.split(root)[1].substr(1),
@@ -30,7 +47,7 @@ var mkdirp = function(real_path, mode, callback) {
                 } catch(e) {
                     return callback(e);
                 }
-                console.log('mkdir: ' + create_path);
+                console.log(getTimeString() + " " + 'mkdir: ' + create_path);
             }
         }
         callback(null);
@@ -42,8 +59,8 @@ var compiledCoffee = function(source, type) {
     try {
         compiled = coffee.compile(source);
     } catch(e) {
-        console.log(source);
-        console.log(e);
+        console.log(getTimeString() + " " + source);
+        console.log(getTimeString() + " " + e);
 	return '';
     }
     switch(type) {
@@ -63,7 +80,7 @@ var uncompressedCoffee = function(source, filename, uncompressed_path) {
         uncompressed_file_label = uncompressed_file.split(root)[1];
     fs.writeFile(uncompressed_file, source, function(err) {
         if(err) throw err;
-        console.log('coffee compiled to ' + uncompressed_file_label);
+        console.log(getTimeString() + " " + 'coffee compiled to ' + uncompressed_file_label);
     });
 }
 
@@ -76,7 +93,7 @@ var compressedCoffee = function(source, filename, compressed_path) {
         compressed_file_label = compressed_file.split(root)[1];
     fs.writeFile(compressed_file, minified.code, function(err) {
         if(err) throw err;
-        console.log('coffee minified to ' + compressed_file_label);
+        console.log(getTimeString() + " " + 'coffee minified to ' + compressed_file_label);
     });
 }
 
@@ -105,18 +122,18 @@ var compileCoffee = function(pack_name) {
         if(i == segment_max) basename = segments[i];
     }
     filename = basename + '.js';
-    console.log('brewing coffee package ' + pack_name);
-    console.log('reading brew configuration...');
+    console.log(getTimeString() + " " + 'brewing coffee package ' + pack_name);
+    console.log(getTimeString() + " " + 'reading brew configuration...');
     fs.readFile(path.resolve(coffee_src, 'brew.json'), 'utf8', function(err, data) {
-        if(err) return console.log('Could not read brew.json file from coffee directory. Aborting compilation.');
+        if(err) return console.log(getTimeString() + " " + 'Could not read brew.json file from coffee directory. Aborting compilation.');
         brew = JSON.parse(data);
         pack = brew.packages[pack_name];
         if(pack === undefined) {
-            console.log('Could not find package ' + pack_name + ' in brew.json. Aborting compilation.');
+            console.log(getTimeString() + " " + 'Could not find package ' + pack_name + ' in brew.json. Aborting compilation.');
             return;
         }
         stirCoffee(pack.requires, function(err, data) {
-            if(err) return console.log(err);
+            if(err) return console.log(getTimeString() + " " + err);
             uncompressed_path = path.resolve(js_uncompressed, relative_path);
             compressed_path = path.resolve(js_compressed, relative_path);
             mkdirp(uncompressed_path, 0750, function(err) {
@@ -141,8 +158,8 @@ var compileCoffee = function(pack_name) {
 
 var exec = function(command) {
     exec_real(command, function(error, stdout, stderr) {
-        if(stdout !== '') console.log('stdout: ' + stdout);
-        if(stderr !== '') console.log('stderr: ' + stderr);
+        if(stdout !== '') console.log(getTimeString() + " " + 'stdout: ' + stdout);
+        if(stderr !== '') console.log(getTimeString() + " " + 'stderr: ' + stderr);
     });
 }
 
@@ -151,7 +168,7 @@ var compressedSass = function(file, filename, real_path, type) {
     compressed_file = path.resolve(real_path, filename);
     file_label = file.split(root)[1];
     compressed_file_label = compressed_file.split(root)[1];
-    console.log('compiling ' + file_label + ' compressed to ' + compressed_file_label);
+    console.log(getTimeString() + " " + 'compiling ' + file_label + ' compressed to ' + compressed_file_label);
     if(type == '.sass') exec('sass ' + file + ' -t compressed ' + compressed_file);
     else { exec('sass --scss ' + file + ' ' + compressed_file); }
 }
@@ -161,7 +178,7 @@ var uncompressedSass = function(file, filename, real_path, type) {
     uncompressed_file = path.resolve(real_path, filename);
     file_label = file.split(root)[1];
     uncompressed_file_label = uncompressed_file.split(root)[1];
-    console.log('compiling ' + file_label + ' uncompressed to ' + uncompressed_file_label);
+    console.log(getTimeString() + " " + 'compiling ' + file_label + ' uncompressed to ' + uncompressed_file_label);
     if(type == '.sass') exec('sass ' + file + ' ' + uncompressed_file);
     else { exec('sass --scss ' + file + ' ' + uncompressed_file); }
 }
@@ -199,8 +216,8 @@ var processSass = function(file, partial) {
     fs.readFile(file, 'utf8', function(err, data) {
         var haystack, match, partial_root, match_name, partial_name;
         if(err) {
-            console.log('Failed to process due to following error:');
-            return console.log(err);
+            console.log(getTimeString() + " " + 'Failed to process due to following error:');
+            return console.log(getTimeString() + " " + err);
         }
         partial_name = path.basename(partial, path.extname(partial)).substr(1);
         haystack = new RegExp('@import +"([^"]*)"', 'g');
@@ -229,7 +246,7 @@ watch.createMonitor(sass_src, function(monitor) {
         extension = path.extname(f);
         if(extension != '.sass' && extension != '.scss') return;
         console.log("");
-        console.log("=== Process Sass ===");
+        console.log(getTimeString() + " " + "=== Process Sass ===");
         basename = path.basename(f, extension);
         if(basename.charAt(0) == '_') {
             finder = find(sass_src);
@@ -276,12 +293,12 @@ watch.createMonitor(coffee_src, function(monitor) {
         extension = path.extname(f);
         if(extension != '.coffee') return;
         console.log("");
-        console.log("=== Process Coffee ===");
+        console.log(getTimeString() + " " + "=== Process Coffee ===");
         filename = path.basename(f, extension) + '.js';
         fs.readFile(f, 'utf8', function (err, data) {
             if(err) {
-                console.log('Failed to process file due to following error:');
-                return console.log(err);
+                console.log(getTimeString() + " " + 'Failed to process file due to following error:');
+                return console.log(getTimeString() + " " + err);
             }
             lines = data.split("\n");
             pack = lines[0].match(/package\:([A-z\d\-\_\.\/]*)/) || [];
@@ -289,8 +306,8 @@ watch.createMonitor(coffee_src, function(monitor) {
                 compileCoffee(pack[1]);
                 return;
             }
-            console.log('The following coffeescript is not set up for packaging: ');
-            console.log(f);
+            console.log(getTimeString() + " " + 'The following coffeescript is not set up for packaging: ');
+            console.log(getTimeString() + " " + f);
         });
     });
 });
