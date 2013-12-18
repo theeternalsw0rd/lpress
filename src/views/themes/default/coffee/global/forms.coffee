@@ -5,6 +5,14 @@
 ###
  uppercase booleans easier to read, custom code in watcher to change it, not a coffee feature.
 ###
+
+###
+ start icon codes from font awesome
+###
+icon_upload = "&#xf01b;"
+###
+ end icon codes
+###
 $html = $('html')
 $body = $('body')
 $page = $(document.getElementById('page'))
@@ -16,8 +24,10 @@ getUploader = (id, upload_url, path, token, target_id, attachment_type, single, 
   #endif
   if dragndrop
     dropzone = "<p class='center'>This box is also a file drop zone.</p>"
+    drag_class = ' dropzone'
   else
     dropzone = ""
+    drag_class = ''
   #endif
   return $("""
     <div id='#{id}' class='colorbox'>
@@ -26,7 +36,7 @@ getUploader = (id, upload_url, path, token, target_id, attachment_type, single, 
           <li class='tab'><a href='##{id}-new'>New</a></li>
           <li class='tab'><a href='##{id}-existing'>Existing</a></li>
         </ul>
-        <div id='#{id}-new' class='tab-contents'>#{dropzone}
+        <div id='#{id}-new' class='tab-contents#{drag_class}'>#{dropzone}
           <div class='upload'>
             #{input}
           </div>
@@ -281,13 +291,14 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
             dragndrop
           )
           label = $this.attr('title').replace(/Select/, 'Upload')
+          button_html = "<span class='button-icon'>#{icon_upload}</span><span class='button-label'>#{label}</span>"
           if $html.hasClass('ie')
             $uploader.find('.upload').append(
-              "<a unselectable='on' id='for-#{id}-input' class='button'>#{label}</a>"
+              "<a unselectable='on' id='for-#{id}-input' class='button'>#{button_html}</a>"
             )
           else
             $uploader.find('.upload').append(
-              "<span unselectable='on' id='for-#{id}-input' class='button'>#{label}</span>"
+              "<span unselectable='on' id='for-#{id}-input' class='button'>#{button_html}</span>"
             )
           #endif
           $('body').append($uploader)
