@@ -13,22 +13,11 @@ icon_upload = "&#xf093;"
 ###
  end icon codes
 ###
+Dropzone.autoDiscover = false
 $html = $('html')
 $body = $('body')
 $page = $(document.getElementById('page'))
-getUploader = (id, upload_url, path, token, target_id, attachment_type, single, dragndrop = FALSE) ->
-  if single 
-    input = "<input id='#{id}-input' class='file' type='file' name='files' data-url='#{upload_url}' data-token='#{token}' />"
-  else
-    input = "<input id='#{id}-input' class='file' type='file' name='files[]' data-url='#{upload_url}' data-token='#{token}' multiple />"
-  #endif
-  if dragndrop
-    dropzone = "<p class='center'>This box is also a file drop zone.</p>"
-    drag_class = ' dropzone'
-  else
-    dropzone = ""
-    drag_class = ''
-  #endif
+getUploader = (id, path, target_id, attachment_type) ->
   return $("""
     <div id='#{id}' class='colorbox'>
       <div id='#{id}-tabs' class='tabs'>
@@ -36,13 +25,7 @@ getUploader = (id, upload_url, path, token, target_id, attachment_type, single, 
           <li class='tab'><a href='##{id}-new'>New</a></li>
           <li class='tab'><a href='##{id}-existing'>Existing</a></li>
         </ul>
-        <div id='#{id}-new' class='tab-contents#{drag_class}'>#{dropzone}
-          <div class='upload'>
-            #{input}
-          </div>
-          <div class='progress'>
-            <div class='bar'></div>
-          </div>
+        <div id='#{id}-new' class='tab-contents dropzone'>
         </div>
         <div id='#{id}-existing' class='tab-contents' data-url='#{path}' data-attachment_type='#{attachment_type}' data-target_id='#{target_id}'>
         </div>
@@ -278,97 +261,22 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
         ->
           $this = $(this)
           id = this.href.split('#')[1]
-          dragndrop = !!FileReader and Modernizr.draganddrop
           record = $this.data('prefix') + '/+record/create?type=' + id
+          token = $this.data('token')
           $uploader = getUploader(
             id
-            $this.data('url')
             $this.data('path')
-            $this.data('token')
             $this.data('target_id')
             $this.data('attachment_type')
-            $this.hasClass('single')
-            dragndrop
           )
-          label = $this.attr('title').replace(/Select/, 'Upload')
-          button_html = "<span class='button-icon'>#{icon_upload}</span><span class='button-label'>#{label}</span>"
-          if $html.hasClass('ie')
-            $uploader.find('.upload').append(
-              "<a unselectable='on' id='for-#{id}-input' class='button'>#{button_html}</a>"
-            )
-          else
-            $uploader.find('.upload').append(
-              "<span unselectable='on' id='for-#{id}-input' class='button'>#{button_html}</span>"
-            )
-          #endif
           $('body').append($uploader)
-          $(document.getElementById(id + '-input')).fileupload({
-            dataType: 'json'
-            formData: {_token: $(this).data('token')}
-            done: (event, data) ->
-              $uploaded = $(document.getElementById(id + '-uploaded'))
-              $existing = $(document.getElementById(id + '-existing'))
-              target_id = $existing.data('target_id')
-              if $uploaded.length is 0
-                height = $existing.css('height')
-                $uploaded = $("<div id='#{id}-uploaded' class='tab-contents'><ul class='files'></ul></div>")
-                $uploaded.css('height', height)
-                $tabs = $(document.getElementById(id + '-tabs'))
-                $tabs.append($uploaded)
-                easytabs = $tabs.data('easytabs')
-                $tablist = $tabs.find('ul.etabs')
-                $newtab = $("<li class='tab'><a href='##{id}-uploaded'>Uploaded</a></li>")
-                $tablist.append($newtab)
-                easytabs.tabs.removeClass(easytabs.settings.tabActiveClass)
-                easytabs.panels.removeClass(easytabs.settings.panelActiveClass)
-                $tablist.find("[data-href]").each(
-                  ->
-                    $this = $(this)
-                    $this.attr('href', $this.data('href')).removeAttr('data-href')
-                  #return
-                )
-                easytabs.init()
-              #endif
-              $files = $uploaded.find('ul.files')
-              url = data.result.uri
-              $.each(data.result.statuses, (index, status) ->
-                if status is 200
-                  record = data.result.records[index]
-                  alt = record.label
-                  $.each(record.values, (index, value) ->
-                    if value.field.slug is 'file-description'
-                      alt = value.current_revision.contents
-                      return false
-                    #endif
-                  )
-                  $files.append("""
-                    <li>
-                      <a class='file_select' title='#{record.label}' href='#{url}/#{record.slug}' data-record_id='#{record.id}' data-target_id='#{target_id}'>
-                        <img src='#{url}/#{record.slug}' alt='#{alt}' />
-                        <span class='caption'>#{record.label}</span>
-                      </a>
-                    </li>
-                  """)
-                #endif
-              )
-              $("a[href=##{id}-uploaded]").click()
+          myDropzone = new Dropzone("##{id}-new", {url: $this.data('url')})
+          myDropzone.on(
+            'sending'
+            (file, xhr, formData) ->
+              formData.append('_token', token)
             #return
-            error: (event, data) ->
-              response = $.parseJSON(event.responseText)
-              if event.status
-                $error = $("<div class='error' style='display:none'>" + event.status + ": " + response.error + "</div>")
-              #endif
-              $(document.getElementById(id + '-new')).prepend($error)
-              $error.slideDown('slow').delay(3000).animate({
-                height: 0
-                opacity: 0
-              }
-              'slow'
-              ->
-                $(this).remove()
-              )
-            #return
-          })
+          )
           $tabs = $(document.getElementById(id + '-tabs'))
           $tabs.easytabs({updateHash: false})
           $first_tab = $tabs.find('ul.etabs a').first()
@@ -384,11 +292,8 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
               $colorbox = $(document.getElementById('cboxLoadedContent'))
               $colorbox.find('.colorbox')
                 .css({'height': $colorbox.height() + 'px'})
-              $colorbox.find('a.file, input.file')
+              $colorbox.find('.dropzone')
                 .first().focus()
-              $button = $colorbox.find('.upload')
-              midpoint = ($colorbox.width() - $button.width()) / 2
-              $button.css({'left': midpoint + 'px'})
               $colorbox.get(0).scrollTop = 0
               tab_bar_height = $colorbox.find('.etabs').first().outerHeight()
               $colorbox.find('.tab-contents').each(

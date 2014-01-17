@@ -18,6 +18,7 @@
 		@section('styles')
 			{{ HTML::asset('css', 'vendor/h5bp/normalize.css') }}
 			{{ HTML::asset('css', 'vendor/h5bp/main.css') }}
+			{{ HTML::asset('css', 'vendor/dropzone/basic.css') }}
 			{{ HTML::asset('css', 'vendor/colorbox/colorbox.css') }}
 			{{ HTML::asset('css', 'compiled/global/master.css') }}
 		@show
@@ -36,9 +37,7 @@
 		@section('footer_scripts')
 			{{ HTML::asset('js', 'vendor/jquery/jquery.js') }}
 			{{ HTML::asset('js', 'vendor/colorbox/colorbox.js') }}
-			{{ HTML::asset('js', 'vendor/blueimp/jquery.ui.widget.js') }}
-			{{ HTML::asset('js', 'vendor/blueimp/jquery.iframe-transport.js') }}
-			{{ HTML::asset('js', 'vendor/blueimp/jquery.fileupload.js') }}
+			{{ HTML::asset('js', 'vendor/dropzone/dropzone.js') }}
 			{{ HTML::asset('js', 'vendor/jquery-easytabs/jquery.easytabs.js') }}
 			{{ HTML::asset('js', 'compiled/global/ready.js') }}
 		@show

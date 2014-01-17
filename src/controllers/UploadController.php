@@ -1,11 +1,11 @@
 <?php namespace EternalSword\LPress;
 
-use EternalSword\LPress\ThirdParty\Blueimp\Uploader\UploadHandler as UploadHandler;
-use Illuminate\Routing\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Str;
 
 class UploadController extends BaseController {
 	protected $configuration_error = "Couldn't load upload options from configuration so aborting upload.";
@@ -18,7 +18,9 @@ class UploadController extends BaseController {
 		$options = array();
 		$options['image_versions'] = array();
 		$asset_path = parent::getAssetPath(TRUE);
-		$options['upload_dir'] = $asset_path . Input::get('path');
+		$date = new \DateTime();
+		$date = $date->format('Y/m/');
+		$options['upload_dir'] = $asset_path . Input::get('path') . $date;
 		$asset_domain = Config::get('l-press::asset_domain');
 		$asset_domain = empty($asset_domain) ? DOMAIN : $asset_domain;
 		$route_prefix = parent::getRoutePrefix();
@@ -80,21 +82,28 @@ class UploadController extends BaseController {
 				if($code == 200) {
 					$records = array();
 					$statuses = array();
-					$handler = new UploadHandler($options, FALSE);
-					$files = $handler->post(FALSE);
-					foreach($files["files"] as $file) {
-						if($file->status == 200) {
-							$records[] = RecordController::createAttachmentRecord($file->path, $user)->toArray();
-							$statuses[] = 200;
-						}
-						else {
-							$records[] = NULL;
-							$statuses[] = 500;
-						}
+					$destination_path = $options['upload_dir'];
+					$file = Input::file('file');
+					$increment = 2;
+					$random = '';
+					do {
+						$extension = $file->getClientOriginalExtension();
+						$file_name = Str::slug(basename($file->getClientOriginalName(), $extension)) . $random . '.' . $extension;
+						$file_path = $destination_path . $file_name;
+						$random = '-' . $increment++;
+					} while (File::exists($file_path));
+					$upload_success = Input::file('file')->move($destination_path, $file_name);
+					if($upload_success) {
+						$record = RecordController::createAttachmentRecord($file_path, $user)->toArray();
+						$status = 200;
 					}
-					$json->records = $records;
+					else {
+						$record = NULL;
+						$status = 500;
+					}
+					$json->record = $record;
 					$json->uri = Input::get('uri');
-					$json->statuses = $statuses;
+					$json->status = $status;
 					unset($json->error);
 				}
 			}
@@ -111,8 +120,7 @@ class UploadController extends BaseController {
 		if(!$options) {
 			return Response::json($this->configuration_error, 500);
 		}
-		$options['filename'] = Input::get('file');
-		$handler = new UploadHandler($options);
-		return Response::json($handler->delete(FALSE));
+		$file_path = $options['upload_dir'] . '/' . Input::get('file');
+		return Response::json(File::delete($file_path));
 	}
 }
