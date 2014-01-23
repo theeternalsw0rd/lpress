@@ -50,6 +50,11 @@
   -ms-user-select: none
   user-select: none
 
+%error
+  color: $error_text
+  @include background_opacity($error_background, 0.3)
+  border: 1px solid $error_border
+
 body
   color: $text_color
   background: url(#{$base_path}/images/backgrounds/body.png?v1)
@@ -95,9 +100,7 @@ h1
   @include border_image($url, $height: 0, $width: $border_width, $type: repeat)
 
 .error
-  color: $error_text
-  @include background_opacity($error_background, 0.3)
-  border: 1px solid $error_border
+  @extend %error
 
 .message
   color: $message_text
@@ -180,8 +183,28 @@ input.file:hover + span.button
   span.caption
     @include background_opacity($gallery_item_background, 0.8)
 
-.lt-ie7 
+.lt-ie7
   #gallery, .files
     li
       .caption
-        cursor: hand
+        cursor: pointer
+
+ul.dropzone
+  cursor: pointer
+
+a.dz-preview
+  div.dz-progress
+    @include background_opacity($gallery_item_background, 0.8)
+  span.dz-upload
+    background-color: $success_color
+  div.dz-success-mark
+    color: $success_color
+  div.dz-error-message
+    @extend %error
+
+a.dz-error
+  &:hover
+    @include background_opacity($gallery_item_background, 0.3)
+  cursor: default !important
+  *
+    cursor: default !important

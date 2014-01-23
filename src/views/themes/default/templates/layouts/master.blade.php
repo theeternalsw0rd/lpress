@@ -18,7 +18,6 @@
 		@section('styles')
 			{{ HTML::asset('css', 'vendor/h5bp/normalize.css') }}
 			{{ HTML::asset('css', 'vendor/h5bp/main.css') }}
-			{{ HTML::asset('css', 'vendor/dropzone/basic.css') }}
 			{{ HTML::asset('css', 'vendor/colorbox/colorbox.css') }}
 			{{ HTML::asset('css', 'compiled/global/master.css') }}
 		@show

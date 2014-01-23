@@ -10,6 +10,8 @@
  start icon codes from font awesome
 ###
 icon_upload = "&#xf093;"
+icon_thumbs_up = "&#xf164;"
+icon_thumbs_down = "&#xf165;"
 ###
  end icon codes
 ###
@@ -25,8 +27,8 @@ getUploader = (id, path, target_id, attachment_type) ->
           <li class='tab'><a href='##{id}-new'>New</a></li>
           <li class='tab'><a href='##{id}-existing'>Existing</a></li>
         </ul>
-        <div id='#{id}-new' class='tab-contents dropzone'>
-        </div>
+        <ul id='#{id}-new' class='tab-contents dropzone files'>
+        </ul>
         <div id='#{id}-existing' class='tab-contents' data-url='#{path}' data-attachment_type='#{attachment_type}' data-target_id='#{target_id}'>
         </div>
       </div>
@@ -263,18 +265,74 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
           id = this.href.split('#')[1]
           record = $this.data('prefix') + '/+record/create?type=' + id
           token = $this.data('token')
+          target_id = $this.data('target_id')
           $uploader = getUploader(
             id
             $this.data('path')
-            $this.data('target_id')
+            target_id
             $this.data('attachment_type')
           )
           $('body').append($uploader)
-          myDropzone = new Dropzone("##{id}-new", {url: $this.data('url')})
+          previewTemplate = """
+            <li>
+              <a class='dz-preview dz-file-preview'>
+                <img data-dz-thumbnail />
+                <div class='dz-progress'><span class='dz-upload' data-dz-uploadprogress></span></div>
+                <span class='caption'>Uploading...</caption>
+              </a>
+            </li>
+          """
+          myDropzone = new Dropzone(
+            "##{id}-new"
+            {
+              url: $this.data('url')
+              thumbnailWidth: 500
+              thumbnailHeight: 500
+              previewTemplate: previewTemplate
+            }
+          )
           myDropzone.on(
             'sending'
             (file, xhr, formData) ->
               formData.append('_token', token)
+            #return
+          )
+          myDropzone.on(
+            'success'
+            (file, response) ->
+              uri = response.uri
+              record = response.record
+              success_mark = "<div class='dz-success-mark'><span class='button-icon'>#{icon_thumbs_up}</span></div>"
+              $anchor = $(file.previewElement).children().first()
+              $anchor.addClass('dz-success').addClass('file_select')
+              $anchor.attr('title', record.label).attr('href', "#{uri}/#{record.slug}")
+              $anchor.data('record_id', record.id).data('target_id', target_id)
+              $anchor.find('img').attr('alt', record.label)
+              $anchor.find('.caption').first().html(record.label).after(success_mark)
+            #return
+          )
+          myDropzone.on(
+            'error'
+            (file, error_message) ->
+              console.log(error_message)
+              $error_message = $(error_message)
+              error_message = $error_message.find('h1').first().html()
+              $anchor = $(file.previewElement).children().first()
+              height = 0
+              $anchor.children().each(
+                ->
+                  height += $(this).outerHeight(TRUE)
+                #return
+              )
+              $error_message = $("<div class='dz-error-message' style='height:#{height}px'><span>#{error_message}</span></div>")
+              $anchor.removeAttr('href').addClass('dz-error')
+              $anchor.html("").append($error_message)
+              $anchor.on(
+                'click'
+                (event) ->
+                  event.preventDefault()
+                #return
+              )
             #return
           )
           $tabs = $(document.getElementById(id + '-tabs'))
