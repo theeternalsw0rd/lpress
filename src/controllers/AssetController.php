@@ -5,19 +5,6 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Input;
 
 class AssetController extends BaseController {
-	protected $allowed_mime_parts = array(
-		'image',
-		'video',
-		'audio',
-		'pdf',
-		'css',
-		'javascript',
-		'font-woff', // woff webfont
-		'vnd.ms-fontobject', // eot webfont
-		'x-font-ttf', // ttf webfont
-		'plain'
-	);
-
 	// Start from Blueimp UploadHandler
 	// Fix for overflowing signed 32 bit integers,
 	// works for sizes up to 2^32-1 bytes (4 GiB - 1):
@@ -51,57 +38,9 @@ class AssetController extends BaseController {
 		return $path;
 	}
 
-	protected function verifyWoff($path) {
-		$file = fopen($path, 'rb');
-		if($file === FALSE) return '';
-		$signature = fread($file, 4);
-		fclose($file);
-		if(strtolower($signature) == 'woff')
-			return 'application/font-woff';
-		header('HTTP/1.0 403 Forbidden');
-		echo '<h1>Access Denied</h1>';
-		die();
-	}
-
-	protected function getMime($path, $extension) {
-		$mime = '';
-		$mime = $extension == 'woff' ?
-			$this->verifyWoff($path) :
-			@finfo_file(finfo_open(FILEINFO_MIME_TYPE), $path);
-		if($mime == '') {
-			header('HTTP/1.0 404 Not Found');
-			echo '<h1>File could not be found</h1>';
-			die();
-		}
-		return $mime;
-	}
-
 	protected function sendFile($path, $file_name) {
-		$extension = pathinfo($file_name, PATHINFO_EXTENSION);
-		$mime = $this->getMime($path, $extension);
-		// source files are detected as text/plain
-		switch($extension) {
-			case 'css': {
-				$mime = strpos($mime, 'text') !== FALSE ? 'text/css' : $mime;
-				break;
-			}
-			case 'js': {
-				$mime = strpos($mime, 'text') !== FALSE ? 'text/javascript' : $mime;
-				break;
-			}
-		}
-		$mime_parts = explode('/', $mime);
-		$allowed = FALSE;
-		foreach($this->allowed_mime_parts as $allowed_mime_part) {
-			if(in_array($allowed_mime_part, $mime_parts)) {
-				$allowed = TRUE;
-			}
-		}
-		if(!$allowed) {
-			header('HTTP/1.0 403 Forbidden');
-			echo '<h1>Mimetype ' . $mime . ' is forbidden.</h1>';
-			die();
-		}
+		$mime_handler = new MimeHandler;
+		$mime = $mime_handler->verifyMime($path, $file_name);
 		if(extension_loaded('zlib')){ob_start('ob_gzhandler');}
 		$modified = gmdate('D, d M Y H:i:s T', filemtime($path));
 		if(array_key_exists('download', Input::all())) {
