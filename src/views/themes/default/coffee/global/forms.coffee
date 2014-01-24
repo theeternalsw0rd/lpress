@@ -314,7 +314,6 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
           myDropzone.on(
             'error'
             (file, error_message) ->
-              console.log(error_message)
               if typeof(error_message) is 'object'
                 error_message = error_message.error
               else
