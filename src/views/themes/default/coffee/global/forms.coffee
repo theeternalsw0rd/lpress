@@ -315,8 +315,12 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
             'error'
             (file, error_message) ->
               console.log(error_message)
-              $error_message = $(error_message)
-              error_message = $error_message.find('h1').first().html()
+              if typeof(error_message) is 'object'
+                error_message = error_message.error
+              else
+                $error_message = $(error_message)
+                error_message = $error_message.find('h1').first().html()
+              #endif
               $anchor = $(file.previewElement).children().first()
               height = 0
               $anchor.children().each(

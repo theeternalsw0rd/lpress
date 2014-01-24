@@ -14,6 +14,12 @@ class MimeHandler {
 		'plain'
 	);
 
+	function __construct($allowed_mime_parts = NULL) {
+		if(is_array($allowed_mime_parts)) {
+			$this->$allowed_mime_parts = $allowed_mime_parts;
+		}
+	}
+
 	protected function verifyWoff($path) {
 		$file = fopen($path, 'rb');
 		if($file === FALSE) return '';
@@ -60,11 +66,12 @@ class MimeHandler {
 		return $allowed;
 	}
 
-	public function verifyMime($path, $file_name) {
+	public function verifyMime($path, $file_name, $upload = FALSE) {
 		$extension = pathinfo($file_name, PATHINFO_EXTENSION);
 		$mime = $this->getMime($path, $extension);
 		$mime_parts = explode('/', $mime);
 		if(!$this->verifyMimeParts($mime_parts)) {
+			if($upload) return FALSE;
 			header('HTTP/1.0 403 Forbidden');
 			echo '<h1>Mimetype ' . $mime . ' is forbidden.</h1>';
 			die();

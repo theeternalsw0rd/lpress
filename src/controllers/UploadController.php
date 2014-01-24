@@ -13,6 +13,7 @@ class UploadController extends BaseController {
 	protected $permission_error = "You do not have permission to upload files.";
 	protected $record_error = "Record id not passed. Cannot process request.";
 	protected $type_error = "Type of upload (new/update) not passed. Cannot process request.";
+	protected $mime_error = "This mimetype is not accepted for the given RecordType.";
 
 	protected function getOptions() {
 		$options = array();
@@ -83,6 +84,7 @@ class UploadController extends BaseController {
 					$records = array();
 					$statuses = array();
 					$destination_path = $options['upload_dir'];
+					$uri = Input::get('uri');
 					$file = Input::file('file');
 					$increment = 2;
 					$random = '';
@@ -94,17 +96,29 @@ class UploadController extends BaseController {
 					} while (File::exists($file_path));
 					$upload_success = Input::file('file')->move($destination_path, $file_name);
 					if($upload_success) {
-						$record = RecordController::createAttachmentRecord($file_path, $user)->toArray();
-						$status = 200;
+						$types = explode('/', $uri);
+						$mime_handler = new MimeHandler($types[0]);
+						$mime = $mime_handler->verifyMime($file_path, $file_name, TRUE);
+						if($mime !== FALSE) {
+							$record = RecordController::createAttachmentRecord($file_path, $user)->toArray();
+							$status = 200;
+						}
+						else {
+							File::delete($file_path);
+							$json->error = $this->mime_error;
+							$code = 403;
+						}
 					}
 					else {
 						$record = NULL;
 						$status = 500;
 					}
-					$json->record = $record;
-					$json->uri = Input::get('uri');
-					$json->status = $status;
-					unset($json->error);
+					if($code != 403) {
+						$json->record = $record;
+						$json->uri = $uri;
+						$json->status = $status;
+						unset($json->error);
+					}
 				}
 			}
 			else {
