@@ -14,35 +14,40 @@ class MimeHandler {
 		'plain'
 	);
 
-	function __construct($allowed_mime_parts = NULL) {
+	protected $mime = NULL;
+	protected $status = 500;
+
+	function __construct($path = NULL, $file_name = NULL, $allowed_mime_parts = NULL) {
 		if(is_array($allowed_mime_parts)) {
 			$this->$allowed_mime_parts = $allowed_mime_parts;
 		}
+		if(is_string($path) && is_string($file_name)) {
+			$extension = pathinfo($file_name, PATHINFO_EXTENSION);
+			$this->setMime($path, $extension);
+			$this->updateStatus();
+		}
 	}
 
-	protected function verifyWoff($path) {
+	protected function getWoffMime($path) {
 		$file = fopen($path, 'rb');
 		if($file === FALSE) return '';
 		$signature = fread($file, 4);
 		fclose($file);
 		if(strtolower($signature) == 'woff')
 			return 'application/font-woff';
-		header('HTTP/1.0 403 Forbidden');
-		echo '<h1>Access Denied</h1>';
-		die();
+		return NULL;
 	}
 
-	protected function getMime($path, $extension) {
+	public function getMime() {
+		return $this->mime;
+	}
+
+	public function setMime($path, $extension) {
 		$mime = '';
 		$mime = $extension == 'woff' ?
-			$this->verifyWoff($path) :
+			$this->getWoffMime($path) :
 			@finfo_file(finfo_open(FILEINFO_MIME_TYPE), $path);
-		if($mime == '') {
-			header('HTTP/1.0 404 Not Found');
-			echo '<h1>File could not be found</h1>';
-			die();
-		}
-		// source files are detected as text/plain
+		// some source files are detected as text/plain
 		switch($extension) {
 			case 'css': {
 				$mime = strpos($mime, 'text') !== FALSE ? 'text/css' : $mime;
@@ -53,7 +58,7 @@ class MimeHandler {
 				break;
 			}
 		}
-		return $mime;
+		$this->mime = $mime;
 	}
 
 	protected function verifyMimeParts($mime_parts) {
@@ -66,16 +71,25 @@ class MimeHandler {
 		return $allowed;
 	}
 
-	public function verifyMime($path, $file_name, $upload = FALSE) {
-		$extension = pathinfo($file_name, PATHINFO_EXTENSION);
-		$mime = $this->getMime($path, $extension);
-		$mime_parts = explode('/', $mime);
-		if(!$this->verifyMimeParts($mime_parts)) {
-			if($upload) return FALSE;
-			header('HTTP/1.0 403 Forbidden');
-			echo '<h1>Mimetype ' . $mime . ' is forbidden.</h1>';
-			die();
+	public function updateStatus() {
+		if($this->mime == NULL) {
+			$this->status = 500;
+			return;
 		}
-		return $mime;
+		if($this->mime == '') {
+			$this->status = 404;
+			return;
+		}
+		$mime_parts = explode('/', $this->mime);
+		if(!$this->verifyMimeParts($mime_parts)) {
+			$this->status = 403;
+			return;
+		}
+		$this->status = 200;
+		return;
+	}
+
+	public function getStatus() {
+		return $this->status;
 	}
 }

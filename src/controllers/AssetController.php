@@ -1,6 +1,7 @@
 <?php namespace EternalSword\LPress;
 
 use Illuminate\Routing\Controllers\Controller;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Input;
 
@@ -39,8 +40,21 @@ class AssetController extends BaseController {
 	}
 
 	protected function sendFile($path, $file_name) {
-		$mime_handler = new MimeHandler;
-		$mime = $mime_handler->verifyMime($path, $file_name);
+		$mime_handler = new MimeHandler($path, $file_name);
+		$status = $mime_handler->getStatus();
+		$mime = $mime_handler->getMime();
+		switch($status) {
+			case 200: {
+				break;
+			}
+			case 403: {
+				App::abort($status, $mime . ' is not allowed by the server.');
+				exit();
+			}
+			default: {
+				App::abort($status);
+			}
+		}
 		if(extension_loaded('zlib')){ob_start('ob_gzhandler');}
 		$modified = gmdate('D, d M Y H:i:s T', filemtime($path));
 		if(array_key_exists('download', Input::all())) {

@@ -133,7 +133,7 @@ class BaseController extends Controller {
 				</label>
 			";
 		});
-		Form::macro('faux_file', function($slug, $upload_type = 'new', $single = TRUE, $attributes = array()) {
+		Form::macro('faux_file', function($slug, $upload_command = 'create', $single = TRUE, $attributes = array()) {
 			$type = RecordType::where('slug', '=', $slug)->first();
 			if(count($type) === 0) {
 				return "<div class='error'>Could not find RecordType ${slug} for file input.</div>";
@@ -154,7 +154,7 @@ class BaseController extends Controller {
 				return "<div class='error'>RecordType ${slug} is not valid for file input.</div>";
 			}
 			$prefix = self::getRoutePrefix();
-			$url = $prefix . "/+upload?path=${file_path}/&uri=${prefix}/${url_path}/&type=${upload_type}";
+			$url = $prefix . "/+upload?path=${file_path}/&uri=${prefix}/${url_path}/&upload_command=${upload_command}";
 			$url_path = $prefix . '/' . $url_path;
 			$attributes = self::getAttributeString($attributes);
 			$token = csrf_token();
