@@ -26,8 +26,9 @@ class UserController extends BaseController {
 	public static function updateUser() {
 		$auth_user = Auth::user();
 		$id = Input::get('user_id');
-		if($auth_user->id == $id || $auth_user->hasPermission('root')) {
+		if($auth_user->id == $id || $auth_user->hasPermission('user-manager')) {
 			return self::processForm($id);
 		}
+		return App::abort(403);
 	}
 }
