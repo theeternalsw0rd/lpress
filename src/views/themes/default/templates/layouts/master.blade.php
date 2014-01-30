@@ -29,6 +29,24 @@
 					<p>You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 				</div>
 			<![endif]-->
+			@if(Session::has('errors'))
+				@foreach(Session::get('errors') as $error)
+					@if(!empty($error))
+						<div class='error'>
+							<p>{{ $error }}</p>
+						</div>
+					@endif
+				@endforeach
+			@endif
+			@if(Session::has('messages'))
+				@foreach(Session::get('messages') as $message)
+					@if(!empty($message))
+						<div class='message'>
+							<p>{{ $message }}</p>
+						</div>
+					@endif
+				@endforeach
+			@endif
 			@yield('content')
 		</div>
 		@section('hidden')
