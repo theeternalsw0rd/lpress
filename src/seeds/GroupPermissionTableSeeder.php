@@ -15,23 +15,15 @@ class LPressGroupPermissionTableSeeder extends Seeder {
 			),
 			array(
 				'group_id' => 2,
-				'permission_id' => 3
-			),
-			array(
-				'group_id' => 2,
 				'permission_id' => 4
 			),
 			array(
 				'group_id' => 2,
-				'permission_id' => 5
-			),
-			array(
-				'group_id' => 2,
 				'permission_id' => 6
 			),
 			array(
 				'group_id' => 2,
-				'permission_id' => 7
+				'permission_id' => 8
 			),
 			array(
 				'group_id' => 3,
@@ -39,6 +31,10 @@ class LPressGroupPermissionTableSeeder extends Seeder {
 			),
 			array(
 				'group_id' => 3,
+				'permission_id' => 4
+			),
+			array(
+				'group_id' => 3,
 				'permission_id' => 5
 			),
 			array(
@@ -50,48 +46,48 @@ class LPressGroupPermissionTableSeeder extends Seeder {
 				'permission_id' => 7
 			),
 			array(
-				'group_id' => 4,
-				'permission_id' => 3
+				'group_id' => 3,
+				'permission_id' => 8
 			),
 			array(
 				'group_id' => 4,
-				'permission_id' => 5
+				'permission_id' => 4
+			),
+			array(
+				'group_id' => 4,
+				'permission_id' => 6
 			),
 			array(
 				'group_id' => 4,
 				'permission_id' => 7
+			),
+			array(
+				'group_id' => 4,
+				'permission_id' => 8
 			),
 			array(
 				'group_id' => 5,
-				'permission_id' => 7
-			),
-			array(
-				'group_id' => 7,
-				'permission_id' => 1
-			),
-			array(
-				'group_id' => 8,
-				'permission_id' => 2
-			),
-			array(
-				'group_id' => 8,
-				'permission_id' => 3
-			),
-			array(
-				'group_id' => 8,
 				'permission_id' => 4
 			),
 			array(
-				'group_id' => 8,
-				'permission_id' => 5
-			),
-			array(
-				'group_id' => 8,
+				'group_id' => 5,
 				'permission_id' => 6
 			),
 			array(
+				'group_id' => 5,
+				'permission_id' => 8
+			),
+			array(
+				'group_id' => 6,
+				'permission_id' => 8
+			),
+			array(
 				'group_id' => 8,
-				'permission_id' => 7
+				'permission_id' => 1
+			),
+			array(
+				'group_id' => 9,
+				'permission_id' => 2
 			),
 			array(
 				'group_id' => 9,
@@ -99,6 +95,10 @@ class LPressGroupPermissionTableSeeder extends Seeder {
 			),
 			array(
 				'group_id' => 9,
+				'permission_id' => 4
+			),
+			array(
+				'group_id' => 9,
 				'permission_id' => 5
 			),
 			array(
@@ -110,8 +110,16 @@ class LPressGroupPermissionTableSeeder extends Seeder {
 				'permission_id' => 7
 			),
 			array(
+				'group_id' => 9,
+				'permission_id' => 8
+			),
+			array(
 				'group_id' => 10,
 				'permission_id' => 3
+			),
+			array(
+				'group_id' => 10,
+				'permission_id' => 4
 			),
 			array(
 				'group_id' => 10,
@@ -119,11 +127,47 @@ class LPressGroupPermissionTableSeeder extends Seeder {
 			),
 			array(
 				'group_id' => 10,
+				'permission_id' => 6
+			),
+			array(
+				'group_id' => 10,
 				'permission_id' => 7
+			),
+			array(
+				'group_id' => 10,
+				'permission_id' => 8
+			),
+			array(
+				'group_id' => 11,
+				'permission_id' => 4
+			),
+			array(
+				'group_id' => 11,
+				'permission_id' => 6
 			),
 			array(
 				'group_id' => 11,
 				'permission_id' => 7
+			),
+			array(
+				'group_id' => 11,
+				'permission_id' => 8
+			),
+			array(
+				'group_id' => 12,
+				'permission_id' => 4
+			),
+			array(
+				'group_id' => 12,
+				'permission_id' => 6
+			),
+			array(
+				'group_id' => 12,
+				'permission_id' => 8
+			),
+			array(
+				'group_id' => 13,
+				'permission_id' => 8
 			)
 		);
 

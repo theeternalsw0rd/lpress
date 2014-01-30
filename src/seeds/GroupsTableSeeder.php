@@ -12,6 +12,12 @@ class LPressGroupsTableSeeder extends Seeder {
 				'record_type_id' => 0
 			),
 			array(
+				'label' => 'Manager',
+				'description' => 'This group has full publishing and user management control over all sites.',
+				'site_id' => 0,
+				'record_type_id' => 0
+			),
+			array(
 				'label' => 'Publisher',
 				'description' => 'This group has full publishing control over all sites.',
 				'site_id' => 0,
@@ -44,6 +50,12 @@ class LPressGroupsTableSeeder extends Seeder {
 			array(
 				'label' => 'Wildcard Admin',
 				'description' => 'This group has full control over the wildcard site.',
+				'site_id' => 1,
+				'record_type_id' => 0
+			),
+			array(
+				'label' => 'Wildcard Manager',
+				'description' => 'This group has publishing and user managment control over the wildcard site.',
 				'site_id' => 1,
 				'record_type_id' => 0
 			),

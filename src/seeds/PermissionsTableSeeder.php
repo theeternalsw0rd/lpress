@@ -11,6 +11,11 @@ class LPressPermissionsTableSeeder extends Seeder {
 				'description' => 'Can do anything.'
 			),
 			array(
+				'label' => 'User Manager',
+				'slug' => 'user-manager',
+				'description' => 'Can update other user\'s details and remove user accounts.'
+			),
+			array(
 				'label' => 'Publish',
 				'slug' => 'publish',
 				'description' => 'Make changes to front-end state for all records in scope.'
