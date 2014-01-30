@@ -18,12 +18,12 @@ class LPressPermissionsTableSeeder extends Seeder {
 			array(
 				'label' => 'Publish',
 				'slug' => 'publish',
-				'description' => 'Make changes to front-end state for all records in scope.'
+				'description' => 'Can make changes to front-end state for all records in scope.'
 			),
 			array(
 				'label' => 'Publish Own',
 				'slug' => 'publish-own',
-				'description' => 'Make changes to front-end state for own records in scope.'
+				'description' => 'Can make changes to front-end state for own records in scope.'
 			),
 			array(
 				'label' => 'Delete',
