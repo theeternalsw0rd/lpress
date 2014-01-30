@@ -41,18 +41,18 @@ class AssetController extends BaseController {
 
 	protected function sendFile($path, $file_name) {
 		$mime_handler = new MimeHandler($path, $file_name);
-		$status = $mime_handler->getStatus();
+		$status_code = $mime_handler->getStatusCode();
 		$mime = $mime_handler->getMime();
-		switch($status) {
+		switch($status_code) {
 			case 200: {
 				break;
 			}
 			case 403: {
-				App::abort($status, $mime . ' is not allowed by the server.');
+				App::abort($status_code, $mime . ' is not allowed by the server.');
 				exit();
 			}
 			default: {
-				App::abort($status);
+				App::abort($status_code);
 			}
 		}
 		if(extension_loaded('zlib')){ob_start('ob_gzhandler');}

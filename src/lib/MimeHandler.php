@@ -15,7 +15,7 @@ class MimeHandler {
 	);
 
 	protected $mime = NULL;
-	protected $status = 500;
+	protected $status_code = 500;
 
 	function __construct($path = NULL, $file_name = NULL, $allowed_mime_parts = NULL) {
 		if(is_array($allowed_mime_parts)) {
@@ -24,7 +24,7 @@ class MimeHandler {
 		if(is_string($path) && is_string($file_name)) {
 			$extension = pathinfo($file_name, PATHINFO_EXTENSION);
 			$this->setMime($path, $extension);
-			$this->updateStatus();
+			$this->updateStatusCode();
 		}
 	}
 
@@ -71,25 +71,25 @@ class MimeHandler {
 		return $allowed;
 	}
 
-	public function updateStatus() {
+	public function updateStatusCode() {
 		if($this->mime == NULL) {
-			$this->status = 500;
+			$this->status_code = 500;
 			return;
 		}
 		if($this->mime == '') {
-			$this->status = 404;
+			$this->status_code = 404;
 			return;
 		}
 		$mime_parts = explode('/', $this->mime);
 		if(!$this->verifyMimeParts($mime_parts)) {
-			$this->status = 403;
+			$this->status_code = 403;
 			return;
 		}
-		$this->status = 200;
+		$this->status_code = 200;
 		return;
 	}
 
-	public function getStatus() {
-		return $this->status;
+	public function getStatusCode() {
+		return $this->status_code;
 	}
 }

@@ -29,30 +29,30 @@ App::after(function($request, $response) {
 App::error(function(HttpException $exception) {
 	// missing can't take filters like routes, so call needed stuff directly.
 	extract(BaseController::prepareMake());
-	$code = $exception->getStatusCode();
+	$status_code = $exception->getStatusCode();
 	$message = $exception->getMessage() ?: 'An error occurred and your request could not be processed.';
 	return Response::view($view_prefix . '.errors', array(
 		'view_prefix' => $view_prefix,
-		'title' => 'HttpError: ' + $code,
-		'code' => $code,
+		'title' => 'HttpError: ' + $status_code,
+		'status_code' => $status_code,
 		'message' => $message
-	), $code);
+	), $status_code);
 });
 
 App::error(function(\Illuminate\Session\TokenMismatchException $exception) {
-	$code = 403;
+	$status_code = 403;
 	$message = 'Permission denied. Tokens do not match.';
 	if(Request::ajax()) {
 		$json = new \stdClass;
 		$json->error = $message;
-		return Response::json($json, $code);
+		return Response::json($json, $status_code);
 	}
 	return Response::view($view_prefix . '.errors', array(
 		'view_prefix' => $view_prefix,
-		'title' => 'HttpError: ' + $code,
-		'code' => $code,
+		'title' => 'HttpError: ' + $status_code,
+		'status_code' => $status_code,
 		'message' => $message
-	), $code);
+	), $status_code);
 });
 
 Route::filter(
@@ -76,8 +76,8 @@ Route::filter(
 			if(Request::ajax()) {
 				$json = new \stdClass;
 				$json->error = "Permission denied. Not logged in.";
-				$code = 403;
-				return Response::json($json, $code);
+				$status_code = 403;
+				return Response::json($json, $status_code);
 			}
 			Session::set('redirect', URL::full());
 			return Redirect::route('lpress-login');

@@ -20,7 +20,7 @@ class RecordController extends BaseController {
 		if($route->throw404) {
 			if($route->json) {
 				$json = new \stdClass;
-				$json->code = 404;
+				$json->status_code = 404;
 				$json->reason = self::invalid_url;
 				return Response::json($json, 404);
 			}
@@ -56,7 +56,7 @@ class RecordController extends BaseController {
 		if($record->public != $public) {
 			if($json) {
 				$json = new \stdClass;
-				$json->code = 403;
+				$json->status_code = 403;
 				$json->reason = self::permission_error;
 				return Response::json($json, 403);
 			}
@@ -75,7 +75,7 @@ class RecordController extends BaseController {
 			if($route->root_record_type->slug == 'attachments') {
 				if(!$verifyAttachment($record)) {
 					$json = new \stdClass;
-					$json->code = 404;
+					$json->status_code = 404;
 					$json->error = self::attachment_missing;
 					return Response::json($json, 404);
 				}

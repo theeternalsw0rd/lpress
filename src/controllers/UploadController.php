@@ -53,8 +53,8 @@ class UploadController extends BaseController {
 			$mime_types = explode('/', $uri);
 			$mime_handler = new MimeHandler($file_path, $file_name, $mime_types[0]);
 			$mime = $mime_handler->getMime();
-			$status = $mime_handler->getStatus();
-			switch($status) {
+			$status_code = $mime_handler->getStatusCode();
+			switch($status_code) {
 				case 200: {
 					$record = call_user_func_array(
 						$handler,
@@ -63,25 +63,25 @@ class UploadController extends BaseController {
 					$record = $record->toArray();
 					$json->record = $record;
 					$json->uri = $uri;
-					$json->status = $status;
-					return Response::json($json, $status);
+					$json->status_code = $status_code;
+					return Response::json($json, $status_code);
 				}
 				case 403: {
 					File::delete($file_path);
 					$json->error = $mime . ' is not allowed by the current RecordType.';
-					return Response::json($json, $status);
+					return Response::json($json, $status_code);
 				}
 				default: {
 					File::delete($file_path);
 					$json->error = 'An unexpected error occurred verifying the mimetype.';
-					return Response::json($json, $status);
+					return Response::json($json, $status_code);
 				}
 			}
 		}
 		$json->record = NULL;
-		$json->status = 500;
+		$json->status_code = 500;
 		$json->error = 'An unexpected error occurred saving the record.';
-		return Response::json($json, $status);
+		return Response::json($json, $status_code);
 	}
 
 	protected function verifyRecord($user, $route) {
@@ -89,18 +89,18 @@ class UploadController extends BaseController {
 			$record_id = Input::get('record');
 			$record = is_int($record_id) ? Record::find($record_id) : Record::find(0);
 			if($record->isEmpty()) {
-				$status = 404;
-				$json->status = $status;
+				$status_code = 404;
+				$json->status_code = $status_code;
 				$json->error = $this->notfound_error;
 				return $json;
 			}
-			$status = 200;
-			$json->status = $status;
+			$status_code = 200;
+			$json->status_code = $status_code;
 			$json->original_record = $record;
 			return $json;
 		}
-		$status = 500;
-		$json->status = $status;
+		$status_code = 500;
+		$json->status_code = $status_code;
 		$json->error = $this->record_error;
 		return $json;
 	}
@@ -112,18 +112,18 @@ class UploadController extends BaseController {
 		if(is_callable($handler) && $user->hasPermission($command)) {
 			if($command == 'edit') {
 				$json = $this->verifyRecord($user, $route);
-				$status = $json->status;
-				if($status == 200) {
+				$status_code = $json->status_code;
+				if($status_code == 200) {
 					return $this->processFile($user, $route, $handler, $json);
 				}
-				return Response::json($json, $status);
+				return Response::json($json, $status_code);
 			}
 			return $this->processFile($user, $route, $handler);
 		}
-		$status = 500;
-		$json->status = $status;
+		$status_code = 500;
+		$json->status_code = $status_code;
 		$json->error = $this->command_error;
-		return Response::json($json, $status);
+		return Response::json($json, $status_code);
 	}
 
 	public function postFile() {
@@ -133,16 +133,16 @@ class UploadController extends BaseController {
 		$route = parent::slugsToRoute(Input::get('uri'));
 		if($route->throw404) {
 			$json->error = $this->notfound_error;
-			$json->status = 404;
-			return Response::json($json, $status);
+			$json->status_code = 404;
+			return Response::json($json, $status_code);
 		}
 		if(Input::has('upload_command')) {
 			return $this->processPost($user, $route);
 		}
 		$json->error = $this->command_error;
-		$status = 500;
-		$json->status = $status;
-		return Response::json($json, $status);
+		$status_code = 500;
+		$json->status_code = $status_code;
+		return Response::json($json, $status_code);
 	}
 
 	public function deleteFile() {
