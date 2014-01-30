@@ -161,11 +161,12 @@ class BaseController extends Controller {
 			$class = $single ? 'single file' : 'multiple file';
 			return "<a href='#${slug}' title='${label}' data-token='${token}' data-attachment_type='${attachment_type}' data-prefix='${prefix}' data-path='${url_path}' data-url='${url}' class='${class}' ${attributes}>${label}</a>";
 		});
-		Form::macro('icon_button', function($label, $type = 'button', $attributes = array(), $icon = '') {
+		Form::macro('icon_button', function($label, $type = 'button', $attributes = array(), $icon_class = '') {
+			$icon = '';
 			$icon_font = new IconFont;
-			$icon = $icon_font->getIcon($icon);
+			$icon = $icon_font->getIcon($icon_class);
 			if($icon !== '') {
-				$icon = "<span class='button-icon'>$icon</span>";
+				$icon = "<span class='button-icon ${icon_class}'>$icon</span>";
 			}
 			return "<button type='$type'>$icon<span class='button-label'>$label</span></button>";
 		});

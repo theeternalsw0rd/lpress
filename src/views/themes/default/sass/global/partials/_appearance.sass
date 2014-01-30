@@ -22,6 +22,8 @@
     .button-icon
       text-decoration: none
       display: inline-block
+    .icon-ok
+      color: $success_color
   @if $button and $real_button
     &:active
       @include background_opacity($form_input_rgba_background, $fallback: $form_input_focused_background)
@@ -73,7 +75,10 @@ h1
 #page
   background: url(#{$base_path}/images/backgrounds/page.png?v1)
   border-width: 0 3px 0 3px
-  border-style: double 
+  border-style: double
+
+.button-icon
+  text-shadow: 0px 0px 2px $text_color, 0px 0px 2px $text_color
 
 .colorbox
   display: none
@@ -199,8 +204,6 @@ a.dz-preview
     background-color: $success_color
   div.dz-success-mark
     color: $success_color
-    .button-icon
-      text-shadow: 0px 0px 3px $text_color
   div.dz-error-message
     @extend %error
 
