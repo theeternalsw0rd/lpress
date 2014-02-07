@@ -1,6 +1,9 @@
 $text_family: 'Fanwood', Serif;
 $header_family: 'Fanwood', Serif;
 $icon_font: 'FontAwesome';
+$text_family_winchrome: 'Fanwood-WinChrome', Serif;
+$header_family_winchrome: 'Fanwood-WinChrome', Serif;
+$icon_font_winchrome: 'FontAwesome-WinChrome';
 $base_size: 18px;
 $base_weight: 400;
 @mixin base_font($base_size, $base_weight: normal) {
@@ -40,32 +43,35 @@ $base_weight: 400;
     font-style: normal;
 }
 
-@media screen and (-webkit-min-device-pixel-ratio:0) {
-    @font-face {
-	font-family: 'Fanwood';
-	src: url('#{$base_path}/fonts/fanwood/webfonts/fanwood_text-webfont.svg') format('svg');
-	font-weight: normal;
-	font-style: normal;
-    }
+@font-face {
+    font-family: 'Fanwood-WinChrome';
+    src: url('#{$base_path}/fonts/fanwood/webfonts/fanwood_text-webfont.svg') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
 
-    @font-face {
-	font-family: 'Fanwood';
-	src: url('#{$base_path}/fonts/fanwood/webfonts/fanwood_text-webfont.svg') format('svg');
-	font-weight: normal;
-	font-style: italic;
-    }
+@font-face {
+    font-family: 'Fanwood-WinChrome';
+    src: url('#{$base_path}/fonts/fanwood/webfonts/fanwood_text-webfont.svg') format('svg');
+    font-weight: normal;
+    font-style: italic;
+}
 
-    @font-face {
-	font-family: 'FontAwesome';
-	src: url('#{$base_path}/fonts/font-awesome/fonts/fontawesome-webfont.svg') format('svg');
-	font-weight: normal;
-	font-style: normal;
-    }
+@font-face {
+    font-family: 'FontAwesome-WinChrome';
+    src: url('#{$base_path}/fonts/font-awesome/fonts/fontawesome-webfont.svg') format('svg');
+    font-weight: normal;
+    font-style: normal;
 }
 
 body, input, textarea {
     font-family: $text_family;
     @include base_font(18px)
+}
+html.win-chrome-font {
+    body, input, textarea {
+	font-family: $text_family_winchrome;
+    }
 }
 /* some browsers don't automatically fallback if character doesn't exist in webfont */
 input[type=password], span.checkmark {
@@ -75,9 +81,15 @@ input[type=password], span.checkmark {
     font-family: $icon_font;
     font-size: 1em;
 }
+html.win-chrome-font .button-icon {
+    font-family: $icon_font_winchrome;
+}
 h1 {
     font-size: 1.7em;
     font-family: $header_family;
+}
+html.win-chrome-font h1 {
+    font-family: $header_family_winchrome;
 }
 .opacity span.checkmark {
     font-size: 0.8em !important;
