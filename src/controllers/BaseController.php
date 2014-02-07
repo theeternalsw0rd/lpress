@@ -5,8 +5,10 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Form;
 use Illuminate\Support\Facades\HTML;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 
@@ -97,6 +99,17 @@ class BaseController extends Controller {
 		return $attribute_string;
 	}
 
+	public static function getValidationError($name) {
+		$error = "";
+		if(Session::has('errors')) {
+			$errors = Session::get('errors');
+			if($errors->has($name)) {
+				$error = $errors->first($name, " <span class='error'>:message</span>");
+			}
+		}
+		return $error;
+	}
+
 	public static function setMacros() {
 		HTML::macro('url', function($url, $text = null, $attributes = array()) {
 			$attribute_string = '';
@@ -116,7 +129,26 @@ class BaseController extends Controller {
 			$title = $has_title ? $title : $text;
 			return "<a href='${url}' title='${title}'${attribute_string}>${title}</a>";
 		});
-		Form::macro('faux_checkbox', function($name, $label, $attributes = array()) {
+		Form::macro('text_input', function($type, $name, $label, $value, $attributes = array()) {
+			$error = self::getValidationError($name);
+			$attribute_string = self::getAttributeString($attributes);
+			$value = Input::old($name, $value);
+			if($type == 'textarea') {
+				$size = "";
+				if(!array_key_exists('cols', $attributes)) {
+					$size .= " cols='50' ";
+				}
+				if(!array_key_exists('rows', $attributes)) {
+					$size .= " rows='10' ";
+				}
+				$input = "<textarea id='${name}' name='${name}' ${size} ${attribute_string}>${value}</textarea>";
+			}
+			else {
+				$input = "<input id='${name}' name='${name}' type='${type}' value='${value}' ${attribute_string} />";
+			}
+			return "<label for='${name}'>${label}${error}</label>$input";
+		});
+		Form::macro('checkbox_input', function($name, $label, $attributes = array()) {
 			return "
 				<label for='${name}' class='checkbox'>
 					<input id='${name}' name='${name}' class='checkbox' type='checkbox'" . self::getAttributeString($attributes) . " />
@@ -124,7 +156,7 @@ class BaseController extends Controller {
 				</label>
 			";
 		});
-		Form::macro('faux_file', function($slug, $upload_command = 'create', $single = TRUE, $attributes = array()) {
+		Form::macro('file_input', function($slug, $upload_command = 'create', $single = TRUE, $value = '', $attributes = array()) {
 			$type = RecordType::where('slug', '=', $slug)->first();
 			if(count($type) === 0) {
 				return "<div class='error'>Could not find RecordType ${slug} for file input.</div>";
@@ -147,10 +179,14 @@ class BaseController extends Controller {
 			$prefix = self::getRoutePrefix();
 			$url = $prefix . "/+upload?path=${file_path}/&uri=${prefix}/${url_path}/&upload_command=${upload_command}";
 			$url_path = $prefix . '/' . $url_path;
-			$attributes = self::getAttributeString($attributes);
+			$attribute_string = self::getAttributeString($attributes);
 			$token = csrf_token();
 			$class = $single ? 'single file' : 'multiple file';
-			return "<a href='#${slug}' title='${label}' data-token='${token}' data-attachment_type='${attachment_type}' data-prefix='${prefix}' data-path='${url_path}' data-url='${url}' class='${class}' ${attributes}>${label}</a>";
+			$data = "data-token='${token}' data-attachment_type='${attachment_type}' data-prefix='${prefix}' data-path='${url_path}' data-url='${url}'";
+			$hidden_name = $attributes['data-target_id'];
+			$value = Input::old($hidden_name, $value);
+			$hidden = "<input id='${hidden_name}' name='${hidden_name}' type='hidden' value='${value}' />";
+			return "<a href='#${slug}' title='${label}'  class='${class}' ${data} ${attribute_string}>${label}</a>${hidden}";
 		});
 		Form::macro('icon_button', function($label, $type = 'button', $attributes = array(), $icon_class = '') {
 			$icon = '';

@@ -13,48 +13,120 @@
 			{{ Form::open(array('route' => 'lpress-create-user')) }}
 		@endif
 		<div class='text'>
-			{{ Form::label('Username:') }}
-			{{ Form::text('username', '', array('autofocus' => 'autofocus', 'tabindex' => '1')) }}
+			{{ Form::text_input(
+				'text',
+				'username',
+				'Username:',
+				'',
+				array(
+					'autofocus' => 'autofocus',
+					'tabindex' => '1'
+				)
+			) }}
 		</div>
 		<div class='text'>
-			{{ Form::label('Password:') }}
-			{{ Form::password('password', array('tabindex' => '2')) }}
+			{{ Form::text_input(
+				'password',
+				'password',
+				'Password:',
+				'',
+				array(
+					'tabindex' => '2'
+				)
+			) }}
 		</div>
 		<div class='text'>
-			{{ Form::label('Verify Password:') }}
-			{{ Form::password('verify_password', array('tabindex' => '3')) }}
+			{{ Form::text_input(
+				'password',
+				'verify_password',
+				'Verify Password:',
+				'',
+				array(
+				'tabindex' => '3'
+				)
+			) }}
 		</div>
 		<div class='text'>
-			{{ Form::label('Email Address:') }}
-			{{ Form::input('email', 'email', '', array('tabindex' => '4')) }}
+			{{ Form::text_input(
+				'email',
+				'email',
+				'Email Address:',
+				'',
+				array(
+				'tabindex' => '4'
+				)
+			) }}
 		</div>
 		<div class='checkbox'>
-			{{ Form::faux_checkbox('email-public', 'Allow email to be displayed publicly.', array('tabindex' => '5')) }}
+			{{ Form::checkbox_input('email-public', 'Allow email to be displayed publicly.', array('tabindex' => '5')) }}
 		</div>
 		<div class='text'>
-			{{ Form::label('Title:') }}
-			{{ Form::text('first_name', '', array('tabindex' => '6')) }}
+			{{ Form::text_input(
+				'text',
+				'title',
+				'Title (eg Mr.):',
+				'',
+				array(
+				'tabindex' => '6'
+				)
+			) }}
 		</div>
 		<div class='text'>
-			{{ Form::label('First Name:') }}
-			{{ Form::text('first_name', '', array('tabindex' => '7')) }}
+			{{ Form::text_input(
+				'text',
+				'first_name',
+				'First Name:',
+				'',
+				array(
+				'tabindex' => '7'
+				)
+			) }}
 		</div>
 		<div class='text'>
-			{{ Form::label('Last Name:') }}
-			{{ Form::text('last_name', '', array('tabindex' => '8')) }}
+			{{ Form::text_input(
+				'text',
+				'last_name',
+				'Last Name:',
+				'',
+				array(
+				'tabindex' => '8'
+				)
+			) }}
 		</div>
 		<div class='text'>
-			{{ Form::label('Name Suffix:') }}
-			{{ Form::text('suffix', '', array('tabindex' => '9')) }}
+			{{ Form::text_input(
+				'text',
+				'suffix',
+				'Name Suffix (eg Jr.)',
+				'',
+				array(
+				'tabindex' => '9'
+				)
+			) }}
 		</div>
 		<div class='text'>
-			{{ Form::label('Bio:') }}
-			{{ Form::textarea('bio', '', array('tabindex' => '10')) }}
+			{{ Form::text_input(
+				'textarea',
+				'bio',
+				'Bio:',
+				'',
+				array(
+				'tabindex' => '10'
+				)
+			) }}
 		</div>
 		<div class='file'>
-			{{ Form::faux_file('avatars', 'create', TRUE, array('tabindex' => '11', 'data-target_id' => 'user_image')) }}
+			{{ Form::file_input(
+				'avatars',
+				'create',
+				FALSE,
+				'',
+				array(
+					'tabindex' => '11',
+					'data-target_id' => 'user_image'
+				)
+			) }}
 		</div>
-		{{ Form::hidden('user_image', '', array('id' => 'user_image')) }}
 		{{ Form::token() }}
 		<div class='submit'>
 			{{ Form::icon_button('OK', 'submit', array('class' => 'button', 'tabindex' => '12'), 'icon-ok') }}

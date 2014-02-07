@@ -23,6 +23,7 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
 		'username' => 'required|unique:users',
 		'email' => 'required|email|unique:users',
 		'password' => 'required|min:8',
+		'verify_password' => 'required|same:password',
 		'email_visible' => 'bool',
 		'image' => 'record_exists'
 	);

@@ -25,7 +25,7 @@ class UserController extends BaseController {
 		if($validator->passes()) {
 			Redirect::back()->withInput()->with('messages', Input::all());
 		}
-		return Redirect::back()->withInput()->with('errors', $validator->messages()->all());
+		return Redirect::back()->withInput()->withErrors($validator);
 	}
 
 	public static function updateUser() {

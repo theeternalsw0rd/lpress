@@ -29,8 +29,8 @@
 					<p>You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 				</div>
 			<![endif]-->
-			@if(Session::has('errors'))
-				@foreach(Session::get('errors') as $error)
+			@if(Session::has('std_errors'))
+				@foreach(Session::get('std_errors') as $error)
 					@if(!empty($error))
 						<div class='error'>
 							<p>{{ $error }}</p>
