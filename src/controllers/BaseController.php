@@ -11,15 +11,6 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 
 class BaseController extends Controller {
-	protected function supportsSHA2() {
-		$user_agent = $_SERVER['HTTP_USER_AGENT'];
-		if(preg_match('/(Windows NT 5)|(Windows XP)/i', $user_agent)
-			&& !preg_match('/firefox/i', $user_agent)
-		) {
-			return FALSE;
-		}
-		return TRUE;
-	}
 
 	public static function getRoutePrefix() {
 		$route_prefix = Config::get('l-press::route_prefix');
@@ -89,7 +80,7 @@ class BaseController extends Controller {
 			}
 		}
 		if(Config::get($config) && !Request::secure()) {
-			if(!Config::get('l-press::ssl_is_sha2') || $this->supportsSHA2()) {
+			if(!Config::get('l-press::ssl_is_sha2') || UserAgent::supportsSHA2()) {
 				return Redirect::secure(Request::getRequestUri());
 			}
 			return Redirect::route('lpress-sha2');

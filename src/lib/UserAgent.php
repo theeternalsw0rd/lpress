@@ -3,6 +3,16 @@
 use Illuminate\Support\Facades\Request;
 
 class UserAgent {
+	public static function supportsSHA2() {
+		$user_agent = $_SERVER['HTTP_USER_AGENT'];
+		if(preg_match('/(Windows NT 5)|(Windows XP)/i', $user_agent)
+			&& !preg_match('/firefox/i', $user_agent)
+		) {
+			return FALSE;
+		}
+		return TRUE;
+	}
+
 	public static function getClass() {
 		$user_agent = Request::server('HTTP_USER_AGENT');
 		if(strpos($user_agent, "Chrome") !== FALSE && strpos($user_agent, "Windows") !== FALSE) {
