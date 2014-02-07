@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends BaseController {
 	protected static function processForm($id = NULL) {
@@ -17,10 +18,14 @@ class UserController extends BaseController {
 		if(is_null($user)) {
 			return Redirect::back()->withInput()->with(
 				'errors',
-				array('Could not find user from the provided id. It\'s possible the user was deleted by another user or the posted data was corrupt.')
+				array('Could not find user by id provided implicitly. It\'s possible the user was deleted by another user or the posted data was corrupt.')
 			);
 		}
-		return Redirect::back()->withInput()->with('errors', array('Some unknown issue occurred.'));
+		$validator = Validator::make(Input::all(), $user->getRules(), CustomValidator::getOwnMessages());
+		if($validator->passes()) {
+			Redirect::back()->withInput()->with('messages', Input::all());
+		}
+		return Redirect::back()->withInput()->with('errors', $validator->messages()->all());
 	}
 
 	public static function updateUser() {

@@ -19,6 +19,14 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
 	 */
 	protected $hidden = array('password', 'email', 'id');
 
+	protected $rules = array(
+		'username' => 'required|unique:users',
+		'email' => 'required|email|unique:users',
+		'password' => 'required|min:8',
+		'email_visible' => 'bool',
+		'image' => 'record_exists'
+	);
+
 	/**
 	 * Get the unique identifier for the user.
 	 *
@@ -44,6 +52,10 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
 	 */
 	public function getReminderEmail() {
 		return $this->email;
+	}
+
+	public function getRules() {
+		return $this->rules;
 	}
 
 	public function hasPermission($permission) {
