@@ -26,6 +26,9 @@ class LPressServiceProvider extends ServiceProvider {
 		Config::set('database.connections', $db_connections);
 		Config::set('auth.driver', 'eloquent');
 		Config::set('auth.model', 'EternalSword\LPress\User');
+		$this->app->validator->resolver(function($translator, $data, $rules, $messages) {
+			return new CustomValidator($translator, $data, $rules, $messages);
+		});
 		define('PATH', dirname(dirname(__DIR__)));
 		require PATH . '/routes.php';
 	}
