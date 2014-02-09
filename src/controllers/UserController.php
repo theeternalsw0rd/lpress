@@ -3,6 +3,7 @@
 use Illuminate\Routing\Controllers\Controller;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
@@ -22,10 +23,13 @@ class UserController extends BaseController {
 			);
 		}
 		$validator = Validator::make(Input::all(), $user->getRules(), CustomValidator::getOwnMessages());
-		if($validator->passes()) {
-			Redirect::back()->withInput()->with('messages', Input::all());
+		if($validator->fails()) {
+			return Redirect::back()->withInput()->withErrors($validator);
 		}
-		return Redirect::back()->withInput()->withErrors($validator);
+		$user->fill(Input::all());
+		$user->password = Hash::make(Input::get('password'));
+		$user->save();
+		return Redirect::route('lpress-dashboard');
 	}
 
 	public static function updateUser() {

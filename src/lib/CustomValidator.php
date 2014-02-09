@@ -9,7 +9,8 @@ class CustomValidator extends \Illuminate\Validation\Validator {
 		'RequiredIf',
 		'Accepted',
 		'Bool',
-		'RecordExists'
+		'RecordExists',
+		'Same'
 	);
 
 	public static function getOwnMessages() {
@@ -24,7 +25,28 @@ class CustomValidator extends \Illuminate\Validation\Validator {
 	}
 
 	public function validateRecordExists($attribute, $value, $parameters) {
-		if(!empty($parameters)) {
+		if(empty($value)) {
+			return TRUE;
 		}
+		if(!is_numeric($value)) {
+			return FALSE;
+		}
+		$record = Record::find($value);
+		if(count($record) !== 1) {
+			return FALSE;
+		}
+		if(!empty($parameters)) {
+			$record->load('record_type');
+			$record_type_slug = $parameters[0];
+			$record_type = $record->record_type;
+			while($record_type->depth > 0) {
+				if($record_type->slug == $record_type_slug) {
+					return TRUE;
+				}
+				$record_type = RecordType::find($record_type->parent_id);
+			}
+			return FALSE;
+		}
+		return TRUE;
 	}
 }

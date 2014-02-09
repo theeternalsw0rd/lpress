@@ -155,17 +155,6 @@ Route::delete(
 );
 
 Route::get(
-	$route_prefix . $dashboard_route,
-	array(
-		'before' => 'theme|dashboard',
-		'as' => 'lpress-dashboard',
-		function() {
-			echo "Hello username";
-		}
-	)
-);
-
-Route::get(
 	$route_prefix . '+login',
 	array(
 		'before' => 'theme|login-ssl',
@@ -217,6 +206,14 @@ Route::group(
 		'before' => 'theme|dashboard'
 	), 
 	function() {
+		Route::get(
+			'/',
+			array(
+				'before' => 'theme|dashboard',
+				'as' => 'lpress-dashboard',
+				'uses' => 'EternalSword\LPress\DashboardController@getDashboard'
+			)
+		);
 		Route::get(
 			'install',
 			array(

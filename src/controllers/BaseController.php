@@ -2,6 +2,7 @@
 
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Form;
 use Illuminate\Support\Facades\HTML;
@@ -251,6 +252,9 @@ class BaseController extends Controller {
 			}
 			return $alt;
 		});
+		Blade::extend(function($value) {
+			return preg_replace('/\{\$(.+)\$\}/', '<?php ${1} ?>', $value);
+		});
 	}
 
 	public static function getAssetPath($attachment = FALSE) {
@@ -412,5 +416,9 @@ class BaseController extends Controller {
 			}
 		}
 		return $route;
+	}
+
+	public static function getBoolInput($key) {
+		return Input::has($key) ? Input::get($key) : NULL;
 	}
 }

@@ -13,28 +13,58 @@
 	<div class='form'>
 		{{ Form::open() }}
 		@if ($install)
+			{$ $button_index = 2 $}
 			<div class='text'>
-				{{ Form::label('Application Key:') }}
-				{{ Form::password('password', array('autofocus' => 'autofocus', 'tabindex' => '1')) }}
+				{{ Form::text_input(
+					'password',
+					'password',
+					'Application Key:',
+					'',
+					array(
+						'autofocus' => 'autofocus',
+						'tabindex' => '1'
+					)
+				) }}
 			</div>
 			{{ Form::hidden('username', 'lpress') }}
 		@else
+			{$ $button_index = 4 $}
 			<div class='text'>
-				{{ Form::label('Username') }}<br />
-				{{ Form::text('username', array('autofocus' => 'autofocus', 'tabindex' => '1')) }}
+				{{ Form::text_input(
+					'text',
+					'username',
+					'Username:',
+					'',
+					array(
+						'autofocus' => 'autofocus',
+						'tabindex' => '1'
+					)
+				) }}
 			</div>
 			<div class='text'>
-				{{ Form::label('Password') }}<br />
-				{{ Form::text('password', array('tabindex' => '2')) }}
+				{{ Form::text_input(
+					'password',
+					'password',
+					'Password:',
+					'',
+					array(
+						'tabindex' => '2'
+					)
+				) }}
 			</div>
 			<div class='checkbox'>
-				{{ Form::label('Remember me') }}
-				{{ Form::checkbox('remember') }}
+				{{ Form::checkbox_input(
+					'remember_me',
+					'Remember me',
+					array(
+						'tabindex' => '3'
+					)
+				) }}
 			</div>
 		@endif
 		{{ Form::token() }}
 		<div class='submit'>
-			{{ Form::icon_button('OK', 'submit', array('class' => 'button', 'tabindex' => '3'), 'icon-ok') }}
+			{{ Form::icon_button('OK', 'submit', array('class' => 'button', 'tabindex' => '${button_index}'), 'icon-ok') }}
 		</div>
 		{{ Form::close() }}
 	</div>
