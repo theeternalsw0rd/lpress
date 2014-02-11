@@ -1,9 +1,10 @@
-@extends($view_prefix . '.layouts.master')
+@extends($view_prefix . '.layouts.dashboard')
 @section('styles')
 	@parent
 @stop
 @section('content')
-	<h1>Create User</h1>
+	@parent
+	<h2>Create User</h2>
 	<div class='form clearfix'>
 		@if ($install)
 			{{ Form::open(array('route' => 'lpress-dashboard.update-user')) }}

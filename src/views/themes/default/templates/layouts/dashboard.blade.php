@@ -1,10 +1,9 @@
-@extends($view_prefix . '.layouts.dashboard')
+@extends($view_prefix . '.layouts.master')
 @section('styles')
 	@parent
 @stop
 @section('content')
-	@parent
-	<h2>Welcome, {{ $user->username }} {{ HTML::linkRoute('lpress-logout', 'Logout') }}</h2>
+	<h1>LPress Dashboard</h1>
 @stop
 @section('footer_scripts')
 	@parent
