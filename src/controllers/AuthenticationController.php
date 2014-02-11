@@ -68,7 +68,7 @@ class AuthenticationController extends BaseController {
 			$remember
 		)) {
 			if(Input::get('username') == 'lpress') {
-				return Redirect::route('lpress-installer');
+				return Redirect::route('lpress-dashboard.installer');
 			}
 			$route_prefix = Config::get('l-press::route_prefix');
 			$redirect = Session::get('redirect', $route_prefix);

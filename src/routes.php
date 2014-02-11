@@ -206,25 +206,26 @@ Route::group(
 		'before' => 'theme|dashboard'
 	), 
 	function() {
+		$group = 'lpress-dashboard';
 		Route::get(
 			'/',
 			array(
 				'before' => 'theme|dashboard',
-				'as' => 'lpress-dashboard',
+				'as' => $group,
 				'uses' => 'EternalSword\LPress\DashboardController@getDashboard'
 			)
 		);
 		Route::get(
 			'install',
 			array(
-				'as' => 'lpress-installer',
+				'as' => $group . '.installer',
 				'uses' => 'EternalSword\LPress\InstallController@getInstaller'
 			)
 		);
 		Route::post(
 			'update-user',
 			array(
-				'as' => 'lpress-update-user',
+				'as' => $group . '.update-user',
 				'before' => 'csrf',
 				'uses' => 'EternalSword\LPress\UserController@updateUser'
 			)

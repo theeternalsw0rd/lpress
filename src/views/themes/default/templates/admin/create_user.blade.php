@@ -6,11 +6,11 @@
 	<h1>Create User</h1>
 	<div class='form clearfix'>
 		@if ($install)
-			{{ Form::open(array('route' => 'lpress-update-user')) }}
+			{{ Form::open(array('route' => 'lpress-dashboard.update-user')) }}
 			{{ Form::hidden('install', $install) }}
 			{{ Form::hidden('user_id', 1) }}
 		@else
-			{{ Form::open(array('route' => 'lpress-create-user')) }}
+			{{ Form::open(array('route' => 'lpress-dashboard.create-user')) }}
 		@endif
 		<div class='text'>
 			{{ Form::text_input(
