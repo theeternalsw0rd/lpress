@@ -7,7 +7,7 @@ class DashboardController extends BaseController {
 	public static function getDashboard() {
 		extract(parent::prepareMake());	
 		$user = Auth::user();
-		return View::make($view_prefix . '.admin.dashboard',
+		return View::make($view_prefix . '.dashboard.index',
 			array(
 				'view_prefix' => $view_prefix,
 				'title' => 'Dashboard',
