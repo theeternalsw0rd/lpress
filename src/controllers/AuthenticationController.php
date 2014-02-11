@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\HTML;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
@@ -77,5 +78,11 @@ class AuthenticationController extends BaseController {
 		}
 		Session::put('bad_login', true);
 		return Redirect::route('lpress-login');
+	}
+
+	public function checkActive() {
+		$data = new \stdClass;
+		$data->active = Auth::check();
+		return Response::json($data);
 	}
 }

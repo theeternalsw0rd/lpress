@@ -202,9 +202,8 @@ Route::post(
 
 Route::group(
 	array(
-		'prefix' => $route_prefix . $dashboard_route,
-		'before' => 'theme|dashboard'
-	), 
+		'prefix' => $route_prefix . $dashboard_route
+	),
 	function() {
 		$group = 'lpress-dashboard';
 		Route::get(
@@ -218,6 +217,7 @@ Route::group(
 		Route::get(
 			'install',
 			array(
+				'before' => 'theme|dashboard',
 				'as' => $group . '.installer',
 				'uses' => 'EternalSword\LPress\InstallController@getInstaller'
 			)
@@ -226,10 +226,22 @@ Route::group(
 			'update-user',
 			array(
 				'as' => $group . '.update-user',
-				'before' => 'csrf',
+				'before' => 'dashboard|csrf',
 				'uses' => 'EternalSword\LPress\UserController@updateUser'
 			)
 		);
+		Route::get(
+			'session.json',
+			array(
+				'uses' => 'EternalSword\LPress\AuthenticationController@checkActive'
+			)
+		);
+		Route::get(
+			'{path}',
+			array(
+				'uses' => 'EternalSword\LPress\AuthenticationController@checkActive'
+			)
+		)->where('path', '[A-z\d\-\/]+\/session.json');
 	}
 );
 
