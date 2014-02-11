@@ -3,7 +3,7 @@
 	@parent
 @stop
 @section('content')
-	<h1>Welcome, {{ $user->username }}</h1>
+	<h1>Welcome, {{ $user->username }} {{ HTML::linkRoute('lpress-logout', 'Logout') }}</h1>
 @stop
 @section('footer_scripts')
 	@parent
