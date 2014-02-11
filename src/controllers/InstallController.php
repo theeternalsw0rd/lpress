@@ -2,6 +2,8 @@
 
 use Illuminate\Routing\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\View;
 
 class InstallController extends BaseController {
@@ -15,6 +17,12 @@ class InstallController extends BaseController {
 					'title' => 'Create User',
 					'install' => TRUE
 				)
+			);
+		}
+		if($user && $user->username != 'lpress') {
+			return Redirect::route('lpress-dashboard')->with(
+				'std_errors',
+				array('Application is already installed. You cannot run the installer again.')
 			);
 		}
 	}
