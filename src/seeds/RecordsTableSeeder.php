@@ -3,7 +3,7 @@
 class LPressRecordsTableSeeder extends Seeder {
 
 	public function run() {
-		$now = date('Y-m-d H:i:s');
+		$date = new \DateTime;
 		$records = array(
 			array(
 				'label' => 'Key',
@@ -13,8 +13,8 @@ class LPressRecordsTableSeeder extends Seeder {
 				'publisher_id' => 1,
 				'record_type_id' => 5,
 				'site_id' => 1,
-				'created_at' => $now,
-				'updated_at' => $now
+				'created_at' => $date,
+				'updated_at' => $date
 			)
 		);
 

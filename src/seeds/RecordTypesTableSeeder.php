@@ -3,6 +3,7 @@
 class LPressRecordTypesTableSeeder extends Seeder {
 
 	public function run() {
+		$date = new \DateTime;
 		$record_types = array(
 			array(
 				'label' => 'Post',
@@ -10,7 +11,9 @@ class LPressRecordTypesTableSeeder extends Seeder {
 				'description' => 'Default type for content.',
 				'slug' => 'posts',
 				'parent_id' => 0,
-				'depth' => 0
+				'depth' => 0,
+				'created_at' => $date,
+				'updated_at' => $date
 			),
 			array(
 				'label' => 'Link',
@@ -18,7 +21,9 @@ class LPressRecordTypesTableSeeder extends Seeder {
 				'description' => 'Link to external resources easily by name.',
 				'slug' => 'links',
 				'parent_id' => 0,
-				'depth' => 0
+				'depth' => 0,
+				'created_at' => $date,
+				'updated_at' => $date
 			),
 			array(
 				'label' => 'Attachment',
@@ -26,7 +31,9 @@ class LPressRecordTypesTableSeeder extends Seeder {
 				'description' => 'Default type for uploaded files.',
 				'slug' => 'attachments',
 				'parent_id' => 0,
-				'depth' => 0
+				'depth' => 0,
+				'created_at' => $date,
+				'updated_at' => $date
 			),
 			array(
 				'label' => 'Image',
@@ -34,7 +41,9 @@ class LPressRecordTypesTableSeeder extends Seeder {
 				'description' => 'Attachments that are images.',
 				'slug' => 'images',
 				'parent_id' => 3,
-				'depth' => 1
+				'depth' => 1,
+				'created_at' => $date,
+				'updated_at' => $date
 			),
 			array(
 				'label' => 'Avatar',
@@ -42,7 +51,9 @@ class LPressRecordTypesTableSeeder extends Seeder {
 				'description' => 'Images that are avatars.',
 				'slug' => 'avatars',
 				'parent_id' => 4,
-				'depth' => 2
+				'depth' => 2,
+				'created_at' => $date,
+				'updated_at' => $date
 			)
 		);
 

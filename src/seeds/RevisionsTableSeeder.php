@@ -3,7 +3,7 @@
 class LPressRevisionsTableSeeder extends Seeder {
 
 	public function run() {
-		$now = date('Y-m-d H:i:s');
+		$date = new \DateTime;
 		$revisions = array(
 			array(
 				'value_id' => 1,
@@ -11,8 +11,8 @@ class LPressRevisionsTableSeeder extends Seeder {
 				'publisher_id' => 1,
 				'prev_revision_id' => 0,
 				'contents' => 'key.png',
-				'created_at' => $now,
-				'updated_at' => $now
+				'created_at' => $date,
+				'updated_at' => $date
 			),
 			array(
 				'value_id' => 2,
@@ -20,8 +20,8 @@ class LPressRevisionsTableSeeder extends Seeder {
 				'publisher_id' => 1,
 				'prev_revision_id' => 0,
 				'contents' => 'Key avatar preloaded for use at installation.',
-				'created_at' => $now,
-				'updated_at' => $now
+				'created_at' => $date,
+				'updated_at' => $date
 			)
 		);
 
