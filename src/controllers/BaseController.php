@@ -112,6 +112,32 @@ class BaseController extends Controller {
 	}
 
 	public static function setMacros() {
+		HTML::macro('collection_table', function($collection, $columns) {
+			$html = "<table><thead><tr>";
+			foreach($columns as $label) {
+				$html .= "<td>${label}</td>";
+			}
+			$html .= "</tr></thead><tbody>";
+			foreach($collection as $model) {
+				$html .= "<tr>";
+				foreach($columns as $property => $label) {
+					if(strpos($property, '->') !== FALSE) {
+						$properties = explode('->', $property);
+						$value = $model;
+						foreach($properties as $property) {
+							$value = $value->{$property};
+						}
+					}
+					else {
+						$value = $model->$property;
+					}
+					$html .= "<td>${value}</td>";
+				}
+				$html .= "</tr>";
+			}
+			$html .= "</tbody></table>";
+			return $html;
+		});
 		HTML::macro('url', function($url, $text = null, $attributes = array()) {
 			$attribute_string = '';
 			$has_title = FALSE;
