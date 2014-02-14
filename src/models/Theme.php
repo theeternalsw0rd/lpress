@@ -15,4 +15,8 @@ class Theme extends \Eloquent {
 	 * @var array
 	 */
 	protected $hidden = array();
+
+	public function sites() {
+		$this->hasMany('EternalSword\LPress\Site');
+	}
 }
