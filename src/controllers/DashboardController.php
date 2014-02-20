@@ -15,9 +15,9 @@ class DashboardController extends BaseController {
 			'is_root' => $is_root
 		);
 		if($is_root) {
-			$sites = Site::all();
+			$sites = Site::take(5)->get();
 			$pass_to_view['sites'] = $sites->load('theme');
-			$pass_to_view['columns'] = Site::getColumns();
+			$pass_to_view['columns'] = Site::getColumns('dashboard');
 		}
 		return View::make($view_prefix . '.dashboard.index', $pass_to_view);
 	}

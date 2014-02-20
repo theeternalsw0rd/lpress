@@ -72,6 +72,16 @@ a
 h1, h2, h3
   color: $heading_color
 
+td
+  @include background_opacity($td_rgba_background, 0.2, $td_background)
+  border: 4px solid $td_border_color
+
+tr:hover
+  td
+    @include background_opacity($td_rgba_background, 0.4, $td_background)
+  td.editable:hover
+    color: $link_color
+
 #page
   background: url(#{$base_path}/images/backgrounds/page.png?v1)
   border-width: 0 3px 0 3px
