@@ -114,12 +114,14 @@ html.win-chrome-font {
 input[type=password], span.checkmark {
     font-family: Serif
 }
-.button-icon {
+.button-icon, .icon {
     font-family: $icon_font;
     font-size: 1em;
 }
-html.win-chrome-font .button-icon {
-    font-family: $icon_font_winchrome;
+html.win-chrome-font {
+	.button-icon, .icon {
+		font-family: $icon_font_winchrome;
+	}
 }
 h1 {
     font-size: 1.7em;

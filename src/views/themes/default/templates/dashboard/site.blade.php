@@ -33,7 +33,7 @@
 		{{ Form::checkbox_input('in_production', 'Site is in production.', array('tabindex' => '3')) }}
 	</div>
 	<div class='select'>
-		{{ Form::select_input('theme_id', 'Theme', $theme_list, $site->theme_id, array('tabindex' => '4')) }}
+		{{ Form::select_input('theme_id', 'Theme:', $theme_list, $site->theme_id, array('tabindex' => '4')) }}
 	</div>
 	<div class='submit'>
 		{{ Form::icon_button('OK', 'submit', array('class' => 'button', 'tabindex' => '5'), 'fa-check') }}

@@ -9,7 +9,10 @@
 ###
  start icon codes from font awesome
 ###
-fa_check = "&#xf00c;"
+icons = {
+  'fa-check': "&#xf00c;"
+  'fa-sort': "&#xf0dc;"
+}
 ###
  end icon codes
 ###
@@ -33,6 +36,28 @@ getUploader = (id, path, target_id, attachment_type) ->
     </div>
   """)
 #return
+$('select').each(
+  ->
+    $select = $(this)
+    $label = $select.prev().hide()
+    label = $label.html()
+    $options = $select.find('option')
+    current = $select.find('option[selected="selected"]').html()
+    if $options.length > 1
+      html = "<ul class='select'><li><a href='#' class='label'>#{label}<span class='current'> #{current}</span><span class='icon'>#{icons['fa-sort']}</span></a><ul>"
+      $options.each(
+        ->
+          $option = $(this)
+          html += "<li><a class='option' href='##{ $select.attr('id') }' data-value='#{ $option.attr('value') }'>#{ $option.html() }</a></li>"
+        #return
+      )
+      html += "</ul></li></ul>"
+    else
+      html = "<ul class='select'><li><a class='label disabled'>#{label} #{current}<span class='icon disabled'>#{icons['fa-sort']}</span></a></li></ul>"
+    #endif
+    $select.after(html)
+  #return
+)
 $(document).on(
   'click'
   'ul.etabs'
@@ -300,7 +325,7 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
             (file, response) ->
               uri = response.uri
               record = response.record
-              success_mark = "<div class='dz-success-mark'><span class='button-icon'>#{fa_check}</span></div>"
+              success_mark = "<div class='dz-success-mark'><span class='button-icon'>#{icons['fa-check']}</span></div>"
               $anchor = $(file.previewElement).children().first()
               $anchor.addClass('dz-success').addClass('file_select')
               $anchor.attr('title', record.label).attr('href', "#{uri}/#{record.slug}")

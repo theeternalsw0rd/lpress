@@ -61,8 +61,16 @@ p.center
   width: 100%
   text-align: center
 
-ul.tabular
-  margin: 0
+select
+  display: block
+  margin: 0 0 0.5em 0
+
+.js select
+  position: absolute
+  left: -1000px
+
+ul.tabular, ul.select
+  margin: 0.5em 0
   padding: 0
   & > li
     display: block
@@ -70,7 +78,7 @@ ul.tabular
     a.label
       display: block
       padding: 0.5em
-      span.marker
+      span.icon
         display: block
         float: right
     & > ul
@@ -110,15 +118,15 @@ ul.etabs
     display: inline-block
     margin: 0.5em 0 0 0
 
-.text label
-  display: block
-  padding: $input_padding
-
-.text input
-  display: block
-  padding: $input_padding
-  margin: 0 0 0.5em 0
-  width: 25%
+.text
+  margin: 0.5em 0 0 0
+  label
+    display: block
+    padding: $input_padding
+  input
+    display: block
+    padding: $input_padding
+    width: 25%
 
 .js label.checkbox
   display: inline-block
