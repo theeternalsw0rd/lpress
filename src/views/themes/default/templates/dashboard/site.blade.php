@@ -36,7 +36,7 @@
 		{{ Form::select_input('theme_id', 'Theme', $theme_list, $site->theme_id, array('tabindex' => '4')) }}
 	</div>
 	<div class='submit'>
-		{{ Form::icon_button('OK', 'submit', array('class' => 'button', 'tabindex' => '5'), 'icon-ok') }}
+		{{ Form::icon_button('OK', 'submit', array('class' => 'button', 'tabindex' => '5'), 'fa-check') }}
 	</div>
 	{{ Form::close() }}
 @stop

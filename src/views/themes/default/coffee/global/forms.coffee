@@ -9,8 +9,7 @@
 ###
  start icon codes from font awesome
 ###
-icon_upload = "&#xf093;"
-icon_ok = "&#xf00c;"
+fa_check = "&#xf00c;"
 ###
  end icon codes
 ###
@@ -301,7 +300,7 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
             (file, response) ->
               uri = response.uri
               record = response.record
-              success_mark = "<div class='dz-success-mark'><span class='button-icon'>#{icon_ok}</span></div>"
+              success_mark = "<div class='dz-success-mark'><span class='button-icon'>#{fa_check}</span></div>"
               $anchor = $(file.previewElement).children().first()
               $anchor.addClass('dz-success').addClass('file_select')
               $anchor.attr('title', record.label).attr('href', "#{uri}/#{record.slug}")

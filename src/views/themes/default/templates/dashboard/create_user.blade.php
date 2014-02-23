@@ -129,7 +129,7 @@
 			) }}
 		</div>
 		<div class='submit'>
-			{{ Form::icon_button('OK', 'submit', array('class' => 'button', 'tabindex' => '12'), 'icon-ok') }}
+			{{ Form::icon_button('OK', 'submit', array('class' => 'button', 'tabindex' => '12'), 'fa-check') }}
 		</div>
 		{{ Form::close() }}
 	</div>

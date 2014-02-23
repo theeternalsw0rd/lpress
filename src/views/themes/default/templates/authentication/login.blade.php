@@ -64,7 +64,7 @@
 		@endif
 		{{ Form::token() }}
 		<div class='submit'>
-			{{ Form::icon_button('OK', 'submit', array('class' => 'button', 'tabindex' => '${button_index}'), 'icon-ok') }}
+			{{ Form::icon_button('OK', 'submit', array('class' => 'button', 'tabindex' => '${button_index}'), 'fa-check') }}
 		</div>
 		{{ Form::close() }}
 	</div>
