@@ -121,8 +121,10 @@ input[type=password], span.checkmark {
 html.win-chrome-font .button-icon {
     font-family: $icon_font_winchrome;
 }
-h1, h2, h3 {
+h1 {
     font-size: 1.7em;
+}
+h1, h2, h3 {
     font-family: $header_family;
 }
 html.win-chrome-font {
@@ -130,8 +132,14 @@ html.win-chrome-font {
 		font-family: $header_family_winchrome;
 	}
 }
-thead {
-	font-weight: bold;
+ul.tabular {
+	div.label {
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	div.label:hover {
+		text-decoration: none;
+	}
 }
 .opacity span.checkmark {
     font-size: 0.8em !important;

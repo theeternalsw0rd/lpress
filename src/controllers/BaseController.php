@@ -21,6 +21,14 @@ class BaseController extends Controller {
 		return $route_prefix;
 	}
 
+	public static function getDashboardPrefix() {
+		$route_prefix = self::getRoutePrefix();
+		$route_prefix = empty($route_prefix) ? '/' : $route_prefix;
+		$url_prefix = rtrim('//' . DOMAIN . '/' . $route_prefix, '/');
+		$dashboard_route = '+' . Config::get('l-press::dashboard_route');
+		return $url_prefix . '/' . $dashboard_route;
+	}
+
 	public static function verifyTheme() {
 		define('DOMAIN', Request::server('HTTP_HOST'));
 		$site = NULL;
@@ -112,14 +120,13 @@ class BaseController extends Controller {
 	}
 
 	public static function setMacros() {
-		HTML::macro('collection_table', function($collection, $columns) {
-			$html = "<table><thead><tr>";
-			foreach($columns as $label) {
-				$html .= "<td>${label}</td>";
-			}
-			$html .= "</tr></thead><tbody>";
+		HTML::macro('collection_editor', function($collection, $columns) {
+			$rows = array();
+			$html = "<ul class='tabular'>";
+			$dashboard_prefix = self::getDashboardPrefix();
 			foreach($collection as $model) {
-				$html .= "<tr>";
+				$url = $dashboard_prefix . '/' . $model->getTable() . '/' . $model->id;
+				$html .= "<li class='item inactive'><a href='${url}' class='label'>" . $model->label . "<span class='marker'>+</span></a><ul class='column'>";
 				foreach($columns as $property => $label) {
 					if(strpos($property, '->') !== FALSE) {
 						$properties = explode('->', $property);
@@ -131,11 +138,11 @@ class BaseController extends Controller {
 					else {
 						$value = $model->$property;
 					}
-					$html .= "<td>${value}</td>";
+					$html .= "<li>" . $label . ": " . $value . "</li>";
 				}
-				$html .= "</tr>";
+				$html .= "</ul></li>";
 			}
-			$html .= "</tbody></table>";
+			$html .= "</ul>";
 			return $html;
 		});
 		HTML::macro('url', function($url, $text = null, $attributes = array()) {
@@ -182,6 +189,18 @@ class BaseController extends Controller {
 					<span unselectable='on' class='checkbox-label' data-for='${name}'>${label}</span>
 				</label>
 			";
+		});
+		Form::macro('select_input', function($name, $label, $options, $selected, $attributes = array()) {
+			$html = "
+				<label for='${name}' class='select'>${label}</label>
+				<select id='${name}' name='${name}'" . self::getAttributeString($attributes) . ">
+			";
+			foreach($options as $value => $label) {
+				$attributes = $selected == $value ? " selected='selected'" : "";
+				$html .= "<option value='${value}'${attributes}>${label}</option>";
+			}
+			$html .= "</select>";
+			return $html;
 		});
 		Form::macro('file_input', function($slug, $upload_command = 'create', $single = TRUE, $value = '', $attributes = array()) {
 			$type = RecordType::where('slug', '=', $slug)->first();

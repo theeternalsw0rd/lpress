@@ -200,6 +200,7 @@ Route::post(
 	)
 );
 
+
 Route::group(
 	array(
 		'prefix' => $route_prefix . $dashboard_route
@@ -221,6 +222,37 @@ Route::group(
 				'as' => $group . '.installer',
 				'uses' => 'EternalSword\LPress\InstallController@getInstaller'
 			)
+		);
+		Route::group(
+			array(
+				'prefix' => 'sites',
+			),
+			function() {
+				$group = 'lpress-dashboard';
+				Route::get(
+					'/',
+					array(
+						'before' => 'theme|dashboard',
+						'as' => $group . '.sites',
+						'uses' => 'EternalSword\LPress\SiteController@getSites'
+					)
+				);
+				Route::get(
+					'{id}',
+					array(
+						'before' => 'theme|dashboard',
+						'as' => $group . '.sites.site',
+						'uses' => 'EternalSword\LPress\SiteController@getSite'
+					)
+				);
+				Route::post(
+					'{id}',
+					array(
+						'before' => 'dashboard|csrf',
+						'as' => $group . 'sites.update'
+					)
+				);
+			}
 		);
 		Route::post(
 			'update-user',

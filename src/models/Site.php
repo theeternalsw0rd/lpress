@@ -16,21 +16,13 @@ class Site extends \Eloquent {
 	 */
 	protected $hidden = array();
 
-	protected static $sites_columns = array(
+	protected static $columns = array(
 		'id' => 'ID',
-		'label' => 'Label',
 		'domain' => 'Domain',
 		'theme->label' => 'Theme',
 		'in_production' => 'In Production',
 		'created_at' => 'Created At',
 		'updated_at' => 'Updated At'
-	);
-
-	protected static $dashboard_columns = array(
-		'label' => 'Label',
-		'domain' => 'Domain',
-		'theme->label' => 'Theme',
-		'in_production' => 'In Production',
 	);
 
 	/**
@@ -46,8 +38,7 @@ class Site extends \Eloquent {
 		return $this->belongsTo('EternalSword\LPress\Theme');
 	}
 
-	public static function getColumns($context = 'sites') {
-		$columns = $context . '_columns';
-		return self::$$columns;
+	public static function getColumns() {
+		return self::$columns;
 	}
 }

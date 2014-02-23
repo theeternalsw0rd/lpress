@@ -128,7 +128,6 @@
 				)
 			) }}
 		</div>
-		{{ Form::token() }}
 		<div class='submit'>
 			{{ Form::icon_button('OK', 'submit', array('class' => 'button', 'tabindex' => '12'), 'icon-ok') }}
 		</div>

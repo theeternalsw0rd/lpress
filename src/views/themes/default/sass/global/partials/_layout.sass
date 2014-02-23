@@ -41,6 +41,9 @@ div.error, div.message
   position: relative
   top: 0.2em
 
+.js .no-js
+  display: none !important
+
 span.error
   padding: 0.2em
   position: relative
@@ -58,11 +61,20 @@ p.center
   width: 100%
   text-align: center
 
-tr
-  padding: 1em 0
-
-td
-  padding: 0 1.5em
+ul.tabular
+  margin: 0
+  padding: 0
+  & > li
+    display: block
+    max-width: 490px
+    a.label
+      display: block
+      padding: 0.5em
+      span.marker
+        display: block
+        float: right
+    & > ul
+      display: none
 
 ul.etabs
   display: block
