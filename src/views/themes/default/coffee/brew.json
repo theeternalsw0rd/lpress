@@ -5,7 +5,7 @@
 				"global/helpers.coffee",
 				"global/forms.coffee",
 				"global/gallery.coffee",
-				"global/expand_down.coffee",
+				"global/tabular.coffee",
 				"global/flexnav.coffee"
 			]
 		},

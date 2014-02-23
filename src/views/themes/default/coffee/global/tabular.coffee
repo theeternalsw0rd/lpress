@@ -1,6 +1,6 @@
 # package:global/ready
 ###
- * open global/expand_down.coffee
+ * open global/tabular.coffee
 ###
 #
 $(document).on(
@@ -27,5 +27,5 @@ $(document).on(
 )
 
 ###
- * close global/expand_down.coffee
+ * close global/tabular.coffee
 ###
