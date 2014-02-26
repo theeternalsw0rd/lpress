@@ -126,7 +126,9 @@ class BaseController extends Controller {
 			$dashboard_prefix = self::getDashboardPrefix();
 			foreach($collection as $model) {
 				$url = $dashboard_prefix . '/' . $model->getTable() . '/' . $model->id;
-				$html .= "<li class='item inactive'><a href='${url}' class='label'>" . $model->label . "<span class='icon'>+</span></a><ul class='column'>";
+				$icon_font = new IconFont;
+				$icon = $icon_font->getIcon('fa-caret-square-o-down');
+				$html .= "<li class='item inactive'><a href='${url}' class='label'>" . $model->label . "<span class='icon'>$icon</span></a><ul class='column'>";
 				foreach($columns as $property => $label) {
 					if(strpos($property, '->') !== FALSE) {
 						$properties = explode('->', $property);

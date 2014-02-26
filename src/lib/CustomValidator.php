@@ -49,4 +49,20 @@ class CustomValidator extends \Illuminate\Validation\Validator {
 		}
 		return TRUE;
 	}
+
+	public function validateDomain($attribute, $value, $parameters) {
+		if($value == 'wildcard') {
+			return TRUE;
+		}
+		$parts = explode('.', $value);
+		foreach($parts as $part) {
+			if(preg_match("/^[\pL\pN][\pL\pN-][\pL\pN]+$/", $part) != 1) {
+				return FALSE;
+			}
+		}
+		if(preg_match("[\pL]+", $parts[count($parts) - 1]) != 1) {
+			return FALSE;
+		}
+		return TRUE;
+	}
 }

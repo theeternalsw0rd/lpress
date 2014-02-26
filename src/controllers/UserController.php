@@ -32,9 +32,8 @@ class UserController extends BaseController {
 		return Redirect::route('lpress-dashboard');
 	}
 
-	public static function updateUser() {
+	public static function updateUser($id) {
 		$auth_user = Auth::user();
-		$id = Input::get('user_id');
 		if($auth_user->id == $id || $auth_user->hasPermission('user-manager')) {
 			return self::processForm($id);
 		}

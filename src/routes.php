@@ -249,18 +249,51 @@ Route::group(
 					'{id}',
 					array(
 						'before' => 'dashboard|csrf',
-						'as' => $group . 'sites.update'
+						'as' => $group . 'sites.update',
+						'uses' => 'EternalSword\LPress\SiteController@postSite'
 					)
 				);
 			}
 		);
-		Route::post(
-			'update-user',
+		Route::group(
 			array(
-				'as' => $group . '.update-user',
-				'before' => 'dashboard|csrf',
-				'uses' => 'EternalSword\LPress\UserController@updateUser'
-			)
+				'prefix' => 'users',
+			),
+			function() {
+				$group = 'lpress-dashboard';
+				Route::post(
+					'{id}',
+					array(
+						'as' => $group . '.users.update',
+						'before' => 'dashboard|csrf',
+						'uses' => 'EternalSword\LPress\UserController@updateUser'
+					)
+				);
+			}
+		);
+		Route::group(
+			array(
+				'prefix' => 'records',
+			),
+			function() {
+				$group = 'lpress-dashboard';
+				Route::get(
+					'create',
+					array(
+						'as' => $group . '.records.create',
+						'uses' => 'EternalSword\LPress\RecordController@getRecordForm',
+						'before' => 'theme|dashboard'
+					)
+				);
+				Route::post(
+					'create',
+					array(
+						'as' => $group . 'records.create',
+						'uses' => 'EternalSword\LPress\RecordController@createRecord',
+						'before' => 'theme|dashboard'
+					)
+				);
+			}
 		);
 		Route::get(
 			'session.json',
@@ -276,28 +309,6 @@ Route::group(
 		)->where('path', '[A-z\d\-\/]+\/session.json');
 	}
 );
-
-Route::group(
-	array(
-		'prefix' => $route_prefix . '/+record',
-		'before' => 'theme|dashboard'
-	),
-	function() {
-		Route::get(
-			'create',
-			array(
-				'uses' => 'EternalSword\LPress\RecordController@getRecordForm'
-			)
-		);
-		Route::post(
-			'create',
-			array(
-				'uses' => 'EternalSword\LPress\RecordController@createRecord'
-			)
-		);
-	}
-);
-
 Route::get(
 	'{path}',
 	array(

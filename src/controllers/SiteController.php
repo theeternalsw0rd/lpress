@@ -24,4 +24,7 @@ class SiteController extends BaseController {
 		}
 		return App::abort(403, 'Your account does not have sufficient privilege for the requested information.');
 	}
+
+	public static function postSite($id) {
+	}
 }

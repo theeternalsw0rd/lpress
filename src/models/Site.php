@@ -16,6 +16,20 @@ class Site extends \Eloquent {
 	 */
 	protected $hidden = array();
 
+	protected $fillable = array(
+		'label',
+		'domain',
+		'theme_id',
+		'in_production'
+	);
+
+	protected $rules = array(
+		'label' => 'required',
+		'domain' => 'required|domain|unique:sites',
+		'theme_id' => 'required|numeric',
+		'in_production' => 'bool'
+	);
+
 	protected static $columns = array(
 		'id' => 'ID',
 		'domain' => 'Domain',

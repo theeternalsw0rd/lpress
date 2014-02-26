@@ -7,11 +7,9 @@
 	<h2>Create User</h2>
 	<div class='form clearfix'>
 		@if ($install)
-			{{ Form::open(array('route' => 'lpress-dashboard.update-user')) }}
-			{{ Form::hidden('install', $install) }}
-			{{ Form::hidden('user_id', 1) }}
+			{{ Form::open(array('route' => array('lpress-dashboard.users.update', 1))) }}
 		@else
-			{{ Form::open(array('route' => 'lpress-dashboard.create-user')) }}
+			{{ Form::open(array('route' => 'lpress-dashboard.users.create')) }}
 		@endif
 		<div class='text'>
 			{{ Form::text_input(
