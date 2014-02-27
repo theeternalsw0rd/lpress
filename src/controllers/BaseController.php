@@ -224,7 +224,7 @@ class BaseController extends Controller {
 			if ($root_type->slug != 'attachments') {
 				return "<div class='error'>RecordType ${slug} is not valid for file input.</div>";
 			}
-			$prefix = self::getRoutePrefix();
+			$prefix = self::getDashboardPrefix();
 			$url = $prefix . "/+upload?path=${file_path}/&uri=${prefix}/${url_path}/&upload_command=${upload_command}";
 			$url_path = $prefix . '/' . $url_path;
 			$attribute_string = self::getAttributeString($attributes);

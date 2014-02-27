@@ -286,7 +286,7 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
         ->
           $this = $(this)
           id = this.href.split('#')[1]
-          record = $this.data('prefix') + '/+record/create?type=' + id
+          record = $this.data('prefix') + '/records/create?type=' + id
           token = $this.data('token')
           target_id = $this.data('target_id')
           $uploader = getUploader(
