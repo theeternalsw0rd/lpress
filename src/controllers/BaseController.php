@@ -224,13 +224,14 @@ class BaseController extends Controller {
 			if ($root_type->slug != 'attachments') {
 				return "<div class='error'>RecordType ${slug} is not valid for file input.</div>";
 			}
-			$prefix = self::getDashboardPrefix();
-			$url = $prefix . "/+upload?path=${file_path}/&uri=${prefix}/${url_path}/&upload_command=${upload_command}";
+			$dashboard_prefix = self::getDashboardPrefix();
+			$prefix = self::getRoutePrefix();
 			$url_path = $prefix . '/' . $url_path;
+			$url = $dashboard_prefix . "/upload?path=${file_path}/&uri=${url_path}/&upload_command=${upload_command}";
 			$attribute_string = self::getAttributeString($attributes);
 			$token = csrf_token();
 			$class = $single ? 'single file' : 'multiple file';
-			$data = "data-token='${token}' data-attachment_type='${attachment_type}' data-prefix='${prefix}' data-path='${url_path}' data-url='${url}'";
+			$data = "data-token='${token}' data-attachment_type='${attachment_type}' data-prefix='${dashboard_prefix}' data-path='${url_path}' data-url='${url}'";
 			$hidden_name = $attributes['data-target_id'];
 			$value = Input::old($hidden_name, $value);
 			$hidden = "<input id='${hidden_name}' name='${hidden_name}' type='hidden' value='${value}' />";

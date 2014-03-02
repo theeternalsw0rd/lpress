@@ -133,28 +133,6 @@ Route::get(
 )->where('path', '(.*)');
 
 Route::get(
-	$route_prefix . '+upload',
-	array(
-		'before' => 'csrf|theme|dashboard',
-		'uses' => 'EternalSword\LPress\UploadController@getURL'
-	)
-);
-Route::post(
-	$route_prefix . '+upload',
-	array(
-		'before' => 'csrf|theme|dashboard',
-		'uses' => 'EternalSword\LPress\UploadController@postFile'
-	)
-);
-Route::delete(
-	$route_prefix . '+upload',
-	array(
-		'before' => 'csrf|theme|dashboard',
-		'uses' => 'EternalSword\LPress\UploadController@deleteFile'
-	)
-);
-
-Route::get(
 	$route_prefix . '+login',
 	array(
 		'before' => 'theme|login-ssl',
@@ -267,6 +245,35 @@ Route::group(
 						'as' => $group . '.users.update',
 						'before' => 'dashboard|csrf',
 						'uses' => 'EternalSword\LPress\UserController@updateUser'
+					)
+				);
+			}
+		);
+		Route::group(
+			array(
+				'prefix' => 'upload'
+			),
+			function() {
+				$group = 'lpress-dashboard';
+				Route::get(
+					'/',
+					array(
+						'before' => 'csrf|theme|dashboard',
+						'uses' => 'EternalSword\LPress\UploadController@getURL'
+					)
+				);
+				Route::post(
+					'/',
+					array(
+						'before' => 'csrf|theme|dashboard',
+						'uses' => 'EternalSword\LPress\UploadController@postFile'
+					)
+				);
+				Route::delete(
+					'/',
+					array(
+						'before' => 'csrf|theme|dashboard',
+						'uses' => 'EternalSword\LPress\UploadController@deleteFile'
 					)
 				);
 			}
