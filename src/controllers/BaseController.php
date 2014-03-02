@@ -137,26 +137,29 @@ class BaseController extends Controller {
 			else {
 				$input = "<input id='${name}' name='${name}' type='${type}' value='${value}' ${attribute_string} />";
 			}
-			return "<label for='${name}'>${label}${error}</label>$input";
+			return "<div class='text'><label for='${name}'>${label}${error}</label>$input</div>";
 		});
 		Form::macro('checkbox_input', function($name, $label, $attributes = array()) {
 			return "
-				<label for='${name}' class='checkbox'>
-					<input id='${name}' name='${name}' class='checkbox' type='checkbox'" . self::getAttributeString($attributes) . " />
-					<span unselectable='on' class='checkbox-label' data-for='${name}'>${label}</span>
-				</label>
+				<div class='checkbox'>
+					<label for='${name}' class='checkbox'>
+						<input id='${name}' name='${name}' class='checkbox' type='checkbox'" . self::getAttributeString($attributes) . " />
+						<span unselectable='on' class='checkbox-label' data-for='${name}'>${label}</span>
+					</label>
+				</div>
 			";
 		});
 		Form::macro('select_input', function($name, $label, $options, $selected, $attributes = array()) {
 			$html = "
-				<label for='${name}' class='select'>${label}</label>
-				<select id='${name}' name='${name}'" . self::getAttributeString($attributes) . ">
+				<div class='select'>
+					<label for='${name}' class='select'>${label}</label>
+					<select id='${name}' name='${name}'" . self::getAttributeString($attributes) . ">
 			";
 			foreach($options as $value => $label) {
 				$attributes = $selected == $value ? " selected='selected'" : "";
 				$html .= "<option value='${value}'${attributes}>${label}</option>";
 			}
-			$html .= "</select>";
+			$html .= "</select></div>";
 			return $html;
 		});
 		Form::macro('file_input', function($slug, $upload_command = 'create', $single = TRUE, $value = '', $attributes = array()) {
@@ -190,7 +193,7 @@ class BaseController extends Controller {
 			$hidden_name = $attributes['data-target_id'];
 			$value = Input::old($hidden_name, $value);
 			$hidden = "<input id='${hidden_name}' name='${hidden_name}' type='hidden' value='${value}' />";
-			return "<a href='#${slug}' title='${label}'  class='${class}' ${data} ${attribute_string}>${label}</a>${hidden}";
+			return "<div class='file'><a href='#${slug}' title='${label}'  class='${class}' ${data} ${attribute_string}>${label}</a>${hidden}</div>";
 		});
 		Form::macro('icon_button', function($label, $type = 'button', $attributes = array(), $icon_class = '') {
 			$icon = '';
@@ -239,15 +242,51 @@ class BaseController extends Controller {
 		Form::macro('model_form', function($model, $url) {
 			$html = Form::open(array('url' => $url));
 			$columns = $model->getColumns();
+			$relationships = $model->getRelations();
+			$tab_index = 1;
 			foreach($columns as $column) {
 				$property = $column['name'];
 				$label = $column['label'];
+				$type = $column['type'];
 				$value = $model->$property;
-				if(is_object($value)) {
-					$value = $value->label;
+				if(strpos($property, '_id') !== FALSE) {
+					$related_property = substr($property, 0, -3);
+					if(array_key_exists($related_property, $relationships)) {
+						// point of relationship
+						$relationship = $relationships[$related_property];
+						$class = get_class($relationship);
+						$label = explode('\\', $class);
+						$label = $label[count($label) - 1];
+						unset($relationships[$related_property]);
+						$type = 'selection';
+						$items = $class::all();
+						$options_list = array();
+						foreach($items as $item) {
+							$options_list[$item->id] = $item->label;
+						}
+					}
 				}
-				$html .= "<p>" . $label . ": " . $value . "</p>";
+				$label .= ':';
+				switch($type) {
+					case 'selection': {
+						$html .= Form::select_input($property, $label, $options_list, $value, array('tabindex' => $tab_index));
+						break;
+					}
+					case 'boolean': {
+						$attributes = array('tabindex' => $tab_index);
+						if($value) {
+							$attributes['checked'] = 'checked';
+						}
+						$html .= Form::checkbox_input($property, $label, $attributes);
+						break;
+					}
+					default: {
+						$html .= Form::text_input('text', $property, $label, $value, array('tabindex' => $tab_index));
+					}
+				}
+				$tab_index++;
 			}
+			$html .= "<div class='submit'>" . Form::icon_button('OK', 'submit', array('class' => 'button', 'tabindex' => $tab_index), 'fa-check') . "</div>";
 			$html .= Form::close();
 			return $html;
 		});
