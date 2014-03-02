@@ -132,8 +132,9 @@ class UploadController extends BaseController {
 		$json = new \stdClass;
 		$route = parent::slugsToRoute(Input::get('uri'));
 		if($route->throw404) {
+			$status_code = 404;
 			$json->error = $this->notfound_error;
-			$json->status_code = 404;
+			$json->status_code = $status_code;
 			return Response::json($json, $status_code);
 		}
 		if(Input::has('upload_command')) {
