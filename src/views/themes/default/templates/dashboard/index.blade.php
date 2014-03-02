@@ -11,7 +11,7 @@
 			of this installation at the global level and at the individual site level.
 		</p>
 		<h2>Site Management</h2>
-		{{ HTML::collection_editor($sites, $columns) }}
+		{{ HTML::collection_editor($sites) }}
 	@endif
 @stop
 @section('footer_scripts')

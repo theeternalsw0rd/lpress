@@ -120,51 +120,6 @@ class BaseController extends Controller {
 	}
 
 	public static function setMacros() {
-		HTML::macro('collection_editor', function($collection, $columns) {
-			$rows = array();
-			$html = "<ul class='tabular'>";
-			$dashboard_prefix = self::getDashboardPrefix();
-			foreach($collection as $model) {
-				$url = $dashboard_prefix . '/' . $model->getTable() . '/' . $model->id;
-				$icon_font = new IconFont;
-				$icon = $icon_font->getIcon('fa-caret-square-o-down');
-				$html .= "<li class='item inactive'><a href='${url}' class='label'>" . $model->label . "<span class='icon'>$icon</span></a><ul class='column'>";
-				foreach($columns as $property => $label) {
-					if(strpos($property, '->') !== FALSE) {
-						$properties = explode('->', $property);
-						$value = $model;
-						foreach($properties as $property) {
-							$value = $value->{$property};
-						}
-					}
-					else {
-						$value = $model->$property;
-					}
-					$html .= "<li>" . $label . ": " . $value . "</li>";
-				}
-				$html .= "</ul></li>";
-			}
-			$html .= "</ul>";
-			return $html;
-		});
-		HTML::macro('url', function($url, $text = null, $attributes = array()) {
-			$attribute_string = '';
-			$has_title = FALSE;
-			if(is_array($attributes) && count($attributes) > 0) {
-				foreach($attributes as $attribute => $value) {
-					if($attribute == 'title') {
-						$title = $value;
-						$has_title = TRUE;
-					}
-					else {
-						$attribute_string .= " ${attribute}='${value}'";
-					}
-				}
-			}
-			$text = is_null($text) ? $url : $text;
-			$title = $has_title ? $title : $text;
-			return "<a href='${url}' title='${title}'${attribute_string}>${title}</a>";
-		});
 		Form::macro('text_input', function($type, $name, $label, $value, $attributes = array()) {
 			$error = self::getValidationError($name);
 			$attribute_string = self::getAttributeString($attributes);
@@ -280,6 +235,54 @@ class BaseController extends Controller {
 				$close = "' data-err='$path could not be found" . $close;
 			}
 			return $open . $version . $close;
+		});
+		Form::macro('model_form', function($model, $url) {
+			$html = Form::open(array('url' => $url));
+			$columns = $model->getColumns();
+			foreach($columns as $column) {
+				$property = $column['name'];
+				$label = $column['label'];
+				$value = $model->$property;
+				if(is_object($value)) {
+					$value = $value->label;
+				}
+				$html .= "<p>" . $label . ": " . $value . "</p>";
+			}
+			$html .= Form::close();
+			return $html;
+		});
+		HTML::macro('collection_editor', function($collection) {
+			$rows = array();
+			$html = "<ul class='tabular'>";
+			$dashboard_prefix = self::getDashboardPrefix();
+			foreach($collection as $model) {
+				$url = $dashboard_prefix . '/' . $model->getTable() . '/' . $model->id;
+				$icon_font = new IconFont;
+				$icon = $icon_font->getIcon('fa-caret-square-o-down');
+				$html .= "<li class='item inactive'><a href='${url}' class='label'>" . $model->label . "<span class='icon'>$icon</span></a>";
+				$html .= Form::model_form($model, $url);
+				$html .= "</li>";
+			}
+			$html .= "</ul>";
+			return $html;
+		});
+		HTML::macro('url', function($url, $text = null, $attributes = array()) {
+			$attribute_string = '';
+			$has_title = FALSE;
+			if(is_array($attributes) && count($attributes) > 0) {
+				foreach($attributes as $attribute => $value) {
+					if($attribute == 'title') {
+						$title = $value;
+						$has_title = TRUE;
+					}
+					else {
+						$attribute_string .= " ${attribute}='${value}'";
+					}
+				}
+			}
+			$text = is_null($text) ? $url : $text;
+			$title = $has_title ? $title : $text;
+			return "<a href='${url}' title='${title}'${attribute_string}>${title}</a>";
 		});
 		HTML::macro('imageAlt', function($record) {
 			if(is_array($record)) {

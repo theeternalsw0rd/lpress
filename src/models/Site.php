@@ -1,6 +1,6 @@
 <?php namespace EternalSword\LPress;
 
-class Site extends \Eloquent {
+class Site extends BaseModel {
 
 	/**
 	 * The database table used by the model.
@@ -30,15 +30,6 @@ class Site extends \Eloquent {
 		'in_production' => 'bool'
 	);
 
-	protected static $columns = array(
-		'id' => 'ID',
-		'domain' => 'Domain',
-		'theme->label' => 'Theme',
-		'in_production' => 'In Production',
-		'created_at' => 'Created At',
-		'updated_at' => 'Updated At'
-	);
-
 	/**
 	 * Get the users for this site.
 	 *
@@ -51,8 +42,4 @@ class Site extends \Eloquent {
 	public function theme() {
 		return $this->belongsTo('EternalSword\LPress\Theme');
 	}
-
-	public static function getColumns() {
-		return self::$columns;
-	}
-}
+}	

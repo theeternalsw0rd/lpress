@@ -7,16 +7,18 @@ $(document).on(
   'click'
   'ul.tabular > li > a'
   (event) ->
-    $item = $(this).parent()
+    event.preventDefault()
+    $this = $(this)
+    $item = $this.parent()
     if $item.hasClass('inactive')
-      $item.find('ul').slideDown(
+      $this.next().slideDown(
         'fast'
         ->
           $item.removeClass('inactive').addClass('active')
         #return
       )
     else
-      $item.find('ul').slideUp(
+      $this.next().slideUp(
         'fast'
         ->
           $item.removeClass('active').addClass('inactive')
