@@ -1,6 +1,6 @@
 <?php namespace EternalSword\LPress;
 
-class Revision extends \Eloquent {
+class Revision extends BaseModel {
 
 	/**
 		* The database table used by the model.

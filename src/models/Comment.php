@@ -3,7 +3,7 @@
 use Illuminate\Auth\UserInterface;
 use Illuminate\Auth\Reminders\RemindableInterface;
 
-class Comment extends \Eloquent {
+class Comment extends BaseModel {
 
 	/**
 	 * The database table used by the model.

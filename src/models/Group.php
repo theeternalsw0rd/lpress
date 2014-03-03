@@ -1,9 +1,6 @@
 <?php namespace EternalSword\LPress;
 
-use Illuminate\Auth\UserInterface;
-use Illuminate\Auth\Reminders\RemindableInterface;
-
-class Group extends \Eloquent { 
+class Group extends BaseModel { 
 	public function permissions() {
 		return $this->belongsToMany('\EternalSword\LPress\Permission');
 	}

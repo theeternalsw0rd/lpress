@@ -1,6 +1,6 @@
 <?php namespace EternalSword\LPress;
 
-class Symlink extends \Eloquent {
+class Symlink extends BaseModel {
 
 	/**
 		* The database table used by the model.

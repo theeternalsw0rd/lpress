@@ -1,6 +1,6 @@
 <?php namespace EternalSword\LPress;
 
-class FieldType extends \Eloquent {
+class FieldType extends BaseModel {
 
 	/**
 		* The database table used by the model.

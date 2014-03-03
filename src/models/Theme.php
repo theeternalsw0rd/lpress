@@ -1,6 +1,6 @@
 <?php namespace EternalSword\LPress;
 
-class Theme extends \Eloquent {
+class Theme extends BaseModel {
 
 	/**
 	 * The database table used by the model.

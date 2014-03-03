@@ -1,6 +1,6 @@
 <?php namespace EternalSword\LPress;
 
-class Permission extends \Eloquent {
+class Permission extends BaseModel {
 
 	/**
 	 * The database table used by the model.
