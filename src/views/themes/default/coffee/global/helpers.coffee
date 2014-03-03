@@ -16,6 +16,27 @@ parseURI = (uri) ->
   return queries
 #return
 
+ulSlideDown = (event, clickElement) ->
+  event.preventDefault()
+  $this = $(clickElement)
+  $item = $this.parent()
+  if $item.hasClass('inactive')
+    $this.next().slideDown(
+      'fast'
+      ->
+        $item.removeClass('inactive').addClass('active')
+      #return
+    )
+  else
+    $this.next().slideUp(
+      'fast'
+      ->
+        $item.removeClass('active').addClass('inactive')
+      #return
+    )
+  #endif
+#return
+
 ###
  * close global/helpers.coffee
 ###

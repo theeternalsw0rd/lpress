@@ -20,6 +20,27 @@ Dropzone.autoDiscover = false
 $html = $('html')
 $body = $('body')
 $page = $(document.getElementById('page'))
+$(document).on(
+  'click'
+  'ul.select > li > a'
+  (event) ->
+    ulSlideDown(event, this)
+  #return
+)
+$(document).on(
+  'click'
+  'a.option'
+  (event) ->
+    event.preventDefault()
+    $this = $(this)
+    $target = $($this.attr('href'))
+    $target.val($this.data('value'))
+    $target.find('option[selected="selected"]').removeAttr('selected')
+    $label = $this.closest('ul').prev()
+    $label.find('span.current').html(' ' + $this.html())
+    $label.click()
+  #return
+)
 getUploader = (id, path, target_id, attachment_type) ->
   return $("""
     <div id='#{id}' class='colorbox'>
@@ -44,7 +65,7 @@ $('select').each(
     $options = $select.find('option')
     current = $select.find('option[selected="selected"]').html()
     if $options.length > 1
-      html = "<ul class='select'><li><a href='#' class='label'>#{label}<span class='current'> #{current}</span><span class='icon'>#{icons['fa-sort']}</span></a><ul>"
+      html = "<ul class='select'><li class='inactive'><a href='#' class='label'>#{label}<span class='current'> #{current}</span><span class='icon'>#{icons['fa-sort']}</span></a><ul class='options'>"
       $options.each(
         ->
           $option = $(this)

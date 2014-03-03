@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Str;
 
 class BaseController extends Controller {
 
@@ -243,26 +244,39 @@ class BaseController extends Controller {
 			$html = Form::open(array('url' => $url));
 			$columns = $model->getColumns();
 			$relationships = $model->getRelations();
+			$rules = $model->getRules();
 			$tab_index = 1;
 			foreach($columns as $column) {
 				$property = $column['name'];
 				$label = $column['label'];
 				$type = $column['type'];
 				$value = $model->$property;
-				if(strpos($property, '_id') !== FALSE) {
+				if(array_key_exists($property, $rules)) {
+					$rule = explode('|', $rules[$property]);
+				}
+				else {
+					$rule = array();
+				}
+				if(Str::endsWith($property, '_id')) {
 					$related_property = substr($property, 0, -3);
-					if(array_key_exists($related_property, $relationships)) {
-						// point of relationship
-						$relationship = $relationships[$related_property];
-						$class = get_class($relationship);
-						$label = explode('\\', $class);
-						$label = $label[count($label) - 1];
-						unset($relationships[$related_property]);
-						$type = 'selection';
+					$namespace = 'EternalSword\\LPress\\';
+					$label = str_replace('_', ' ', Str::title($related_property));
+					$class = $namespace.str_replace(' ', '', $label);
+					if(class_exists($class) && is_subclass_of($class, $namespace.'BaseModel')) {
 						$items = $class::all();
-						$options_list = array();
+						if(in_array('required', $rule)) {
+							$options_list = array();
+						}
+						else {
+							$options_list = array('Unassigned', 'NULL');
+						}
+						$type = 'selection';
 						foreach($items as $item) {
 							$options_list[$item->id] = $item->label;
+						}
+						if(is_null($value)) {
+						}
+						else {
 						}
 					}
 				}
