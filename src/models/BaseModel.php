@@ -25,4 +25,8 @@ class BaseModel extends Eloquent {
 		}
 		return $columns_array;
 	}
+
+	public function getRules() {
+		return $this->rules;
+	}
 }
