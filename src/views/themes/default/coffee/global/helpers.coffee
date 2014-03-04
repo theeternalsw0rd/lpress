@@ -7,6 +7,19 @@ $ = jQuery
 
 $('body').removeClass('nojs')
 
+###
+ start icon codes from font awesome
+###
+icons = {
+  'fa-check': "&#xf00c;"
+  'fa-sort': "&#xf0dc;"
+  'fa-caret-square-o-down': "&#xf150;"
+  'fa-caret-square-o-up': "&#xf151;"
+}
+###
+ end icon codes
+###
+
 parseURI = (uri) ->
   query_string = uri.split('?')[1]
   queries = {}

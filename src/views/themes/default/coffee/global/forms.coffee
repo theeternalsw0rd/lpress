@@ -6,16 +6,6 @@
  uppercase booleans easier to read, custom code in watcher to change it, not a coffee feature.
 ###
 
-###
- start icon codes from font awesome
-###
-icons = {
-  'fa-check': "&#xf00c;"
-  'fa-sort': "&#xf0dc;"
-}
-###
- end icon codes
-###
 Dropzone.autoDiscover = false
 $html = $('html')
 $body = $('body')

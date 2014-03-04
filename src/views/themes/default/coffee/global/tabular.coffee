@@ -8,6 +8,13 @@ $(document).on(
   'ul.tabular > li > a'
   (event) ->
     ulSlideDown(event, this)
+    $this = $(this)
+    $icon = $(this).find('span.icon')
+    if($this.parent().hasClass('active'))
+      $icon.html(icons['fa-caret-square-o-down'])
+    else
+      $icon.html(icons['fa-caret-square-o-up'])
+    #endif
   #return
 )
 

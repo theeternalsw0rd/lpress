@@ -275,8 +275,8 @@ class BaseController extends Controller {
 							$options_list[$item->id] = $item->label;
 						}
 						if(is_null($value)) {
-						}
-						else {
+							reset($options_list);
+							$value = key($options_list);
 						}
 					}
 				}
@@ -304,7 +304,7 @@ class BaseController extends Controller {
 			$html .= Form::close();
 			return $html;
 		});
-		HTML::macro('collection_editor', function($collection) {
+		HTML::macro('collection_editor', function($collection, $new_model) {
 			$rows = array();
 			$html = "<ul class='tabular'>";
 			$dashboard_prefix = self::getDashboardPrefix();
@@ -316,6 +316,10 @@ class BaseController extends Controller {
 				$html .= Form::model_form($model, $url);
 				$html .= "</li>";
 			}
+			$url = $dashboard_prefix . '/' . $new_model->getTable() . '/create';
+			$html .= "<li class='item inactive'><a href='${url}' class='label'>New<span class='icon'>$icon</span></a>";
+			$html .= Form::model_form($new_model, $url);
+			$html .= "</li>";
 			$html .= "</ul>";
 			return $html;
 		});
