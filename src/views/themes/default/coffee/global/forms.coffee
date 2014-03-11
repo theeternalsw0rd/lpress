@@ -14,7 +14,7 @@ $(document).on(
   'click'
   'ul.select > li > a'
   (event) ->
-    ulSlideDown(event, this)
+    ulSlideToggle(event, this)
   #return
 )
 $(document).on(
@@ -64,6 +64,7 @@ $('select').each(
       )
       html += "</ul></li></ul>"
     else
+      $select.addClass('disabled')
       html = "<ul class='select'><li><a class='label disabled'>#{label} #{current}<span class='icon disabled'>#{icons['fa-sort']}</span></a></li></ul>"
     #endif
     $select.after(html)

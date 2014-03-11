@@ -7,7 +7,7 @@ $(document).on(
   'click'
   'ul.tabular > li > a'
   (event) ->
-    ulSlideDown(event, this)
+    ulSlideToggle(event, this)
     $this = $(this)
     $icon = $(this).find('span.icon')
     if($this.parent().hasClass('active'))

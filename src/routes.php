@@ -55,6 +55,8 @@ App::error(function(\Illuminate\Session\TokenMismatchException $exception) {
 	), $status_code);
 });
 
+Route::pattern('id', '[0-9]+');
+
 Route::filter(
 	'theme',
 	function() {
@@ -83,6 +85,15 @@ Route::filter(
 			return Redirect::route('lpress-login');
 		}
 		return BaseController::checkSSL('dashboard');
+	}
+);
+
+Route::filter(
+	'root',
+	function() {
+		if(!Auth::user()->isRoot()) {
+			return App::abort(403, 'Your account does not have sufficient privilege for the requested information.');
+		}
 	}
 );
 
@@ -210,23 +221,31 @@ Route::group(
 				Route::get(
 					'/',
 					array(
-						'before' => 'theme|dashboard',
+						'before' => 'theme|dashboard|root',
 						'as' => $group . '.sites',
 						'uses' => 'EternalSword\LPress\SiteController@getSites'
 					)
 				);
 				Route::get(
+					'create',
+					array(
+						'before' => 'theme|dashboard|root',
+						'as' => $group . '.sites.create',
+						'uses' => 'EternalSword\LPress\SiteController@getForm'
+					)
+				);
+				Route::get(
 					'{id}',
 					array(
-						'before' => 'theme|dashboard',
+						'before' => 'theme|dashboard|root',
 						'as' => $group . '.sites.site',
-						'uses' => 'EternalSword\LPress\SiteController@getSite'
+						'uses' => 'EternalSword\LPress\SiteController@getForm'
 					)
 				);
 				Route::post(
 					'{id}',
 					array(
-						'before' => 'dashboard|csrf',
+						'before' => 'dashboard|root|csrf',
 						'as' => $group . 'sites.update',
 						'uses' => 'EternalSword\LPress\SiteController@postSite'
 					)
@@ -313,7 +332,7 @@ Route::group(
 			array(
 				'uses' => 'EternalSword\LPress\AuthenticationController@checkActive'
 			)
-		)->where('path', '[A-z\d\-\/]+\/session.json');
+		)->where('path', '[A-z0-9\-\/]+\/session.json');
 	}
 );
 Route::get(
@@ -323,4 +342,4 @@ Route::get(
 		'as' => 'records',
 		'uses' => 'EternalSword\LPress\RecordController@parseRoute'
 	)
-)->where('path', '[A-z\d\-\/\.]+');
+)->where('path', '[A-z0-9\-\/\.]+');

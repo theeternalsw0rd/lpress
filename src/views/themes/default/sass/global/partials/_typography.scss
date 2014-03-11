@@ -129,8 +129,12 @@ h1 {
 h1, h2, h3 {
     font-family: $header_family;
 }
+a.create {
+	font-size: 50%;
+}
+
 html.win-chrome-font {
-	h1 , h2, h3{
+	h1, h2, h3{
 		font-family: $header_family_winchrome;
 	}
 }

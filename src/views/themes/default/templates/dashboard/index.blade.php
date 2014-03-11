@@ -12,6 +12,7 @@
 		</p>
 		<h2>Site Management</h2>
 		{{ HTML::collection_editor($sites, $new_site) }}
+		<a href="{{ URL::route('lpress-dashboard.sites') }}">Manage all sites</a>
 	@endif
 @stop
 @section('footer_scripts')

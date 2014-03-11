@@ -29,7 +29,22 @@ parseURI = (uri) ->
   return queries
 #return
 
-ulSlideDown = (event, clickElement) ->
+getFocusables = ($element) ->
+  return $element.find('a[href], input, select, button, textarea, *[contenteditable="true"]').filter(':not(.disabled)').filter(':visible')
+#return
+
+rebuildTabindex = ($focusables, $focusElement) ->
+  $('*[tabindex="*"]').attr('tabindex', '-1')
+  $focusables.each(
+    (index, element) ->
+      $this = $(element)
+      $this.attr('tabindex', index + 1)
+    #return
+  )
+  $focusElement.focus()
+#return
+
+ulSlideToggle = (event, clickElement) ->
   event.preventDefault()
   $this = $(clickElement)
   $item = $this.parent()
@@ -38,6 +53,9 @@ ulSlideDown = (event, clickElement) ->
       'fast'
       ->
         $item.removeClass('inactive').addClass('active')
+        $focusables = getFocusables($(document))
+        $focusElement = getFocusables($(this)).first()
+        rebuildTabindex($focusables, $focusElement)
       #return
     )
   else
@@ -45,9 +63,23 @@ ulSlideDown = (event, clickElement) ->
       'fast'
       ->
         $item.removeClass('active').addClass('inactive')
+        $focusables = getFocusables($(document))
+        $focusElement = $this
+        rebuildTabindex($focusables, $focusElement)
       #return
     )
   #endif
+#return
+
+initializeTabindex = do ->
+  $focusables = getFocusables($(document))
+  $forms = $('form').filter(':visible')
+  if $forms.length > 0
+    $focusElement = getFocusables($forms.first()).first()
+  else
+    $focusElement = $focusables.first()
+  #endif
+  rebuildTabindex($focusables, $focusElement)
 #return
 
 ###

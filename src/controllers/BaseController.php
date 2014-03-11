@@ -240,12 +240,13 @@ class BaseController extends Controller {
 			}
 			return $open . $version . $close;
 		});
-		Form::macro('model_form', function($model, $url) {
+		Form::macro('model_form', function($model, $url = NULL) {
+			if(is_null($url)) {
+				$url = self::getDashboardPrefix() . '/' . $model->getTable() . '/create';
+			}
 			$html = Form::open(array('url' => $url));
 			$columns = $model->getColumns();
-			$relationships = $model->getRelations();
 			$rules = $model->getRules();
-			$tab_index = 1;
 			foreach($columns as $column) {
 				$property = $column['name'];
 				$label = $column['label'];
@@ -283,11 +284,11 @@ class BaseController extends Controller {
 				$label .= ':';
 				switch($type) {
 					case 'selection': {
-						$html .= Form::select_input($property, $label, $options_list, $value, array('tabindex' => $tab_index));
+						$html .= Form::select_input($property, $label, $options_list, $value, array());
 						break;
 					}
 					case 'boolean': {
-						$attributes = array('tabindex' => $tab_index);
+						$attributes = array();
 						if($value) {
 							$attributes['checked'] = 'checked';
 						}
@@ -295,31 +296,32 @@ class BaseController extends Controller {
 						break;
 					}
 					default: {
-						$html .= Form::text_input('text', $property, $label, $value, array('tabindex' => $tab_index));
+						$html .= Form::text_input('text', $property, $label, $value, array());
 					}
 				}
-				$tab_index++;
 			}
-			$html .= "<div class='submit'>" . Form::icon_button('OK', 'submit', array('class' => 'button', 'tabindex' => $tab_index), 'fa-check') . "</div>";
+			$html .= "<div class='submit'>" . Form::icon_button('OK', 'submit', array('class' => 'button'), 'fa-check') . "</div>";
 			$html .= Form::close();
 			return $html;
 		});
-		HTML::macro('collection_editor', function($collection, $new_model) {
+		Form::macro('new_model_link', function($model) {
+			$dashboard_prefix = self::getDashboardPrefix();
+			$url = $dashboard_prefix . '/' . $model->getTable() . '/create';
+			$model_label = $model->label;
+			return "<a href='${url}' class='create model' data-model='" . get_class($model) . "'>+Add New ${model_label}</a>";
+		});
+		HTML::macro('collection_editor', function($collection) {
 			$rows = array();
 			$html = "<ul class='tabular'>";
 			$dashboard_prefix = self::getDashboardPrefix();
+			$icon_font = new IconFont;
+			$icon = $icon_font->getIcon('fa-caret-square-o-down');
 			foreach($collection as $model) {
 				$url = $dashboard_prefix . '/' . $model->getTable() . '/' . $model->id;
-				$icon_font = new IconFont;
-				$icon = $icon_font->getIcon('fa-caret-square-o-down');
 				$html .= "<li class='item inactive'><a href='${url}' class='label'>" . $model->label . "<span class='icon'>$icon</span></a>";
 				$html .= Form::model_form($model, $url);
 				$html .= "</li>";
 			}
-			$url = $dashboard_prefix . '/' . $new_model->getTable() . '/create';
-			$html .= "<li class='item inactive'><a href='${url}' class='label'>New<span class='icon'>$icon</span></a>";
-			$html .= Form::model_form($new_model, $url);
-			$html .= "</li>";
 			$html .= "</ul>";
 			return $html;
 		});
