@@ -120,6 +120,171 @@ class BaseController extends Controller {
 		return $error;
 	}
 
+	public static function getAssetPath($attachment = FALSE) {
+		$path = '';
+		if($attachment) {
+			$attachment_config = Config::get('l-press::attachments');
+			$attachment_path_base = $attachment_config['path_base'];
+			switch($attachment_path_base) {
+				case 'package': {
+					$path = PATH . '/';
+					break;
+				}
+				case 'laravel': {
+					$path = base_path() . '/';
+					break;
+				}
+				default: {
+					$path = $attachment_path_base . '/';
+				}
+			}
+		}
+		else {
+			$theme_config = Config::get('l-press::themes');
+			$theme_path_base = $theme_config['path_base'];
+			switch($theme_path_base) {
+				case 'package':
+					$path = PATH . '/' . $theme_config['path'] . '/' . THEME . '/assets';
+					break;
+				case 'laravel':
+					$path = base_path() . '/' . $theme_config['path'] . '/' . THEME . '/assets';
+					break;
+				default:
+					$path = $theme_path_base . '/' . $theme_config['path'] . '/' . THEME . '/assets';
+			}
+		}
+		return $path;
+	}
+
+	public static function prepareMake() {
+		if(!defined('THEME')) {
+			echo 'An unknown error occured, please try again later.';
+			die();
+		}
+		$view_prefix = 'l-press::themes.' . THEME . '.templates';
+		self::setMacros();
+		return array("view_prefix" => $view_prefix, "site" => Site::find(SITE));
+	}
+
+	public static function slugsToRoute($path) {
+		$route = new \stdClass;
+		$route->throw404 = FALSE;
+		$route->json = FALSE;
+		$route_prefix = self::getRoutePrefix();
+		if(!empty($route_prefix)) {
+			$real_path = explode(self::getRoutePrefix(), $path);
+			$real_path = $real_path[1];
+		}
+		else {
+			$real_path = $path;
+		}
+		$segments = preg_split('@/@', $real_path, NULL, PREG_SPLIT_NO_EMPTY);
+		$slugs = array();
+		$slug_types = array();
+		$last_index = count($segments) - 1;
+		$last_slug = $segments[$last_index];
+		$last_slug = explode('.', $last_slug);
+		if(count($last_slug) > 1 && $last_slug[1] == 'json') {
+			$segments[$last_index] = $last_slug[0];
+			$route->json = TRUE;
+		}
+		if($last_index > 0) {
+			$base_index = $last_index - 1;
+			// process base path first since last item has more complex logic
+			for($i=$base_index;$i>=0;$i--) {
+				$slug = $segments[$i];
+				$record_type = RecordType::where('slug', '=', $slug)->first();
+				if(count($record_type) === 0) {
+					$route->throw404 = TRUE;
+					break;
+				}
+				$parent = RecordType::find($record_type->parent_id);
+				if($i > 0) {
+					if($parent->depth > 0 && $parent->slug != $segments[$i-1]) {
+						$route->throw404 = TRUE;
+					}
+				}
+				else {
+					$route->root_record_type = $parent;
+				}
+				if($i == $base_index) {
+					$base_type = $record_type;
+				}
+				array_push($slug_types, 'record_type');
+				array_push($slugs, $slug);
+			}
+			if(!$route->throw404) {
+				$found = FALSE;
+				$slug = $segments[$last_index];
+				$record_type = RecordType::where('slug', '=', $slug)
+				->where('parent_id', '=', $base_type->id)
+				->first();
+				if(count($record_type) > 0) {
+					array_unshift($slug_types, 'record_type');
+					array_unshift($slugs, $slug);
+					$route->record_type = $record_type;
+					$found = TRUE;
+				}
+				if(!$found) {
+					$record = Record::where('site_id', '=', SITE)
+					->where('record_type_id', '=', $base_type->id)
+					->where('slug', '=', $slug)
+					->first();
+					if(count($record) > 0) {
+						array_unshift($slug_types, 'record');
+						array_unshift($slugs, $slug);
+						$found = TRUE;
+						$route->record = $record;
+					}
+				}
+				if(!$found) {
+					$symlink = Symlink::where('site_id', '=', SITE)
+					->where('record_type_id', '=', $base_type->id)
+					->where('slug', '=', $slug)
+					->first();
+					if(count($symlink) > 0) {
+						array_unshift($slug_types, 'record');
+						array_unshift($slugs, $slug);
+						$found = TRUE;
+						$route->record = $symlink->record;
+					}
+				}
+				if($found) {
+					$route->slug_types = $slug_types;
+					$route->slugs = $slugs;
+				}
+				else {
+					$route->throw404 = TRUE;
+				}
+			}
+		}
+		else {
+			$found = FALSE;
+			$slug = $segments[$last_index];
+			$record_type = RecordType::where('slug', '=', $slug)
+			->where('depth', '=', 1)
+			->first();
+			if(count($record_type) > 0) {
+				array_push($slug_types, 'record_type');
+				array_push($slugs, $slug);
+				$route->record_type = $record_type;
+				$found = TRUE;
+			}
+			if($found) {
+				$route->slug_types = $slug_types;
+				$route->slugs = $slugs;
+			}
+			else {
+				$route->throw404 = TRUE;
+			}
+		}
+		return $route;
+	}
+
+	public static function getBoolInput($key) {
+		return Input::has($key) ? Input::get($key) : NULL;
+	}
+
 	public static function setMacros() {
 		Form::macro('text_input', function($type, $name, $label, $value, $attributes = array()) {
 			$error = self::getValidationError($name);
@@ -365,170 +530,5 @@ class BaseController extends Controller {
 		Blade::extend(function($value) {
 			return preg_replace('/\{\$(.+)\$\}/', '<?php ${1} ?>', $value);
 		});
-	}
-
-	public static function getAssetPath($attachment = FALSE) {
-		$path = '';
-		if($attachment) {
-			$attachment_config = Config::get('l-press::attachments');
-			$attachment_path_base = $attachment_config['path_base'];
-			switch($attachment_path_base) {
-				case 'package': {
-					$path = PATH . '/';
-					break;
-				}
-				case 'laravel': {
-					$path = base_path() . '/';
-					break;
-				}
-				default: {
-					$path = $attachment_path_base . '/';
-				}
-			}
-		}
-		else {
-			$theme_config = Config::get('l-press::themes');
-			$theme_path_base = $theme_config['path_base'];
-			switch($theme_path_base) {
-				case 'package':
-					$path = PATH . '/' . $theme_config['path'] . '/' . THEME . '/assets';
-					break;
-				case 'laravel':
-					$path = base_path() . '/' . $theme_config['path'] . '/' . THEME . '/assets';
-					break;
-				default:
-					$path = $theme_path_base . '/' . $theme_config['path'] . '/' . THEME . '/assets';
-			}
-		}
-		return $path;
-	}
-
-	public static function prepareMake() {
-		if(!defined('THEME')) {
-			echo 'An unknown error occured, please try again later.';
-			die();
-		}
-		$view_prefix = 'l-press::themes.' . THEME . '.templates';
-		self::setMacros();
-		return array("view_prefix" => $view_prefix, "site" => Site::find(SITE));
-	}
-
-	public static function slugsToRoute($path) {
-		$route = new \stdClass;
-		$route->throw404 = FALSE;
-		$route->json = FALSE;
-		$route_prefix = self::getRoutePrefix();
-		if(!empty($route_prefix)) {
-			$real_path = explode(self::getRoutePrefix(), $path);
-			$real_path = $real_path[1];
-		}
-		else {
-			$real_path = $path;
-		}
-		$segments = preg_split('@/@', $real_path, NULL, PREG_SPLIT_NO_EMPTY);
-		$slugs = array();
-		$slug_types = array();
-		$last_index = count($segments) - 1;
-		$last_slug = $segments[$last_index];
-		$last_slug = explode('.', $last_slug);
-		if(count($last_slug) > 1 && $last_slug[1] == 'json') {
-			$segments[$last_index] = $last_slug[0];
-			$route->json = TRUE;
-		}
-		if($last_index > 0) {
-			$base_index = $last_index - 1;
-			// process base path first since last item has more complex logic
-			for($i=$base_index;$i>=0;$i--) {
-				$slug = $segments[$i];
-				$record_type = RecordType::where('slug', '=', $slug)->first();
-				if(count($record_type) === 0) {
-					$route->throw404 = TRUE;
-					break;
-				}
-				$parent = RecordType::find($record_type->parent_id);
-				if($i > 0) {
-					if($parent->depth > 0 && $parent->slug != $segments[$i-1]) {
-						$route->throw404 = TRUE;
-					}
-				}
-				else {
-					$route->root_record_type = $parent;
-				}
-				if($i == $base_index) {
-					$base_type = $record_type;
-				}
-				array_push($slug_types, 'record_type');
-				array_push($slugs, $slug);
-			}
-			if(!$route->throw404) {
-				$found = FALSE;
-				$slug = $segments[$last_index];
-				$record_type = RecordType::where('slug', '=', $slug)
-				->where('parent_id', '=', $base_type->id)
-				->first();
-				if(count($record_type) > 0) {
-					array_unshift($slug_types, 'record_type');
-					array_unshift($slugs, $slug);
-					$route->record_type = $record_type;
-					$found = TRUE;
-				}
-				if(!$found) {
-					$record = Record::where('site_id', '=', SITE)
-					->where('record_type_id', '=', $base_type->id)
-					->where('slug', '=', $slug)
-					->first();
-					if(count($record) > 0) {
-						array_unshift($slug_types, 'record');
-						array_unshift($slugs, $slug);
-						$found = TRUE;
-						$route->record = $record;
-					}
-				}
-				if(!$found) {
-					$symlink = Symlink::where('site_id', '=', SITE)
-					->where('record_type_id', '=', $base_type->id)
-					->where('slug', '=', $slug)
-					->first();
-					if(count($symlink) > 0) {
-						array_unshift($slug_types, 'record');
-						array_unshift($slugs, $slug);
-						$found = TRUE;
-						$route->record = $symlink->record;
-					}
-				}
-				if($found) {
-					$route->slug_types = $slug_types;
-					$route->slugs = $slugs;
-				}
-				else {
-					$route->throw404 = TRUE;
-				}
-			}
-		}
-		else {
-			$found = FALSE;
-			$slug = $segments[$last_index];
-			$record_type = RecordType::where('slug', '=', $slug)
-			->where('depth', '=', 1)
-			->first();
-			if(count($record_type) > 0) {
-				array_push($slug_types, 'record_type');
-				array_push($slugs, $slug);
-				$route->record_type = $record_type;
-				$found = TRUE;
-			}
-			if($found) {
-				$route->slug_types = $slug_types;
-				$route->slugs = $slugs;
-			}
-			else {
-				$route->throw404 = TRUE;
-			}
-		}
-		return $route;
-	}
-
-	public static function getBoolInput($key) {
-		return Input::has($key) ? Input::get($key) : NULL;
 	}
 }
