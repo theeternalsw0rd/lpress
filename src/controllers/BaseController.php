@@ -15,8 +15,6 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
 
 class BaseController extends Controller {
-	protected static $models_view = ".dashboard.models";
-
 	public static function getModelForm($slug, $model_name, $id = NULL) {
 		extract(self::prepareMake());
 		$model_basename = explode('\\', $model_name);
@@ -35,7 +33,11 @@ class BaseController extends Controller {
 			'model' => $model,
 			'model_basename' => $model_basename
 		);
-		return View::make($view_prefix . self::$models_view . '.form', $pass_to_view);
+		$slug_view = $view_prefix . '.dashboard.' . $slug . '.form';
+		if(View::exists($slug_view)) {
+			return View::make($slug_view, $pass_to_view);
+		}
+		return View::make($view_prefix . '.dashboard.models.form', $pass_to_view);
 	}
 
 	public static function getModelIndex($slug, $model_name, $per_page) {
@@ -49,7 +51,11 @@ class BaseController extends Controller {
 			'collection' => $collection,
 			'new_model' => new $model_name()
 		);
-		return View::make($view_prefix . self::$models_view . '.index', $pass_to_view);
+		$slug_view = $view_prefix . '.dashboard.' . $slug . '.index';
+		if(View::exists($slug_view)) {
+			return View::make($slug_view, $pass_to_view);
+		}
+		return View::make($view_prefix . '.dashboard.models.index', $pass_to_view);
 	}
 
 	public static function getModels() {
