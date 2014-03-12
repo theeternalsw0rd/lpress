@@ -49,6 +49,12 @@ class User extends BaseModel implements UserInterface, RemindableInterface {
 		'user_image' => 'record_exists:avatars'
 	);
 
+	protected $special_inputs = array(
+		'image' => 'attachment:avatars',
+		'bio' => 'text:textarea',
+		'email' => 'text:email'
+	);
+
 	/**
 	 * Get the unique identifier for the user.
 	 *
@@ -76,8 +82,10 @@ class User extends BaseModel implements UserInterface, RemindableInterface {
 		return $this->email;
 	}
 
-	public function getRules() {
-		return $this->rules;
+	public function getLabelAttribute() {
+		$name_suffix = $this->name_suffix;
+		$name_suffix = empty($name_suffix) ? '' : ', ' . $name_suffix;
+		return $this->name_prefix . ' ' . $this->first_name . ' ' . $this->last_name . $name_suffix;
 	}
 
 	public function hasPermission($permission) {

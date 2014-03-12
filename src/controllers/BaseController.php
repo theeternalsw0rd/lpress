@@ -15,6 +15,52 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
 
 class BaseController extends Controller {
+	protected static $models_view = ".dashboard.models";
+
+	public static function getModelForm($slug, $model_name, $id = NULL) {
+		extract(self::prepareMake());
+		$model_basename = explode('\\', $model_name);
+		$model_basename = end($model_basename);
+		if(is_null($id)) {
+			$model = new $model_name();
+			$title = "Create New ${model_basename}";
+		}
+		else {
+			$model = $model_name::find($id);
+			$title = "Update ${model_basename}: " . $model->label;
+		}
+		$pass_to_view = array(
+			'view_prefix' => $view_prefix,
+			'title' => $title,
+			'model' => $model,
+			'model_basename' => $model_basename
+		);
+		return View::make($view_prefix . self::$models_view . '.form', $pass_to_view);
+	}
+
+	public static function getModelIndex($slug, $model_name, $per_page) {
+		extract(self::prepareMake());
+		$model_basename = explode('\\', $model_name);
+		$model_basename = end($model_basename);
+		$collection = $model_name::paginate($per_page);
+		$pass_to_view = array(
+			'view_prefix' => $view_prefix,
+			'title' => $model_basename . ' Management',
+			'collection' => $collection,
+			'new_model' => new $model_name()
+		);
+		return View::make($view_prefix . self::$models_view . '.index', $pass_to_view);
+	}
+
+	public static function getModels() {
+		$base_class = 'EternalSword\\LPress\\BaseModel';
+		$result = array();
+		foreach (get_declared_classes() as $class) {
+			if (is_subclass_of($class, $base_class))
+				$result[] = $class;
+		}
+		return $result;
+	}
 
 	public static function getRoutePrefix() {
 		$route_prefix = Config::get('l-press::route_prefix');
@@ -412,42 +458,64 @@ class BaseController extends Controller {
 			$html = Form::open(array('url' => $url));
 			$columns = $model->getColumns();
 			$rules = $model->getRules();
+			$special = $model->getSpecialInputs();
 			foreach($columns as $column) {
 				$property = $column['name'];
 				$label = $column['label'];
 				$type = $column['type'];
 				$value = $model->$property;
-				if(array_key_exists($property, $rules)) {
-					$rule = explode('|', $rules[$property]);
+				if(array_key_exists($property, $special)) {
+					$type = explode(':', $special[$property]);
+					if(count($type) > 0) {
+						switch($type[0]) {
+							case 'attachment': {
+								$attachment_html = Form::file_input($type[1], 'create', FALSE, $value, array('data-target_id' => $property));
+								break;
+							}
+							default: {
+								$text_type = $type[1];
+							}
+						}
+					}
+					$type = $type[0];
 				}
 				else {
-					$rule = array();
-				}
-				if(Str::endsWith($property, '_id')) {
-					$related_property = substr($property, 0, -3);
-					$namespace = 'EternalSword\\LPress\\';
-					$label = str_replace('_', ' ', Str::title($related_property));
-					$class = $namespace.str_replace(' ', '', $label);
-					if(class_exists($class) && is_subclass_of($class, $namespace.'BaseModel')) {
-						$items = $class::all();
-						if(in_array('required', $rule)) {
-							$options_list = array();
-						}
-						else {
-							$options_list = array('Unassigned', 'NULL');
-						}
-						$type = 'selection';
-						foreach($items as $item) {
-							$options_list[$item->id] = $item->label;
-						}
-						if(is_null($value)) {
-							reset($options_list);
-							$value = key($options_list);
+					if(array_key_exists($property, $rules)) {
+						$rule = explode('|', $rules[$property]);
+					}
+					else {
+						$rule = array();
+					}
+					if(Str::endsWith($property, '_id')) {
+						$related_property = substr($property, 0, -3);
+						$namespace = 'EternalSword\\LPress\\';
+						$label = str_replace('_', ' ', Str::title($related_property));
+						$class = $namespace.str_replace(' ', '', $label);
+						if(class_exists($class) && is_subclass_of($class, $namespace.'BaseModel')) {
+							$items = $class::all();
+							if(in_array('required', $rule)) {
+								$options_list = array();
+							}
+							else {
+								$options_list = array('Unassigned', 'NULL');
+							}
+							$type = 'selection';
+							foreach($items as $item) {
+								$options_list[$item->id] = $item->label;
+							}
+							if(is_null($value)) {
+								reset($options_list);
+								$value = key($options_list);
+							}
 						}
 					}
 				}
 				$label .= ':';
 				switch($type) {
+					case 'attachment': {
+						$html .= $attachment_html;
+						break;
+					}
 					case 'selection': {
 						$html .= Form::select_input($property, $label, $options_list, $value, array());
 						break;
@@ -461,7 +529,10 @@ class BaseController extends Controller {
 						break;
 					}
 					default: {
-						$html .= Form::text_input('text', $property, $label, $value, array());
+						if(!isset($text_type)) {
+							$text_type = 'text';
+						}
+						$html .= Form::text_input($text_type, $property, $label, $value, array());
 					}
 				}
 			}

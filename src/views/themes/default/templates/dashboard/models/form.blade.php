@@ -4,8 +4,8 @@
 @stop
 @section('content')
 	@parent
-	<h2>Site: {{ $site->label }}</h2>
-	{{ Form::model_form($site, Request::url()) }}
+	<h2>{{ $model_basename }}: {{ $model->label }}</h2>
+	{{ Form::model_form($model, Request::url()) }}
 @stop
 @section('footer_scripts')
 	@parent

@@ -16,6 +16,17 @@ class Theme extends BaseModel {
 	 */
 	protected $hidden = array();
 
+	protected $fillable = array(
+		'label',
+		'description',
+		'image'
+	);
+
+	protected $rules = array(
+		'label' => 'required',
+		'slug' => 'required'
+	);
+
 	public function sites() {
 		$this->hasMany('EternalSword\LPress\Site');
 	}

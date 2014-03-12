@@ -55,8 +55,6 @@ App::error(function(\Illuminate\Session\TokenMismatchException $exception) {
 	), $status_code);
 });
 
-Route::pattern('id', '[0-9]+');
-
 Route::filter(
 	'theme',
 	function() {
@@ -214,46 +212,6 @@ Route::group(
 		);
 		Route::group(
 			array(
-				'prefix' => 'sites',
-			),
-			function() {
-				$group = 'lpress-dashboard';
-				Route::get(
-					'/',
-					array(
-						'before' => 'theme|dashboard|root',
-						'as' => $group . '.sites',
-						'uses' => 'EternalSword\LPress\SiteController@getSites'
-					)
-				);
-				Route::get(
-					'create',
-					array(
-						'before' => 'theme|dashboard|root',
-						'as' => $group . '.sites.create',
-						'uses' => 'EternalSword\LPress\SiteController@getForm'
-					)
-				);
-				Route::get(
-					'{id}',
-					array(
-						'before' => 'theme|dashboard|root',
-						'as' => $group . '.sites.site',
-						'uses' => 'EternalSword\LPress\SiteController@getForm'
-					)
-				);
-				Route::post(
-					'{id}',
-					array(
-						'before' => 'dashboard|root|csrf',
-						'as' => $group . 'sites.update',
-						'uses' => 'EternalSword\LPress\SiteController@postSite'
-					)
-				);
-			}
-		);
-		Route::group(
-			array(
 				'prefix' => 'users',
 			),
 			function() {
@@ -333,6 +291,20 @@ Route::group(
 				'uses' => 'EternalSword\LPress\AuthenticationController@checkActive'
 			)
 		)->where('path', '[A-z0-9\-\/]+\/session.json');
+		Route::get(
+			'{slug}',
+			array(
+				'before' => 'theme|dashboard',
+				'uses' => 'EternalSword\LPress\DashboardController@routeAction'
+			)
+		);
+		Route::get(
+			'{slug}/{id}',
+			array(
+				'before' => 'theme|dashboard',
+				'uses' => 'EternalSword\LPress\DashboardController@routeAction'
+			)
+		);
 	}
 );
 Route::get(

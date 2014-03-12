@@ -5,6 +5,7 @@ use \Eloquent as Eloquent;
 use \Str as Str;
 
 class BaseModel extends Eloquent {
+	protected $special_inputs = array('description' => 'text:textarea');
 
 	public function getColumns() {
 		$schema = DB::getDoctrineSchemaManager();
@@ -28,5 +29,9 @@ class BaseModel extends Eloquent {
 
 	public function getRules() {
 		return $this->rules;
+	}
+
+	public function getSpecialInputs() {
+		return $this->special_inputs;
 	}
 }
