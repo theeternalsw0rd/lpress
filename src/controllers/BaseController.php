@@ -2,6 +2,7 @@
 
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Form;
@@ -56,6 +57,10 @@ class BaseController extends Controller {
 			return View::make($slug_view, $pass_to_view);
 		}
 		return View::make($view_prefix . '.dashboard.models.index', $pass_to_view);
+	}
+
+	public static function hasPermission() {
+		return Auth::user()->isRoot();
 	}
 
 	public static function getModels() {

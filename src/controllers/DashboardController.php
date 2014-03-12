@@ -1,5 +1,6 @@
 <?php namespace EternalSword\LPress;
 
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\View;
@@ -47,12 +48,15 @@ class DashboardController extends BaseController {
 				if(!class_exists($controller)) {
 					$controller = __NAMESPACE__ . '\\BaseController';
 				}
+				if(!$controller::hasPermission()) {
+					return App::abort(403, 'You do not have permission to this area.');
+				}
 				if($manager) {
 					return $controller::getModelIndex($slug, $model_name, 15);
 				}
 				return $controller::getModelForm($slug, $model_name, $id);
 			}
 		}
-		App::abort(404, "Could not find model.");
+		return App::abort(404, "Could not find model.");
 	}
 }
