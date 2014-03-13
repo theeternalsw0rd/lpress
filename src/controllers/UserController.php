@@ -33,10 +33,17 @@ class UserController extends BaseController {
 	}
 
 	public static function updateUser($id) {
-		$auth_user = Auth::user();
-		if($auth_user->id == $id || $auth_user->hasPermission('user-manager')) {
+		if(self::hasPermission($id)) {
 			return self::processForm($id);
 		}
 		return App::abort(403);
+	}
+
+	public static function hasPermission($id = NULL) {
+		$user = Auth::user();
+		if(is_null($id)) {
+			return $user->hasPermission('user-manager');
+		}
+		return $user->id == $id || $user->hasPermission('user-manager');
 	}
 }
