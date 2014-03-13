@@ -18,8 +18,7 @@ class Theme extends BaseModel {
 
 	protected $fillable = array(
 		'label',
-		'description',
-		'image'
+		'description'
 	);
 
 	protected $rules = array(

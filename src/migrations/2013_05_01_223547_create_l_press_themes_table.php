@@ -17,7 +17,6 @@ class CreateLPressThemesTable extends Migration {
 			$table->string('label');
 			$table->string('slug')->unique();
 			$table->text('description');
-			$table->string('image');
 			$table->timestamps();
 		});
 	}
