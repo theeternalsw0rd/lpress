@@ -19,7 +19,12 @@ class UserController extends BaseController {
 		if(is_null($user)) {
 			return Redirect::back()->withInput()->with(
 				'errors',
-				array('Could not find user by id provided implicitly. It\'s possible the user was deleted by another user or the posted data was corrupt.')
+				array(
+					Lang::get(
+						'l-press::errors.modelIdNotFound',
+						array('id' => $id)
+					)
+				)
 			);
 		}
 		$validator = Validator::make(Input::all(), $user->getRules(), CustomValidator::getOwnMessages());

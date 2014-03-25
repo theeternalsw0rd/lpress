@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Form;
 use Illuminate\Support\Facades\HTML;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
@@ -26,7 +27,12 @@ class BaseController extends Controller {
 		if(is_null($model)) {
 			return Redirect::back()->withInput()->with(
 				'errors',
-				array('Could not find model by id provided implicitly. It\'s possible it was deleted by another user or the posted data was corrupt.')
+				array(
+					Lang::get(
+						'l-press::errors.modelIdNotFound',
+						array('id' => $id)
+					)
+				)
 			);
 		}
 		$validator = Validator::make(Input::all(), $model->getRules(), CustomValidator::getOwnMessages());
@@ -47,6 +53,15 @@ class BaseController extends Controller {
 		}
 		else {
 			$model = $model_name::find($id);
+			if(is_null($model)) {
+				return App::abort(
+					404, 
+					Lang::get(
+						'l-press::errors.modelIdNotFound',
+						array('id' => $id)
+					)
+				);
+			}
 			$title = "Update ${model_basename}: " . $model->label;
 		}
 		$pass_to_view = array(
