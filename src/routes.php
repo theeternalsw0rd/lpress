@@ -295,14 +295,21 @@ Route::group(
 			'{slug}',
 			array(
 				'before' => 'theme|dashboard',
-				'uses' => 'EternalSword\LPress\DashboardController@routeAction'
+				'uses' => 'EternalSword\LPress\DashboardController@routeGetAction'
 			)
 		);
 		Route::get(
 			'{slug}/{id}',
 			array(
 				'before' => 'theme|dashboard',
-				'uses' => 'EternalSword\LPress\DashboardController@routeAction'
+				'uses' => 'EternalSword\LPress\DashboardController@routeGetAction'
+			)
+		);
+		Route::post(
+			'{slug}/{id}',
+			array(
+				'before' => 'csrf|theme|dashboard',
+				'uses' => 'EternalSword\LPress\DashboardController@routePostAction'
 			)
 		);
 	}

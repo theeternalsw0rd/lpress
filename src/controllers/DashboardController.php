@@ -27,7 +27,22 @@ class DashboardController extends BaseController {
 		return View::make($view_prefix . '.dashboard.index', $pass_to_view);
 	}
 
-	public static function routeAction($slug, $id = NULL) {
+	protected static function getModelInfo($slug) {
+		$models = parent::getModels();
+		foreach($models as $model_name) {
+			$instance = new $model_name();
+			if($instance->getTable() == $slug) {
+				$controller = $model_name . 'Controller';
+				if(!class_exists($controller)) {
+					$controller = __NAMESPACE__ . '\\BaseController';
+				}
+				return array('controller' => $controller, 'model_name' => $model_name);
+			}
+		}
+		return FALSE;
+	}
+
+	public static function routeGetAction($slug, $id = NULL) {
 		$manager = FALSE;
 		if(is_null($id)) {
 			$manager = TRUE;
@@ -40,23 +55,39 @@ class DashboardController extends BaseController {
 				App::abort(422, "Path must end with either create, or the id number of a model.");
 			}
 		}
-		$models = parent::getModels();
-		foreach($models as $model_name) {
-			$instance = new $model_name();
-			if($instance->getTable() == $slug) {
-				$controller = $model_name . 'Controller';
-				if(!class_exists($controller)) {
-					$controller = __NAMESPACE__ . '\\BaseController';
-				}
-				if(!$controller::hasPermission()) {
-					return App::abort(403, 'You do not have permission to this area.');
-				}
-				if($manager) {
-					return $controller::getModelIndex($slug, $model_name, 15);
-				}
-				return $controller::getModelForm($slug, $model_name, $id);
+		$model_info = self::getModelInfo($slug);
+		if($model_info === FALSE) {
+			return App::abort(404, 'Could not find model.');
+		}
+		$controller = $model_info['controller'];
+		$model_name = $model_info['model_name'];
+		if(!$controller::hasPermission()) {
+			return App::abort(403, 'You do not have permission to this area.');
+		}
+		if($manager) {
+			return $controller::getModelIndex($slug, $model_name, 15);
+		}
+		return $controller::getModelForm($slug, $model_name, $id);
+	}
+
+	public static function routePostAction($slug) {
+		if($id == 'create') {
+			$id = NULL;
+		}
+		else {
+			if(!is_numeric($id)) {
+				App::abort(422, "Path must end with either create, or the id number of a model.");
 			}
 		}
-		return App::abort(404, "Could not find model.");
+		$model_info = self::getModelInfo($slug);
+		if($model_info === FALSE) {
+			return App::abort(404, 'Could not find model.');
+		}
+		$controller = $model_info['controller'];
+		$model_name = $model_info['model_name'];
+		if(!$controller::hasPermission($id)) {
+			return App::abort(403, 'You do not have write access here.');
+		}
+		return $controller::processModelForm($slug, $model_name, $id);
 	}
 }

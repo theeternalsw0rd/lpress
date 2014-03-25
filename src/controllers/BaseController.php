@@ -16,6 +16,27 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
 
 class BaseController extends Controller {
+	protected static function processModelForm($slug, $model_name, $id = NULL) {
+		if(is_null($id)) {
+			$model = new $model_name();
+		}
+		else {
+			$model = $model_name::find($id);
+		}
+		if(is_null($model)) {
+			return Redirect::back()->withInput()->with(
+				'errors',
+				array('Could not find model by id provided implicitly. It\'s possible it was deleted by another user or the posted data was corrupt.')
+			);
+		}
+		$validator = Validator::make(Input::all(), $model->getRules(), CustomValidator::getOwnMessages());
+		if($validator->fails()) {
+			return Redirect::back()->withInput()->withErrors($validator);
+		}
+		$model->fill(Input::all());
+		return $model->save();
+	}
+
 	public static function getModelForm($slug, $model_name, $id = NULL) {
 		extract(self::prepareMake());
 		$model_basename = explode('\\', $model_name);
