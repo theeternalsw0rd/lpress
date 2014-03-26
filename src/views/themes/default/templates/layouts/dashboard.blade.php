@@ -3,8 +3,8 @@
 	@parent
 @stop
 @section('content')
-	<h1>LPress Dashboard</h1>
-	<div class='message no-js'>You really should enable javascript. This dashboard relies heavily upon it and you cannot do much efficiently without it.</div>
+	<h1>{{ Lang::get('l-press::headers.dashboard') }}</h1>
+	<div class='message no-js'>{{ Lang::get('l-press::messages.noJS') }}</div>
 @stop
 @section('footer_scripts')
 	@parent

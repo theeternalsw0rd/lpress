@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Response;
@@ -30,7 +31,7 @@ App::error(function(HttpException $exception) {
 	// missing can't take filters like routes, so call needed stuff directly.
 	extract(BaseController::prepareMake());
 	$status_code = $exception->getStatusCode();
-	$message = $exception->getMessage() ?: 'An error occurred and your request could not be processed.';
+	$message = $exception->getMessage() ?: Lang::get('l-press::errors.httpStatus500');
 	return Response::view($view_prefix . '.errors', array(
 		'view_prefix' => $view_prefix,
 		'title' => 'HttpError: ' + $status_code,
@@ -41,7 +42,7 @@ App::error(function(HttpException $exception) {
 
 App::error(function(\Illuminate\Session\TokenMismatchException $exception) {
 	$status_code = 403;
-	$message = 'Permission denied. Tokens do not match.';
+	$message = Lang::get('l-press::errors.tokenMismatch');
 	if(Request::ajax()) {
 		$json = new \stdClass;
 		$json->error = $message;
@@ -75,7 +76,7 @@ Route::filter(
 		if(!Auth::check()) {
 			if(Request::ajax()) {
 				$json = new \stdClass;
-				$json->error = "Permission denied. Not logged in.";
+				$json->error = Lang::get('l-press::errors.ajaxNotLoggedIn');
 				$status_code = 403;
 				return Response::json($json, $status_code);
 			}
@@ -83,15 +84,6 @@ Route::filter(
 			return Redirect::route('lpress-login');
 		}
 		return BaseController::checkSSL('dashboard');
-	}
-);
-
-Route::filter(
-	'root',
-	function() {
-		if(!Auth::user()->isRoot()) {
-			return App::abort(403, 'Your account does not have sufficient privilege for the requested information.');
-		}
 	}
 );
 

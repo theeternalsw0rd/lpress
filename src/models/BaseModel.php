@@ -3,6 +3,7 @@
 use \DB as DB;
 use \Eloquent as Eloquent;
 use \Str as Str;
+use Illuminate\Support\Facades\Lang;
 
 class BaseModel extends Eloquent {
 	protected $special_inputs = array('description' => 'text:textarea');
@@ -15,12 +16,13 @@ class BaseModel extends Eloquent {
 		$columns = $schema->listTableColumns($table);
 		$columns_array = array();
 		foreach($columns as $column) {
-			if(!in_array($column->getName(), $this->fillable)) {
+			$column_name = $column->getName();
+			if(!in_array($column_name, $this->fillable)) {
 				continue;
 			}
 			$columns_array[] = array(
-				'name' => $column->getName(),
-				'label' => str_replace('_', ' ', Str::title($column->getName())),
+				'name' => $column_name,
+				'label' => Lang::get("l-press::labels.${column_name}"),
 				'type' => $column->getType()->getName()
 			);
 		}

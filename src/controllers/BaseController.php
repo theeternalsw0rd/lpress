@@ -49,7 +49,12 @@ class BaseController extends Controller {
 		$model_basename = end($model_basename);
 		if(is_null($id)) {
 			$model = new $model_name();
-			$title = "Create New ${model_basename}";
+			$title = Lang::get(
+				'l-press::titles.newModel',
+				array(
+					'model_basename' => $model_basename
+				)
+			);
 		}
 		else {
 			$model = $model_name::find($id);
@@ -62,7 +67,13 @@ class BaseController extends Controller {
 					)
 				);
 			}
-			$title = "Update ${model_basename}: " . $model->label;
+			$title = Lang::get(
+				'l-press::titles.updateModel',
+				array(
+					'model_basename' => $model_basename,
+					'model_label' => $model->label
+				)
+			);
 		}
 		$pass_to_view = array(
 			'view_prefix' => $view_prefix,
@@ -536,7 +547,7 @@ class BaseController extends Controller {
 					if(Str::endsWith($property, '_id')) {
 						$related_property = substr($property, 0, -3);
 						$namespace = 'EternalSword\\LPress\\';
-						$label = str_replace('_', ' ', Str::title($related_property));
+						$label = Lang::get("l-press::labels.${related_property}");
 						$class = $namespace.str_replace(' ', '', $label);
 						if(class_exists($class) && is_subclass_of($class, $namespace.'BaseModel')) {
 							$items = $class::all();
@@ -557,13 +568,13 @@ class BaseController extends Controller {
 						}
 					}
 				}
-				$label .= ':';
 				switch($type) {
 					case 'attachment': {
 						$html .= $attachment_html;
 						break;
 					}
 					case 'selection': {
+						$label .= Lang::get('l-press::labels.label_separator');
 						$html .= Form::select_input($property, $label, $options_list, $value, array());
 						break;
 					}
@@ -576,6 +587,7 @@ class BaseController extends Controller {
 						break;
 					}
 					default: {
+						$label .= Lang::get('l-press::labels.label_separator');
 						if(!isset($text_type)) {
 							$text_type = 'text';
 						}
@@ -583,7 +595,7 @@ class BaseController extends Controller {
 					}
 				}
 			}
-			$html .= "<div class='submit'>" . Form::icon_button('OK', 'submit', array('class' => 'button'), 'fa-check') . "</div>";
+			$html .= "<div class='submit'>" . Form::icon_button(Lang::get('l-press::labels.submit_button'), 'submit', array('class' => 'button'), 'fa-check') . "</div>";
 			$html .= Form::close();
 			return $html;
 		});
