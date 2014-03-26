@@ -14,5 +14,7 @@ return array(
 	'name_suffix' => 'Name Suffix (eg Jr.)',
 	'name_prefix' => 'Title (eg Mr.)',
 	'bio' => 'Bio',
-	'submit_button' => 'OK'
+	'file_select' => 'Select :type',
+	'submit_button' => 'OK',
+	'null_option' => 'Unassigned'
 );

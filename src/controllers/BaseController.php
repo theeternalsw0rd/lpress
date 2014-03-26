@@ -95,7 +95,7 @@ class BaseController extends Controller {
 		$collection = $model_name::paginate($per_page);
 		$pass_to_view = array(
 			'view_prefix' => $view_prefix,
-			'title' => $model_basename . ' Management',
+			'title' => Lang::get('l-press::headers.model_management', array('model' => $model_basename)),
 			'collection' => $collection,
 			'new_model' => new $model_name()
 		);
@@ -143,24 +143,21 @@ class BaseController extends Controller {
 			$message = $e->getMessage();
 			$code = $e->getCode();
 			if($code == 2002) {
-				echo 'Could not connect to database.';
+				echo Lang::get('l-press::errors.dbConnectionError');
 				die();
 			}
 			if(substr_count($message, 'SQLSTATE[42S02]') > 0) {
-				echo 'Could not find sites table in the database, '
-					. 'please ensure all migrations have been run.';
+				echo Lang::get('l-press::errors.dbTableMissing', array('table' => 'sites'));
 				die();
 			}
-			echo 'An unexpected error occurred, please try again later.';
+			echo Lang::get('l-press::errors.httpStatus500');
 			die();
 		}
 		if(!$site) {
 			$site = Site::where('domain', 'wildcard')->first();
 		}
 		if(!$site) {
-			echo 'No valid site found for this domain, ' 
-				. 'if this is not on purpose you may need to seed the database, '
-				. 'or you have inadvertantly removed the wildcard domain site';
+			echo Lang::get('l-press::errors.siteMissing');
 			die();
 		}
 		define('SITE', $site->id);
@@ -171,11 +168,10 @@ class BaseController extends Controller {
 			$message = $e->getMessage();
 			$code = $e->getCode();
 			if(substr_count($message, 'SQLSTATE[42S02]') > 0) {
-				echo 'Could not find themes table in the database, '
-					. 'please ensure all migrations have been run.';
+				echo Lang::get('l-press::errors.dbTableMissing', array('table' => 'themes'));
 				die();
 			}
-			echo 'An unexpected error occurred, please try again later.';
+			echo Lang::get('l-press::errors.httpStatus500');
 			die();
 		}
 		define('THEME', $theme ? $theme->slug : 'default');
@@ -262,7 +258,7 @@ class BaseController extends Controller {
 
 	public static function prepareMake() {
 		if(!defined('THEME')) {
-			echo 'An unknown error occured, please try again later.';
+			echo Lang::get('l-press::errors.httpStatus500');
 			die();
 		}
 		$view_prefix = 'l-press::themes.' . THEME . '.templates';
@@ -435,9 +431,9 @@ class BaseController extends Controller {
 		Form::macro('file_input', function($slug, $upload_command = 'create', $single = TRUE, $value = '', $attributes = array()) {
 			$type = RecordType::where('slug', '=', $slug)->first();
 			if(count($type) === 0) {
-				return "<div class='error'>Could not find RecordType ${slug} for file input.</div>";
+				return "<div class='error'>" . Lang::get('l-press::errors.missingRecordType', array('slug' => $slug)) . "</div>";
 			}
-			$label = "Select {$type->label}";
+			$label = Lang::get('l-press::labels.file_select', array('type' => $type->label));
 			$file_path = $slug;
 			$url_path = $slug;
 			while($type->depth > 1) {
@@ -450,7 +446,7 @@ class BaseController extends Controller {
 			$root_type = $type->parent_type()->first();
 			$file_path = $root_type->slug . '/' . $site->domain . '/' . $file_path;
 			if ($root_type->slug != 'attachments') {
-				return "<div class='error'>RecordType ${slug} is not valid for file input.</div>";
+				return "<div class='error'>" . Lang::get('l-press::errors.invalidRecordType', array('slug' => $slug)) . "</div>";
 			}
 			$dashboard_prefix = self::getDashboardPrefix();
 			$prefix = self::getRoutePrefix();
@@ -555,7 +551,7 @@ class BaseController extends Controller {
 								$options_list = array();
 							}
 							else {
-								$options_list = array('Unassigned', 'NULL');
+								$options_list = array(Lang::get('l-press::labels.null_option'), 'NULL');
 							}
 							$type = 'selection';
 							foreach($items as $item) {

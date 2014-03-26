@@ -1,5 +1,6 @@
 <?php
 
 return array(
-	'dashboard' => 'LPress Dashboard'
+	'dashboard' => 'LPress Dashboard',
+	'model_management' => ':model Management'
 );
