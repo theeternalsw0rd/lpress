@@ -3,15 +3,9 @@
 	@parent
 @stop
 @section('content')
-	<h1>SSL Requires SHA2</h1>
+	<h1>{{ $title }}</h1>
 	<div class='error'>
-		<p>
-			It appears you are using Windows XP.
-			The secure portions of this website requires SHA2 support
-			which is not available in your browser. Only
-			<a href='http://www.mozilla.com/firefox'>Mozilla Firefox</a>
-			has been verified to work under Windows XP.
-		</p>
+		<p>{{ Lang::get('l-press::errors.xpSha2') }}</p>
 	</div>
 
 @stop

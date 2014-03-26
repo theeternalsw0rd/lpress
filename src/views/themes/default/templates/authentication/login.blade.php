@@ -1,9 +1,9 @@
 @extends($view_prefix . '.layouts.master')
 @section('content')
 	@if ($install)
-		<h1>Welcome to the LPress Installer</h1>
+		<h1>{{ Lang::get('l-press::headers.installer') }}</h1>
 	@else
-		<h1>Login</h1>
+		<h1>{{ Lang::get('l-press::headers.login') }}</h1>
 	@endif
 	@if($login_failed)
 		<div class='error'>
@@ -18,12 +18,8 @@
 				{{ Form::text_input(
 					'password',
 					'password',
-					'Application Key:',
-					'',
-					array(
-						'autofocus' => 'autofocus',
-						'tabindex' => '1'
-					)
+					Lang::get('l-press::labels.application_key') . Lang::get('l-press::labels.label_separator'),
+					''
 				) }}
 			</div>
 			{{ Form::hidden('username', 'lpress') }}
@@ -33,38 +29,28 @@
 				{{ Form::text_input(
 					'text',
 					'username',
-					'Username:',
-					'',
-					array(
-						'autofocus' => 'autofocus',
-						'tabindex' => '1'
-					)
+					Lang::get('l-press::labels.username') . Lang::get('l-press::labels.label_separator'),
+					''
 				) }}
 			</div>
 			<div class='text'>
 				{{ Form::text_input(
 					'password',
 					'password',
-					'Password:',
-					'',
-					array(
-						'tabindex' => '2'
-					)
+					Lang::get('l-press::labels.password') . Lang::get('l-press::labels.label_separator'),
+					''
 				) }}
 			</div>
 			<div class='checkbox'>
 				{{ Form::checkbox_input(
 					'remember_me',
-					'Remember me',
-					array(
-						'tabindex' => '3'
-					)
+					Lang::get('l-press::labels.remember_me')
 				) }}
 			</div>
 		@endif
 		{{ Form::token() }}
 		<div class='submit'>
-			{{ Form::icon_button('OK', 'submit', array('class' => 'button', 'tabindex' => '${button_index}'), 'fa-check') }}
+			{{ Form::icon_button(Lang::get('l-press::labels.submit_button'), 'submit', array('class' => 'button', 'tabindex' => '${button_index}'), 'fa-check') }}
 		</div>
 		{{ Form::close() }}
 	</div>

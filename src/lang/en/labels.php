@@ -1,6 +1,7 @@
 <?php
 
 return array(
+	'application_key' => 'Application Key',
 	'label_separator' => ':',
 	'label' => 'Label',
 	'domain' => 'Domain',
@@ -16,5 +17,8 @@ return array(
 	'bio' => 'Bio',
 	'file_select' => 'Select :type',
 	'submit_button' => 'OK',
-	'null_option' => 'Unassigned'
+	'null_option' => 'Unassigned',
+	'password' => 'Password',
+	'verify_password' => 'Verify Password',
+	'remember_me' => 'Remember me.'
 );
