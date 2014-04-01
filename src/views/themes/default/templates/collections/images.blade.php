@@ -3,11 +3,12 @@
 	@parent
 @stop
 @section('content')
+	@parent
 	@if (count($record_type->children) > 0)
-		<h1>{{ $label }} / <span data-dropdown='#type-children'>Children</span></h1>
+		<h1>{{ Lang::get('l-press::headers.collection', array('label' => $label)) }}</h1>
 		<div id='type-children' class='dropdown'>
 			<ul class='dropdown-menu types'>
-				<li class='hide'>Subcollections</li>
+				<li class='hide'>{{ Lang::get('l-press::headers.subcollection') }}</li>
 				@foreach ($record_type->children as $child)
 					<li>
 						<a title='{{ $child->label}}' href='/{{ $path }}/{{ $child->slug }}'>{{ $child->label }}</a>
@@ -31,7 +32,7 @@
 		</ul>
 	@else
 		<div class='message'>
-			<p>No records found in this collection.</p>
+			<p>{{ Lang::get('l-press::messages.empty_collection') }}</p>
 		</div>
 	@endif
 @stop

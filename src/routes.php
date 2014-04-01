@@ -116,7 +116,7 @@ Route::get(
 			return View::make($view_prefix . '.sha2', 
 				array(
 					'view_prefix' => $view_prefix,
-					'title' => 'SSL Requires SHA2',
+					'title' => Lang::get('l-press::titles.sha2'),
 					'route_prefix' => Config::get('l-press::route_prefix')
 				)
 			);

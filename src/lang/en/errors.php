@@ -10,5 +10,6 @@ return array(
 	'dbConnectionError' => 'Could not connect to database.',
 	'dbTableMissing' => 'Could not find :table table in the database, please ensure all migrations have been run.',
 	'siteMissing' => 'No valid site found for this domain, if this is not on purpose you may need to seed the database, or you have inadvertantly removed the wildcard domain site.',
-	'xpSha2' => 'It appears you are using Windows XP. The secure portions of this website requires SHA2 support which is not available in your browser. Only <a href="http://www.mozilla.com/firefox">Mozilla Firefox</a> has been verified to work under Windows XP.'
+	'xpSha2' => 'It appears you are using Windows XP. The secure portions of this website requires SHA2 support which is not available in your browser. Only <a href="http://www.mozilla.com/firefox">Mozilla Firefox</a> has been verified to work under Windows XP.',
+	'loginFailed' => 'Login failed, please try again.'
 );

@@ -27,7 +27,7 @@
 		<div id='page'>
 			<!--[if lt IE 8]>
 				<div class="message">
-					<p>You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+					<p>{{ Lang::get('l-press::messages.browse_happy') }}</p>
 				</div>
 			<![endif]-->
 			@if(Session::has('std_errors'))
@@ -48,7 +48,9 @@
 					@endif
 				@endforeach
 			@endif
-			@yield('content')
+			@section('content')
+				<div class='message no-js'>{{ Lang::get('l-press::messages.noJS') }}</div>
+			@show
 		</div>
 		@section('hidden')
 		@show

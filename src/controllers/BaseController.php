@@ -599,7 +599,8 @@ class BaseController extends Controller {
 			$dashboard_prefix = self::getDashboardPrefix();
 			$url = $dashboard_prefix . '/' . $model->getTable() . '/create';
 			$model_label = $model->label;
-			return "<a href='${url}' class='create model' data-model='" . get_class($model) . "'>+Add New ${model_label}</a>";
+			$label = Lang::get('l-press::labels.new_model', array('model_label' => $model_label));
+			return "<a href='${url}' class='create model' data-model='" . get_class($model) . "'>${label}</a>";
 		});
 		HTML::macro('collection_editor', function($collection) {
 			$rows = array();

@@ -7,7 +7,7 @@
 	@endif
 	@if($login_failed)
 		<div class='error'>
-			<p>Login failed, please try again.</p>
+			<p>{{ Lang::get('l-press::errors.loginFailed') }}</p>
 		</div>
 	@endif
 	<div class='form'>
