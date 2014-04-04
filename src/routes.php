@@ -298,7 +298,13 @@ Route::get(
 	'{path}',
 	array(
 		'before' => 'theme|general',
-		'as' => 'records',
 		'uses' => 'EternalSword\LPress\RecordController@parseRoute'
 	)
 )->where('path', '[A-z0-9\-\/\.]+');
+Route::get(
+	'{all}',
+	array(
+		'before' => 'theme|general',
+		function($all) { App::abort(404, Lang::get('l-press::errors.invalidRoute')); }
+	)
+)->where('all', '.*');
