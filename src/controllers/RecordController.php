@@ -5,15 +5,11 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\HTML;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
 
 class RecordController extends BaseController {
-	const permission_error = 'Permission denied. Your user does not have access to this content.';
-	const attachment_missing = 'Record was found, but filename value is missing.';
-	const invalid_url = 'No records could be found for this url.';
-	const template_missing = 'No template could be found for this RecordType.';
-
 	public static function parseRoute($path) {
 		$route = BaseController::slugsToRoute($path);
 		$route->path = $path;
@@ -21,10 +17,10 @@ class RecordController extends BaseController {
 			if($route->json) {
 				$json = new \stdClass;
 				$json->status_code = 404;
-				$json->reason = self::invalid_url;
+				$json->reason = Lang::get('l-press::errors.invalidURL');
 				return Response::json($json, 404);
 			}
-			return App::abort(404, self::invalid_url);
+			return App::abort(404, Lang::get('l-press::errors.invalidURL'));
 		}
 		if($route->slug_types[0] == 'record') {
 			return self::getRecord($route);
@@ -57,11 +53,11 @@ class RecordController extends BaseController {
 			if($json) {
 				$json = new \stdClass;
 				$json->status_code = 403;
-				$json->reason = self::permission_error;
+				$json->reason = Lang::get('l-press::errors.permissionError');
 				return Response::json($json, 403);
 			}
 			else {
-				return App::abort('403', self::permission_error);
+				return App::abort('403', Lang::get('l-press::errors.permissionError'));
 			}
 		}
 		$record->load(
@@ -76,7 +72,7 @@ class RecordController extends BaseController {
 				if(!$verifyAttachment($record)) {
 					$json = new \stdClass;
 					$json->status_code = 404;
-					$json->error = self::attachment_missing;
+					$json->error = Lang::get('l-press::errors.attachmentMissing');
 					return Response::json($json, 404);
 				}
 			}
@@ -88,7 +84,7 @@ class RecordController extends BaseController {
 			$attachment_config = Config::get('l-press::attachments');
 			$path = $attachment_config['path'] . '/' . $site->domain . '/' . $path;
 			if(!$verifyAttachment($record)) {
-				return App::abort('404', self::attachment_missing);
+				return App::abort('404', Lang::get('l-press::errors.attachmentMissing'));
 			}
 			$asset = new AssetController;
 			return $asset->getAsset($path);
@@ -153,7 +149,7 @@ class RecordController extends BaseController {
 				$record_type = RecordType::find($record_type->parent_id);
 			}
 		}
-		return App::abort(404, self::template_missing);
+		return App::abort(404, Lang::get('l-press::errors.templateMissing'));
 	}
 
 	public static function getRecordForm() {
@@ -164,7 +160,7 @@ class RecordController extends BaseController {
 
 	public static function createAttachmentRecord($path, $user) {
 		if(!$user->hasPermission('create')) {
-			return App::abort(403, "Your account doesn't have permission to create records");
+			return App::abort(403, Lang::get('l-press::errors.executePermissionError'));
 		}
 		$attachment_config = Config::get('l-press::attachments');
 		$relative_path = explode($attachment_config['path'], $path);
@@ -189,7 +185,7 @@ class RecordController extends BaseController {
 		$record->record_type_id = $record_type->id;
 		$record->site_id = $site->id;
 		if(!$record->save()) {
-			return App::abort(500, 'Could not save record to database.');
+			return App::abort(500, Lang::get('l-press::errors.saveFailed'));
 		}
 		$value = new Value();
 		$value->valuable_id = $record->id;
@@ -197,7 +193,7 @@ class RecordController extends BaseController {
 		$value->field_id = 4;
 		$value->current_revision_id = 0;
 		if(!$value->save()) {
-			return App::abort(500, 'Could not save value to database.');
+			return App::abort(500, Lang::get('l-press::errors.saveFailed'));
 		}
 		$revision = new Revision();
 		$revision->value_id = $value->id;
@@ -206,16 +202,16 @@ class RecordController extends BaseController {
 		$revision->prev_revision_id = 0;
 		$revision->contents = $file_name;
 		if(!$revision->save()) {
-			return App::abort(500, 'Could not save revision to database.');
+			return App::abort(500, Lang::get('l-press::errors.saveFailed'));
 		}
 		if($can_publish) {
 			$value->current_revision_id = $revision->id;
 			if(!$value->save()) {
-				return App::abort(500, 'Could not save current revision to value in database.');
+				return App::abort(500, Lang::get('l-press::errors.saveFailed'));
 			}
 			$record->public = TRUE;
 			if(!$record->save()) {
-				return App::abort(500, 'Could not make record public in database.');
+				return App::abort(500, Lang::get('l-press::errors.saveFailed'));
 			}
 		}
 		$record->load(
