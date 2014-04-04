@@ -272,18 +272,6 @@ Route::group(
 			}
 		);
 		Route::get(
-			'session.json',
-			array(
-				'uses' => 'EternalSword\LPress\AuthenticationController@checkActive'
-			)
-		);
-		Route::get(
-			'{path}',
-			array(
-				'uses' => 'EternalSword\LPress\AuthenticationController@checkActive'
-			)
-		)->where('path', '[A-z0-9\-\/]+\/session.json');
-		Route::get(
 			'{slug}',
 			array(
 				'before' => 'theme|dashboard',

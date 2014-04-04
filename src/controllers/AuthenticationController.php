@@ -77,10 +77,4 @@ class AuthenticationController extends BaseController {
 		Session::put('bad_login', true);
 		return Redirect::route('lpress-login');
 	}
-
-	public function checkActive() {
-		$data = new \stdClass;
-		$data->active = Auth::check();
-		return Response::json($data);
-	}
 }
