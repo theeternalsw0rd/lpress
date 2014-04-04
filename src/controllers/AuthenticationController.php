@@ -52,7 +52,7 @@ class AuthenticationController extends BaseController {
 		return View::make($view_prefix . '.authentication.logged-in',
 			array(
 				'view_prefix' => $view_prefix,
-				'title' => 'Already logged in'
+				'title' => Lang::get('l-press::titles.loggedIn')
 			)
 		);
 	}

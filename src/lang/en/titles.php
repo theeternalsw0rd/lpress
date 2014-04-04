@@ -5,5 +5,6 @@ return array(
 	'updateModel' => 'Update :model_basename: :model_label',
 	'sha2' => 'SSL Requires SHA2',
 	'login' => 'Login',
+	'loggedIn' => 'Already Logged In',
 	'installer' => 'LPress Installer'
 );
