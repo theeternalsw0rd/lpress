@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\HTML;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Route;
@@ -18,12 +19,12 @@ class AuthenticationController extends BaseController {
 		$login_failed = Session::get('bad_login', false);
 		Session::forget('bad_login');
 		$user = Auth::user();
-		$title = 'Login';
+		$title = Lang::get('l-press::titles.login');
 		$install = FALSE;
 		if($first_user->username == 'lpress') {
 			if($user) Auth::logout();
 			$user = FALSE;
-			$title = 'LPress Installer';
+			$title = Lang::get('l-press::titles.installer');
 			$install = TRUE;
 		}
 		if($user) {
