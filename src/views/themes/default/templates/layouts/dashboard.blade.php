@@ -8,5 +8,4 @@
 @stop
 @section('footer_scripts')
 	@parent
-	{{ HTML::asset('js', 'compiled/dashboard/ready.js') }}
 @stop

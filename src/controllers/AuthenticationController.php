@@ -42,6 +42,7 @@ class AuthenticationController extends BaseController {
 
 	public function getLogout() {
 		Auth::logout();
+		Session::flush();
 		Session::put('message', 'Successfully Logged Out');
 		return Redirect::route('lpress-index');
 	}
