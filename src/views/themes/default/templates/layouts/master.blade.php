@@ -55,6 +55,7 @@
 		@section('hidden')
 		@show
 		@section('footer_scripts')
+			{{ HTML::asset('js', 'compiled/lang/' . Config::get('app.locale') . '.js') }}
 			{{ HTML::asset('js', 'vendor/jquery/jquery.js') }}
 			{{ HTML::asset('js', 'vendor/colorbox/colorbox.js') }}
 			{{ HTML::asset('js', 'vendor/dropzone/dropzone.js') }}

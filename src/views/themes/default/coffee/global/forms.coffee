@@ -36,8 +36,8 @@ getUploader = (id, path, target_id, attachment_type) ->
     <div id='#{id}' class='colorbox'>
       <div id='#{id}-tabs' class='tabs'>
         <ul class='etabs clear-fix'>
-          <li class='tab'><a href='##{id}-new'>New</a></li>
-          <li class='tab'><a href='##{id}-existing'>Existing</a></li>
+          <li class='tab'><a href='##{id}-new'>#{lang_global_forms.new}</a></li>
+          <li class='tab'><a href='##{id}-existing'>#{lang_global_forms.existing}</a></li>
         </ul>
         <ul id='#{id}-new' class='tab-contents dropzone files'>
         </ul>
@@ -313,7 +313,7 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
               <a class='dz-preview dz-file-preview'>
                 <img data-dz-thumbnail />
                 <div class='dz-progress'><span class='dz-upload' data-dz-uploadprogress></span></div>
-                <span class='caption'>Uploading...</caption>
+                <span class='caption'>#{lang_global_forms.uploading}</span>
               </a>
             </li>
           """
@@ -324,6 +324,7 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
               thumbnailWidth: 500
               thumbnailHeight: 500
               previewTemplate: previewTemplate
+              dictDefaultMessage: lang_global_forms.dropzone
             }
           )
           myDropzone.on(
