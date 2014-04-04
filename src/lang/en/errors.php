@@ -5,6 +5,7 @@ return array(
 	'tokenMismatch' => 'Permission denied. Tokens do not match.',
 	'ajaxNotLoggedIn' => 'Permission denied. Not logged in.',
 	'modelIdNotFound' => 'Could not find model with id ":id". It\'s possible it was deleted by another user or the posted data was corrupt.',
+	'recordNotFound' => 'Could not find record with id ":id".',
 	'missingRecordType' => 'RecordType ":slug" is missing for this input.',
 	'invalidRecordType' => 'RecordType ":slug" is not valid for this input.',
 	'dbConnectionError' => 'Could not connect to database.',
@@ -22,7 +23,9 @@ return array(
 	'templateMissing' => 'No template could be found for this RecordType.',
 	'saveFailed' => 'Some data was not saved to the database.',
 	'invalidIdFormat' => 'Path must end with either "create", or the id number of a model.',
-	'invalidRoute' => 'The url you provided has no matching route.',
+	'invalidRoute' => 'The url provided has no matching route.',
 	'modelNotFound' => 'Could not find the model for the slug ":slug".',
-	'applicationAlreadyInstalled' => 'Application is already installed. You cannot run the installer again.'
+	'applicationAlreadyInstalled' => 'Application is already installed. You cannot run the installer again.',
+	'uploadCommandMissing' => 'Upload command (create/edit) not passed. Cannot process request.',
+	'uploadRecordIdMissing' => 'Record id not passed. Cannot process request.'
 );

@@ -8,12 +8,6 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Str;
 
 class UploadController extends BaseController {
-	protected $configuration_error = "Couldn't load upload options from configuration so aborting upload.";
-	protected $notfound_error = "Valid RecordType could not be located from uri path.";
-	protected $permission_error = "You do not have permission to upload files.";
-	protected $record_error = "Record id not passed. Cannot process request.";
-	protected $command_error = "Upload command (create/edit) not passed. Cannot process request.";
-
 	protected function getOptions() {
 		$options = array();
 		$options['image_versions'] = array();
@@ -68,19 +62,19 @@ class UploadController extends BaseController {
 				}
 				case 403: {
 					File::delete($file_path);
-					$json->error = $mime . ' is not allowed by the current RecordType.';
+					$json->error = Lang::get('l-press::errors.mimePermissionError', array('mime' => $mime));
 					return Response::json($json, $status_code);
 				}
 				default: {
 					File::delete($file_path);
-					$json->error = 'An unexpected error occurred verifying the mimetype.';
+					$json->error = Lang::get('l-press::errors.httpStatus500');
 					return Response::json($json, $status_code);
 				}
 			}
 		}
 		$json->record = NULL;
 		$json->status_code = 500;
-		$json->error = 'An unexpected error occurred saving the record.';
+		$json->error = Lang::get('l-press::errors.httpStatus500');
 		return Response::json($json, $status_code);
 	}
 
@@ -91,7 +85,7 @@ class UploadController extends BaseController {
 			if($record->isEmpty()) {
 				$status_code = 404;
 				$json->status_code = $status_code;
-				$json->error = $this->notfound_error;
+				$json->error = Lang::get('l-press::errors.recordNotFound', array('id' => $record_id));
 				return $json;
 			}
 			$status_code = 200;
@@ -101,7 +95,7 @@ class UploadController extends BaseController {
 		}
 		$status_code = 500;
 		$json->status_code = $status_code;
-		$json->error = $this->record_error;
+		$json->error = Lang::get('l-press::errors.uploadRecordIdMissing');
 		return $json;
 	}
 
@@ -122,7 +116,7 @@ class UploadController extends BaseController {
 		}
 		$status_code = 500;
 		$json->status_code = $status_code;
-		$json->error = $this->command_error;
+		$json->error = Lang::get('l-press::errors.uploadCommandMissing');
 		return Response::json($json, $status_code);
 	}
 
@@ -133,14 +127,14 @@ class UploadController extends BaseController {
 		$route = parent::slugsToRoute(Input::get('uri'));
 		if($route->throw404) {
 			$status_code = 404;
-			$json->error = $this->notfound_error;
+			$json->error = Lang::get('l-press::errors.invalidRoute');
 			$json->status_code = $status_code;
 			return Response::json($json, $status_code);
 		}
 		if(Input::has('upload_command')) {
 			return $this->processPost($user, $route);
 		}
-		$json->error = $this->command_error;
+		$json->error = Lang::get('l-press::errors.uploadCommandMissing');
 		$status_code = 500;
 		$json->status_code = $status_code;
 		return Response::json($json, $status_code);
@@ -148,9 +142,6 @@ class UploadController extends BaseController {
 
 	public function deleteFile() {
 		$options = $this->getOptions();
-		if(!$options) {
-			return Response::json($this->configuration_error, 500);
-		}
 		$file_path = $options['upload_dir'] . '/' . Input::get('file');
 		return Response::json(File::delete($file_path));
 	}

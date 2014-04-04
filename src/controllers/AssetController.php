@@ -4,6 +4,7 @@ use Illuminate\Routing\Controllers\Controller;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Lang;
 
 class AssetController extends BaseController {
 	// Start from Blueimp UploadHandler
