@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\View;
 
@@ -15,7 +16,7 @@ class DashboardController extends BaseController {
 		$is_root = $user->isRoot();
 		$pass_to_view = array(
 			'view_prefix' => $view_prefix,
-			'title' => 'Dashboard',
+			'title' => Lang::get('l-press::titles.dashboard'),
 			'user' => $user,
 			'is_root' => $is_root
 		);
@@ -52,17 +53,17 @@ class DashboardController extends BaseController {
 		}
 		else {
 			if(!is_numeric($id)) {
-				App::abort(422, "Path must end with either create, or the id number of a model.");
+				App::abort(422, Lang::get('l-press::errors.invalidIdFormat'));
 			}
 		}
 		$model_info = self::getModelInfo($slug);
 		if($model_info === FALSE) {
-			return App::abort(404, 'Could not find model.');
+			return App::abort(404, Lang::get('l-press::errors.modelNotFound', array('slug' => $slug)));
 		}
 		$controller = $model_info['controller'];
 		$model_name = $model_info['model_name'];
 		if(!$controller::hasPermission()) {
-			return App::abort(403, 'You do not have permission to this area.');
+			return App::abort(403, Lang::get('l-press::errors.permissionError'));
 		}
 		if($manager) {
 			return $controller::getModelIndex($slug, $model_name, 15);
@@ -76,17 +77,17 @@ class DashboardController extends BaseController {
 		}
 		else {
 			if(!is_numeric($id)) {
-				App::abort(422, "Path must end with either create, or the id number of a model.");
+				App::abort(422, Lang::get('l-press::errors.invalidIdFormat'));
 			}
 		}
 		$model_info = self::getModelInfo($slug);
 		if($model_info === FALSE) {
-			return App::abort(404, 'Could not find model.');
+			return App::abort(404, Lang::get('l-press::errors.modelNotFound', array('slug' => $slug)));
 		}
 		$controller = $model_info['controller'];
 		$model_name = $model_info['model_name'];
 		if(!$controller::hasPermission($id)) {
-			return App::abort(403, 'You do not have write access here.');
+			return App::abort(403, Lang::get('l-press::errors.executePermissionError'));
 		}
 		return $controller::processModelForm($slug, $model_name, $id);
 	}

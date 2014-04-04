@@ -6,5 +6,6 @@ return array(
 	'sha2' => 'SSL Requires SHA2',
 	'login' => 'Login',
 	'loggedIn' => 'Already Logged In',
-	'installer' => 'LPress Installer'
+	'installer' => 'LPress Installer',
+	'dashboard' => 'Dashboard'
 );
