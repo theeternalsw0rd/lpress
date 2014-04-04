@@ -13,10 +13,6 @@ use Illuminate\Support\Facades\View;
 
 class AuthenticationController extends BaseController {
 	public function getLogin() {
-		if(!defined('THEME')) {
-			echo 'An unknown error occured, please try again later.';
-			die();
-		}
 		extract(parent::prepareMake());	
 		$first_user = User::find(1);
 		$login_failed = Session::get('bad_login', false);

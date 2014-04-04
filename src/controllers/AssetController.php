@@ -32,7 +32,7 @@ class AssetController extends BaseController {
 			if(substr($segment, 0) == '.') {
 				header('HTTP/1.0 403 Forbidden');
 				echo '<h1>'.Lang::get('l-press::errors.pathPermissionError').'</h1>';
-				die();
+				die;
 			}
 			$path .= '/' . $segment;
 		}
@@ -49,10 +49,11 @@ class AssetController extends BaseController {
 			}
 			case 403: {
 				App::abort($status_code, Lang::get('l-press::errors.mimePermissionError', array('mime' => $mime)));
-				exit();
+				die;
 			}
 			default: {
 				App::abort($status_code);
+				die;
 			}
 		}
 		if(extension_loaded('zlib')){ob_start('ob_gzhandler');}
@@ -64,7 +65,7 @@ class AssetController extends BaseController {
 		else {
 			if(isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && $_SERVER['HTTP_IF_MODIFIED_SINCE'] == $modified) {
 				header('HTTP/1.1 304 Not Modified');
-				exit();
+				die;
 			}
 		}
 		header('Content-Type: ' . $mime);
@@ -73,14 +74,14 @@ class AssetController extends BaseController {
 		header('Expires: Sun, 17-Jan-2038 19:14:07 GMT');
 		readfile($path);
 		if(extension_loaded('zlib')){ob_end_flush();}
-		exit;
+		die;
 	}
 
 	public function getAsset($path) {
 		if(!defined('THEME')) {
 			header('HTTP/1.0 404 Not Found');
 			echo '<h1>'.Lang::get('l-press::errors.assetNotFound').'</h1>';
-			die();
+			die;
 		}
 		$segments = explode('/', $path);
 		$count = count($segments);

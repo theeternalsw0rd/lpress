@@ -144,21 +144,21 @@ class BaseController extends Controller {
 			$code = $e->getCode();
 			if($code == 2002) {
 				echo Lang::get('l-press::errors.dbConnectionError');
-				die();
+				die;
 			}
 			if(substr_count($message, 'SQLSTATE[42S02]') > 0) {
 				echo Lang::get('l-press::errors.dbTableMissing', array('table' => 'sites'));
-				die();
+				die;
 			}
 			echo Lang::get('l-press::errors.httpStatus500');
-			die();
+			die;
 		}
 		if(!$site) {
 			$site = Site::where('domain', 'wildcard')->first();
 		}
 		if(!$site) {
 			echo Lang::get('l-press::errors.siteMissing');
-			die();
+			die;
 		}
 		define('SITE', $site->id);
 		define('PRODUCTION', $site->in_production == 1 ? 'compressed' : 'uncompressed');
@@ -169,10 +169,10 @@ class BaseController extends Controller {
 			$code = $e->getCode();
 			if(substr_count($message, 'SQLSTATE[42S02]') > 0) {
 				echo Lang::get('l-press::errors.dbTableMissing', array('table' => 'themes'));
-				die();
+				die;
 			}
 			echo Lang::get('l-press::errors.httpStatus500');
-			die();
+			die;
 		}
 		define('THEME', $theme ? $theme->slug : 'default');
 	}
@@ -259,7 +259,7 @@ class BaseController extends Controller {
 	public static function prepareMake() {
 		if(!defined('THEME')) {
 			echo Lang::get('l-press::errors.httpStatus500');
-			die();
+			die;
 		}
 		$view_prefix = 'l-press::themes.' . THEME . '.templates';
 		self::setMacros();
