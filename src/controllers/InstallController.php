@@ -3,6 +3,7 @@
 use Illuminate\Routing\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\View;
 
@@ -14,7 +15,7 @@ class InstallController extends BaseController {
 			return View::make($view_prefix . '.dashboard.create_user',
 				array(
 					'view_prefix' => $view_prefix,
-					'title' => 'Create User',
+					'title' => Lang::get('l-press::titles.newModel', array('model_basename' => 'User')),
 					'install' => TRUE
 				)
 			);
@@ -22,7 +23,7 @@ class InstallController extends BaseController {
 		if($user && $user->username != 'lpress') {
 			return Redirect::route('lpress-dashboard')->with(
 				'std_errors',
-				array('Application is already installed. You cannot run the installer again.')
+				array(Lang::get('l-press::errors.applicationAlreadyInstalled'))
 			);
 		}
 	}
