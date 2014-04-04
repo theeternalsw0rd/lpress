@@ -31,7 +31,7 @@ class AssetController extends BaseController {
 			$segment = $segments[$i++];
 			if(substr($segment, 0) == '.') {
 				header('HTTP/1.0 403 Forbidden');
-				echo '<h1>Access Denied</h1>';
+				echo '<h1>'.Lang::get('l-press::errors.pathPermissionError').'</h1>';
 				die();
 			}
 			$path .= '/' . $segment;
@@ -48,7 +48,7 @@ class AssetController extends BaseController {
 				break;
 			}
 			case 403: {
-				App::abort($status_code, $mime . ' is not allowed by the server.');
+				App::abort($status_code, Lang::get('l-press::errors.mimePermissionError', array('mime' => $mime)));
 				exit();
 			}
 			default: {
@@ -79,7 +79,7 @@ class AssetController extends BaseController {
 	public function getAsset($path) {
 		if(!defined('THEME')) {
 			header('HTTP/1.0 404 Not Found');
-			echo '<h1>File could not be found</h1>';
+			echo '<h1>'.Lang::get('l-press::errors.assetNotFound').'</h1>';
 			die();
 		}
 		$segments = explode('/', $path);
