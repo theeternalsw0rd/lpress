@@ -73,11 +73,7 @@ ulSlideToggle = (event, clickElement) ->
 
 initializeTabindex = do ->
   $focusables = getFocusables($(document))
-  $forms = $('form').filter(':visible')
-  if $forms.length > 0
-    $focusElement = getFocusables($forms.first()).first()
-  else
-    $focusElement = $focusables.first()
+  $focusElement = $focusables.first()
   #endif
   rebuildTabindex($focusables, $focusElement)
 #return
