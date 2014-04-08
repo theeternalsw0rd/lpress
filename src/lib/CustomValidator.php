@@ -70,7 +70,7 @@ class CustomValidator extends \Illuminate\Validation\Validator {
 				return FALSE;
 			}
 		}
-		if(preg_match("[\pL]+", $parts[count($parts) - 1]) != 1) {
+		if(preg_match("/[\pL]+/", $parts[count($parts) - 1]) != 1) {
 			return FALSE;
 		}
 		return TRUE;
