@@ -547,7 +547,7 @@ class BaseController extends Controller {
 					if(Str::endsWith($property, '_id')) {
 						$related_property = substr($property, 0, -3);
 						$namespace = 'EternalSword\\LPress\\';
-						$label = Lang::get("l-press::labels.${related_property}");
+						$label = Lang::get("l-press::labels.${related_property}", array(), 'en');
 						$class = $namespace.str_replace(' ', '', $label);
 						if(class_exists($class) && is_subclass_of($class, $namespace.'BaseModel')) {
 							$items = $class::all();
