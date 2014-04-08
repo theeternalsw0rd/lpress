@@ -407,12 +407,14 @@ class BaseController extends Controller {
 			}
 			return "<div class='text'><label for='${name}'>${label}${error}</label>$input</div>";
 		});
-		Form::macro('checkbox_input', function($name, $label, $attributes = array()) {
+		Form::macro('checkbox_input', function($name, $label, $value, $attributes = array()) {
+			$error = self::getValidationError($name);
+			$value = Input::old($name, $value) ? " checked='checked'" : "";
 			return "
 				<div class='checkbox'>
 					<label for='${name}' class='checkbox'>
-						<input id='${name}' name='${name}' class='checkbox' type='checkbox'" . self::getAttributeString($attributes) . " />
-						<span unselectable='on' class='checkbox-label' data-for='${name}'>${label}</span>
+						<input id='${name}' name='${name}' class='checkbox' type='checkbox'" . $value . self::getAttributeString($attributes) . " />
+						<span unselectable='on' class='checkbox-label' data-for='${name}'>${label}${error}</span>
 					</label>
 				</div>
 			";
@@ -578,10 +580,7 @@ class BaseController extends Controller {
 					}
 					case 'boolean': {
 						$attributes = array();
-						if($value) {
-							$attributes['checked'] = 'checked';
-						}
-						$html .= Form::checkbox_input($property, $label, $attributes);
+						$html .= Form::checkbox_input($property, $label, $value, $attributes);
 						break;
 					}
 					default: {
