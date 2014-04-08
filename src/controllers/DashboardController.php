@@ -71,7 +71,7 @@ class DashboardController extends BaseController {
 		return $controller::getModelForm($slug, $model_name, $id);
 	}
 
-	public static function routePostAction($slug) {
+	public static function routePostAction($slug, $id) {
 		if($id == 'create') {
 			$id = NULL;
 		}
