@@ -1,5 +1,7 @@
 <?php namespace EternalSword\LPress;
 
+use Illuminate\Support\Facades\Lang;
+
 class CustomValidator extends \Illuminate\Validation\Validator {
 
 	protected $implicitRules = array(
@@ -13,11 +15,19 @@ class CustomValidator extends \Illuminate\Validation\Validator {
 		'Same'
 	);
 
+	protected function doReplacements($message, $attribute, $rule, $parameters) {
+		$message = str_replace(':attribute', "<span class='label'>" . $this->getAttribute($attribute) . "</span>", $message);
+		if (isset($this->replacers[snake_case($rule)])) {
+			$message = $this->callReplacer($message, $attribute, snake_case($rule), $parameters);
+		}
+		elseif (method_exists($this, $replacer = "replace{$rule}")) {
+			$message = $this->$replacer($message, $attribute, $rule, $parameters);
+		}
+		return $message;
+	}
+
 	public static function getOwnMessages() {
-		return array(
-			'bool' => 'The :attribute field must be a boolean value.',
-			'record' => 'The :attribute field must exist as a record.'
-		);
+		return Lang::get('l-press::validation');
 	}
 
 	public function validateBool($attribute, $value, $parameters) {

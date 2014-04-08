@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
 
@@ -36,6 +37,7 @@ class BaseController extends Controller {
 			);
 		}
 		$validator = Validator::make(Input::all(), $model->getRules(), CustomValidator::getOwnMessages());
+		$validator->setAttributeNames(Lang::get('l-press::labels'));
 		if($validator->fails()) {
 			return Redirect::back()->withInput()->withErrors($validator);
 		}
