@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
 
 class BaseController extends Controller {
-	protected static function processModelForm($slug, $model_name, $id = NULL) {
+	protected static function processModelForm($model_name, $id = NULL) {
 		if(is_null($id)) {
 			$model = new $model_name();
 		}
@@ -42,7 +42,27 @@ class BaseController extends Controller {
 			return Redirect::back()->withInput()->withErrors($validator);
 		}
 		$model->fill(Input::all());
-		return $model->save();
+		$model->save();
+		return Redirect::to(URL::previous());
+	}
+
+	protected static function delete($model_name, $id) {
+		$model = $model_name::find($id);
+		if(is_null($model)) {
+			return Redirect::back()->with(
+				'errors',
+				array(
+					Lang::get(
+						'l-press::errors.modelIdNotFound',
+						array('id' => $id)
+					)
+				)
+			);
+		}
+		$model->delete();
+		$url = URL::previous();
+		$url = preg_replace('/\/[0-9]+$/', '', $url);
+		return Redirect::to($url);
 	}
 
 	public static function getModelForm($slug, $model_name, $id = NULL) {
@@ -472,7 +492,7 @@ class BaseController extends Controller {
 			if($icon !== '') {
 				$icon = "<span class='button-icon ${icon_class}'>$icon</span>";
 			}
-			return "<button type='$type'>$icon<span class='button-label'>$label</span></button>";
+			return "<button type='$type'" . self::getAttributeString($attributes) . ">$icon<span class='button-label'>$label</span></button>";
 		});
 		HTML::macro('asset', function($type, $path, $attributes = array()) {
 			$asset_domain = Config::get('l-press::asset_domain');
@@ -510,8 +530,12 @@ class BaseController extends Controller {
 			return $open . $version . $close;
 		});
 		Form::macro('model_form', function($model, $url = NULL) {
+			$trash = TRUE;
 			if(is_null($url)) {
 				$url = self::getDashboardPrefix() . '/' . $model->getTable() . '/create';
+			}
+			if(strpos($url, 'create') !== FALSE) {
+				$trash = FALSE;
 			}
 			$html = Form::open(array('url' => $url));
 			$columns = $model->getColumns();
@@ -592,7 +616,21 @@ class BaseController extends Controller {
 					}
 				}
 			}
-			$html .= "<div class='submit'>" . Form::icon_button(Lang::get('l-press::labels.submit_button'), 'submit', array('class' => 'button'), 'fa-check') . "</div>";
+			$html .= "<div class='submit'>";
+			$html .= Form::icon_button(Lang::get('l-press::labels.submit_button'), 'submit', array('class' => 'button'), 'fa-check');
+			if($trash) {
+				$html .= Form::icon_button(
+					Lang::get('l-press::labels.delete_button'),
+					'submit',
+					array(
+						'class' => 'button',
+						'name' => '_method',
+						'value' => 'DELETE'
+					),
+					'fa-trash-o'
+				);
+			}
+			$html .= "</div>";
 			$html .= Form::close();
 			return $html;
 		});

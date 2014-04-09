@@ -17,7 +17,7 @@ $active_button_top_padding: 2 * $button_vpadding - $active_button_bottom_padding
 
 %button-layout
   display: inline-block
-  margin: 0.5em 0 0 0
+  margin: 0.5em 0.5em 0 0
   padding: $button_vpadding $button_hpadding
 
 html, body
@@ -70,7 +70,7 @@ select
   left: -1000px
 
 ul.tabular, ul.select
-  margin: 0
+  margin: 0.5em 0
   padding: 0
   & > li
     display: block
@@ -230,7 +230,7 @@ span.button, a.button
 span.active-button, a.active-button
   @extend input.button:active
 
-input.button
+input.button, button
   @extend %button-layout
   &:active
     padding: $active_button_top_padding $button_hpadding $active_button_bottom_padding $button_hpadding

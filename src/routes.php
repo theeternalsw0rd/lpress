@@ -292,6 +292,13 @@ Route::group(
 				'uses' => 'EternalSword\LPress\DashboardController@routePostAction'
 			)
 		);
+		Route::delete(
+			'{slug}/{id}',
+			array(
+				'before' => 'csrf|theme|dashboard',
+				'uses' => 'EternalSword\LPress\DashboardController@routeDeleteAction'
+			)
+		);
 	}
 );
 Route::get(

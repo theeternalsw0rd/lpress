@@ -77,7 +77,7 @@ class DashboardController extends BaseController {
 		}
 		else {
 			if(!is_numeric($id)) {
-				App::abort(422, Lang::get('l-press::errors.invalidIdFormat'));
+				return App::abort(422, Lang::get('l-press::errors.invalidIdFormat'));
 			}
 		}
 		$model_info = self::getModelInfo($slug);
@@ -89,6 +89,23 @@ class DashboardController extends BaseController {
 		if(!$controller::hasPermission($id)) {
 			return App::abort(403, Lang::get('l-press::errors.executePermissionError'));
 		}
-		return $controller::processModelForm($slug, $model_name, $id);
+		return $controller::processModelForm($model_name, $id);
 	}
+
+	public static function routeDeleteAction($slug, $id) {
+		if(!is_numeric($id)) {
+			return App::abort(422, Lang::get('l-press::errors.invalidIdFormat'));
+		}
+		$model_info = self::getModelInfo($slug);
+		if($model_info === FALSE) {
+			return App::abort(404, Lang::get('l-press::errors.modelNotFound', array('slug' => $slug)));
+		}
+		$controller = $model_info['controller'];
+		$model_name = $model_info['model_name'];
+		if(!$controller::hasPermission($id)) {
+			return App::abort(403, Lang::get('l-press::errors.executePermissionError'));
+		}
+		return $controller::delete($model_name, $id);
+	}
+
 }
