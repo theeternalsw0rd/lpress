@@ -41,8 +41,8 @@ class User extends BaseModel implements UserInterface, RemindableInterface {
 	);
 
 	protected $rules = array(
-		'username' => 'required|unique:users',
-		'email' => 'required|email|unique:users',
+		'username' => 'required|unique:users,username,:id:',
+		'email' => 'required|email|unique:users,email,:id:',
 		'password' => 'required|min:8',
 		'verify_password' => 'same:password',
 		'email_visible' => 'bool',

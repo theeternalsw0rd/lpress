@@ -25,7 +25,7 @@ class Site extends BaseModel {
 
 	protected $rules = array(
 		'label' => 'required',
-		'domain' => 'required|domain|unique:sites',
+		'domain' => 'required|domain|unique:sites,domain,:id:',
 		'theme_id' => 'required|numeric',
 		'in_production' => 'bool'
 	);

@@ -33,6 +33,20 @@ class BaseModel extends Eloquent {
 		return $this->rules;
 	}
 
+	// auto handle unique rule exclude existing, thanks Holger Weis https://github.com/betawax/role-model/blob/master/src/Betawax/RoleModel/RoleModel.php#L86-L101
+	public function processRules($rules = array()) {
+		$id = $this->getKey();
+		if(count($rules) < 1) {
+			$rules = $this->rules;
+		}
+		array_walk($rules, function(&$item) use ($id) {
+			// Replace placeholders
+			$item = stripos($item, ':id:') !== false ? str_ireplace(':id:', $id, $item) : $item;
+		});
+
+		return $rules;
+	}
+
 	public function getSpecialInputs() {
 		return $this->special_inputs;
 	}

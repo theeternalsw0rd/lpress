@@ -36,7 +36,7 @@ class BaseController extends Controller {
 				)
 			);
 		}
-		$validator = Validator::make(Input::all(), $model->getRules(), CustomValidator::getOwnMessages());
+		$validator = Validator::make(Input::all(), $model->processRules(), CustomValidator::getOwnMessages());
 		$validator->setAttributeNames(Lang::get('l-press::labels'));
 		if($validator->fails()) {
 			return Redirect::back()->withInput()->withErrors($validator);
