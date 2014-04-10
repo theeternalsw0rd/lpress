@@ -81,6 +81,12 @@ h1, h2, h3
   border-width: 0 3px 0 3px
   border-style: double
 
+ul.collection
+  a
+    color: $icon_color
+    &:hover
+      color: $icon_hover_color
+
 ul.tabular, ul.select
   a.label, a.option
     @include background_opacity($label_rgba_background, 0.3, $label_background)
@@ -93,7 +99,7 @@ ul.tabular, ul.select
   li.active > a.label
     @include background_opacity($label_rgba_background, 0.6, $label_background)
 
-.button-icon
+div.dz-success-mark .button-icon
   text-shadow: 0px 0px 2px $text_color, 0px 0px 2px $text_color
 
 .colorbox
@@ -139,9 +145,14 @@ a.disabled
 .text input, textarea
   @include form_common()
 
-ul.tabular, ul.select
+ul.tabular, ul.select, ul.collection
   *
     list-style: none
+
+ul.collection > li.item
+  @include background_opacity($label_rgba_background, 0.3, $label_background)
+  &:hover
+    @include background_opacity($label_rgba_background, 0.4, $label_background)
 
 .lt-ie8
   input, textarea, span.faux-checkbox, span.button, a.button

@@ -641,7 +641,7 @@ class BaseController extends Controller {
 		});
 		HTML::macro('collection_editor', function($collection) {
 			$rows = array();
-			$html = "<ul>";
+			$html = "<ul class='collection'>";
 			$dashboard_prefix = self::getDashboardPrefix();
 			$icon_font = new IconFont;
 			$trash_icon = $icon_font->getIcon('fa-trash-o');
@@ -649,8 +649,8 @@ class BaseController extends Controller {
 			foreach($collection as $model) {
 				$url = $dashboard_prefix . '/' . $model->getTable() . '/' . $model->id;
 				$html .= "<li class='item'><span class='label'>" . $model->label . "</span>";
-				$html .= "<a href='${url}' class='icon'>$edit_icon</a>";
-				$html .= "<a href='${url}/delete' class='icon'>$trash_icon</a>";
+				$html .= "<a href='${url}/delete' class='button-icon'>$trash_icon</a>";
+				$html .= "<a href='${url}' class='button-icon'>$edit_icon</a>";
 				$html .= "</li>";
 			}
 			$html .= "</ul>";
