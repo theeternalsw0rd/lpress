@@ -529,13 +529,23 @@ class BaseController extends Controller {
 			}
 			return $open . $version . $close;
 		});
+		Form::macro('model_delete', function($url) {
+			$html = Form::open(array('url' => $url));
+			$html .= Form::icon_button(
+				Lang::get('l-press::labels.delete_button'),
+				'submit',
+				array(
+					'class' => 'button',
+					'name' => '_method',
+					'value' => 'DELETE'
+				),
+				'fa-trash-o'
+			);
+			$html .= Form::close();
+		});
 		Form::macro('model_form', function($model, $url = NULL) {
-			$trash = TRUE;
 			if(is_null($url)) {
 				$url = self::getDashboardPrefix() . '/' . $model->getTable() . '/create';
-			}
-			if(strpos($url, 'create') !== FALSE) {
-				$trash = FALSE;
 			}
 			$html = Form::open(array('url' => $url));
 			$columns = $model->getColumns();
@@ -618,18 +628,6 @@ class BaseController extends Controller {
 			}
 			$html .= "<div class='submit'>";
 			$html .= Form::icon_button(Lang::get('l-press::labels.submit_button'), 'submit', array('class' => 'button'), 'fa-check');
-			if($trash) {
-				$html .= Form::icon_button(
-					Lang::get('l-press::labels.delete_button'),
-					'submit',
-					array(
-						'class' => 'button',
-						'name' => '_method',
-						'value' => 'DELETE'
-					),
-					'fa-trash-o'
-				);
-			}
 			$html .= "</div>";
 			$html .= Form::close();
 			return $html;
@@ -643,14 +641,16 @@ class BaseController extends Controller {
 		});
 		HTML::macro('collection_editor', function($collection) {
 			$rows = array();
-			$html = "<ul class='tabular'>";
+			$html = "<ul>";
 			$dashboard_prefix = self::getDashboardPrefix();
 			$icon_font = new IconFont;
-			$icon = $icon_font->getIcon('fa-caret-square-o-down');
+			$trash_icon = $icon_font->getIcon('fa-trash-o');
+			$edit_icon = $icon_font->getIcon('fa-pencil-square-o');
 			foreach($collection as $model) {
 				$url = $dashboard_prefix . '/' . $model->getTable() . '/' . $model->id;
-				$html .= "<li class='item inactive'><a href='${url}' class='label'>" . $model->label . "<span class='icon'>$icon</span></a>";
-				$html .= Form::model_form($model, $url);
+				$html .= "<li class='item'><span class='label'>" . $model->label . "</span>";
+				$html .= "<a href='${url}' class='icon'>$edit_icon</a>";
+				$html .= "<a href='${url}/delete' class='icon'>$trash_icon</a>";
 				$html .= "</li>";
 			}
 			$html .= "</ul>";
