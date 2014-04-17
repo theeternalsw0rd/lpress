@@ -2,6 +2,9 @@
 
 use Illuminate\Auth\UserInterface;
 use Illuminate\Auth\Reminders\RemindableInterface;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Redirect;
 
 class User extends BaseModel implements UserInterface, RemindableInterface {
 
@@ -54,6 +57,39 @@ class User extends BaseModel implements UserInterface, RemindableInterface {
 		'bio' => 'text:textarea',
 		'email' => 'text:email'
 	);
+
+	protected function hasModelPermission($action) {
+		$user = Auth::user();
+		return $user->hasPermission('user-manager');
+	}
+
+	public function deleteItem() {
+		if(!$this->hasModelPermission('delete')) {
+			return Redirect::back()->with(
+				'std_errors',
+				array(
+					Lang::get('l-press::errors.executePermissionsError')
+				)
+			);
+		}
+		if($this->id == Auth::user()->id) {
+			return Redirect::back()->with(
+				'std_errors',
+				array(
+					Lang::get('l-press::errors.deleteCurrentUser')
+				)
+			);
+		}
+		if(self::all()->count() == 1) {
+			return Redirect::back()->with(
+				'std_errors',
+				array(
+					Lang::get('l-press::errors.lastModelItem')
+				)
+			);
+		}
+		$this->delete();
+	}
 
 	/**
 	 * Get the unique identifier for the user.

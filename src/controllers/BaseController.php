@@ -18,42 +18,25 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
 
 class BaseController extends Controller {
-	protected static function hasModelPermission($model_name) {
-		$user = Auth::user();
-		if($user->hasPermission('root') || 
-			(
-				$model_name == __NAMESPACE__.'\User') && $user->hasPermission('user-manager')
-			)
-		) {
-			return TRUE;
-		}
-		return TRUE;
-	}
 	protected static function processModelForm($model_name, $id = NULL) {
-		if(!self::hasModelPermission($model_name)) {
-			return Redirect::back()->with(
-				'std_errors',
-				array(
-					Lang::get('l-press::errors.executePermissionsError')
-				)
-			);
-		}
 		if(is_null($id)) {
 			$model = new $model_name();
+			$action = 'create';
 		}
 		else {
 			$model = $model_name::find($id);
-		}
-		if(is_null($model)) {
-			return Redirect::back()->withInput()->with(
-				'errors',
-				array(
-					Lang::get(
-						'l-press::errors.modelIdNotFound',
-						array('id' => $id)
+			$action = 'update';
+			if(is_null($model)) {
+				return Redirect::back()->withInput()->with(
+					'errors',
+					array(
+						Lang::get(
+							'l-press::errors.modelIdNotFound',
+							array('id' => $id)
+						)
 					)
-				)
-			);
+				);
+			}
 		}
 		$validator = Validator::make(Input::all(), $model->processRules(), CustomValidator::getOwnMessages());
 		$validator->setAttributeNames(Lang::get('l-press::labels'));
@@ -61,27 +44,11 @@ class BaseController extends Controller {
 			return Redirect::back()->withInput()->withErrors($validator);
 		}
 		$model->fill(Input::all());
-		$model->save();
+		$model->saveItem($action);
 		return Redirect::to(URL::previous());
 	}
 
 	protected static function delete($model_name, $id) {
-		if(!self::hasModelPermission($model_name)) {
-			return Redirect::back()->with(
-				'std_errors',
-				array(
-					Lang::get('l-press::errors.executePermissionsError')
-				)
-			);
-		}
-		if($model_name == __NAMESPACE__.'\User' && $id == Auth::user()->id) {
-			return Redirect::back()->with(
-				'std_errors',
-				array(
-					Lang::get('l-press::errors.deleteCurrentUser')
-				)
-			);
-		}
 		$model = $model_name::find($id);
 		if(is_null($model)) {
 			return Redirect::back()->with(
@@ -94,15 +61,7 @@ class BaseController extends Controller {
 				)
 			);
 		}
-		if($model_name::all()->count() == 1) {
-			return Redirect::back()->with(
-				'std_errors',
-				array(
-					Lang::get('l-press::errors.lastModelItem')
-				)
-			);
-		}
-		$model->delete();
+		$model->deleteItem();
 		$url = URL::previous();
 		$url = preg_replace('/\/[0-9]+$/', '', $url);
 		return Redirect::to($url);

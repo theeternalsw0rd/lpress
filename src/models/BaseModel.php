@@ -3,10 +3,48 @@
 use \DB as DB;
 use \Eloquent as Eloquent;
 use \Str as Str;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Redirect;
 
 class BaseModel extends Eloquent {
 	protected $special_inputs = array('description' => 'text:textarea');
+
+	protected function hasModelPermission($action) {
+		$user = Auth::user();
+		return $user->hasPermission('root');
+	}
+
+	public function saveItem($action) {
+		if(!$this->hasModelPermission($action)) {
+			return Redirect::back()->with(
+				'std_errors',
+				array(
+					Lang::get('l-press::errors.executePermissionsError')
+				)
+			);
+		}
+		$this->save();
+	}
+	public function deleteItem() {
+		if(!$this->hasModelPermission('delete')) {
+			return Redirect::back()->with(
+				'std_errors',
+				array(
+					Lang::get('l-press::errors.executePermissionsError')
+				)
+			);
+		}
+		if(self::all()->count() == 1) {
+			return Redirect::back()->with(
+				'std_errors',
+				array(
+					Lang::get('l-press::errors.lastModelItem')
+				)
+			);
+		}
+		$this->delete();
+	}
 
 	public function getColumns() {
 		$schema = DB::getDoctrineSchemaManager();
