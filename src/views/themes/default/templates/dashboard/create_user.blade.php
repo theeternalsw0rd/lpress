@@ -57,7 +57,7 @@
 			) }}
 		</div>
 		<div class='checkbox'>
-			{{ Form::checkbox_input('email_visible', 'Allow email to be displayed publicly.', array('tabindex' => '5')) }}
+			{{ Form::checkbox_input('email_visible', 'Allow email to be displayed publicly.', FALSE, array('tabindex' => '5')) }}
 		</div>
 		<div class='text'>
 			{{ Form::text_input(
