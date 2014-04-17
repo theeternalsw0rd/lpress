@@ -47,15 +47,31 @@ class BaseController extends Controller {
 	}
 
 	protected static function delete($model_name, $id) {
+		if($model_name == __NAMESPACE__.'\User' && $id == Auth::user()->id) {
+			return Redirect::back()->with(
+				'std_errors',
+				array(
+					Lang::get('l-press::errors.deleteCurrentUser')
+				)
+			);
+		}
 		$model = $model_name::find($id);
 		if(is_null($model)) {
 			return Redirect::back()->with(
-				'errors',
+				'std_errors',
 				array(
 					Lang::get(
 						'l-press::errors.modelIdNotFound',
 						array('id' => $id)
 					)
+				)
+			);
+		}
+		if($model_name::all()->count() == 1) {
+			return Redirect::back()->with(
+				'std_errors',
+				array(
+					Lang::get('l-press::errors.lastModelItem')
 				)
 			);
 		}

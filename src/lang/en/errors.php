@@ -27,5 +27,7 @@ return array(
 	'modelNotFound' => 'Could not find the model for the slug ":slug".',
 	'applicationAlreadyInstalled' => 'Application is already installed. You cannot run the installer again.',
 	'uploadCommandMissing' => 'Upload command (create/edit) not passed. Cannot process request.',
-	'uploadRecordIdMissing' => 'Record id not passed. Cannot process request.'
+	'uploadRecordIdMissing' => 'Record id not passed. Cannot process request.',
+	'lastModelItem' => 'This is the last item of this model. The system requires at least one, so you cannot delete this item without creating another item first.',
+	'deleteCurrentUser' => 'You cannot delete the user you are logged in as.'
 );
