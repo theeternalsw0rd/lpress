@@ -25,6 +25,7 @@ class CreateLPressUsersTable extends Migration {
 			$table->integer('image');
 			$table->string('password', 100);
 			$table->timestamps();
+			$table->softDeletes();
 		});
 	}
 

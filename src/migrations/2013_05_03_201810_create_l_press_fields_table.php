@@ -21,6 +21,7 @@ class CreateLPressFieldsTable extends Migration {
 			$table->integer('field_type_id');
 			$table->integer('record_type_id');
 			$table->timestamps();
+			$table->softDeletes();
 		});
 	}
 

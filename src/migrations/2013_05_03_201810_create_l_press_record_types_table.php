@@ -21,6 +21,7 @@ class CreateLPressRecordTypesTable extends Migration {
 			$table->integer('depth');
 			$table->text('description');
 			$table->timestamps();
+			$table->softDeletes();
 		});
 	}
 

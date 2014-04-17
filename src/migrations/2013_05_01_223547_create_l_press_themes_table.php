@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -18,6 +18,7 @@ class CreateLPressThemesTable extends Migration {
 			$table->string('slug')->unique();
 			$table->text('description');
 			$table->timestamps();
+			$table->softDeletes();
 		});
 	}
 

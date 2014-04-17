@@ -17,6 +17,7 @@ class CreateLPressGroupPermissionTable extends Migration {
 			$table->integer('group_id');
 			$table->integer('permission_id');
 			$table->timestamps();
+			$table->softDeletes();
 		});
 	}
 

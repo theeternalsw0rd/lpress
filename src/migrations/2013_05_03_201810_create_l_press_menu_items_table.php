@@ -20,6 +20,7 @@ class CreateLPressMenuItemsTable extends Migration {
 			$table->integer('menu_item_type_id');
 			$table->integer('record_id');
 			$table->timestamps();
+			$table->softDeletes();
 		});
 	}
 

@@ -21,6 +21,7 @@ class CreateLPressCommentsTable extends Migration {
 			$table->integer('depth');
 			$table->text('contents');
 			$table->timestamps();
+			$table->softDeletes();
 		});
 	}
 

@@ -24,6 +24,7 @@ class CreateLPressRecordsTable extends Migration {
 			$table->dateTime('checked_in_time');
 			$table->integer('site_id');
 			$table->timestamps();
+			$table->softDeletes();
 		});
 	}
 

@@ -21,6 +21,7 @@ class CreateLPressRevisionsTable extends Migration {
 			$table->text('contents');
 			$table->string('commit');
 			$table->timestamps();
+			$table->softDeletes();
 		});
 	}
 

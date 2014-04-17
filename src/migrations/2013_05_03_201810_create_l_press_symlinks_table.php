@@ -19,6 +19,7 @@ class CreateLPressSymlinksTable extends Migration {
 			$table->integer('record_id');
 			$table->integer('record_type_id');
 			$table->integer('site_id');
+			$table->softDeletes();
 		});
 	}
 

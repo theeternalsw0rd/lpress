@@ -17,6 +17,7 @@ class CreateLPressGroupUserTable extends Migration {
 			$table->integer('group_id');
 			$table->integer('user_id');
 			$table->timestamps();
+			$table->softDeletes();
 		});
 	}
 

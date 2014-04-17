@@ -18,6 +18,7 @@ class CreateLPressGroupsTable extends Migration {
 			$table->text('description');
 			$table->integer('site_id');
 			$table->integer('record_type_id');
+			$table->softDeletes();
 			$table->timestamps();
 		});
 	}

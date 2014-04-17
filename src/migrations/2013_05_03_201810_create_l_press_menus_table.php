@@ -17,6 +17,7 @@ class CreateLPressMenusTable extends Migration {
 			$table->string('label')->unique();
 			$table->integer('parent_menu_item_id');
 			$table->timestamps();
+			$table->softDeletes();
 		});
 	}
 
