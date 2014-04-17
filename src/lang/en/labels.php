@@ -22,5 +22,6 @@ return array(
 	'verify_password' => 'Verify Password',
 	'remember_me' => 'Remember me.',
 	'new_model' => '+Add New :model_label',
-	'delete_button' => 'Delete'
+	'delete_button' => 'Delete',
+	'update_button' => 'Edit'
 );
