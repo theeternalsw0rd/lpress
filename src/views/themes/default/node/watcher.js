@@ -76,7 +76,7 @@ var uncompressedCoffee = function(source, filename, uncompressed_path) {
     if(source == '') return;
     source = source.replace(/FALSE/g, 'false');
     source = source.replace(/TRUE/g, 'true');
-    source = source.replace(/\\n\s+/g, '');
+    source = source.replace(/>\\n\s+</g, '><');
     var uncompressed_file = path.resolve(uncompressed_path, filename),
         uncompressed_file_label = uncompressed_file.split(root)[1];
     fs.writeFile(uncompressed_file, source, function(err) {
@@ -89,7 +89,7 @@ var compressedCoffee = function(source, filename, compressed_path) {
     if(source == '') return;
     source = source.replace(/FALSE/g, 'false');
     source = source.replace(/TRUE/g, 'true');
-    source = source.replace(/\\n\s+/g, '');
+    source = source.replace(/>\\n\s+</g, '><');
     var compressed_file = path.resolve(compressed_path, filename),
         minified = uglifyjs.minify(source, {fromString: true}),
         compressed_file_label = compressed_file.split(root)[1];
