@@ -1,8 +1,6 @@
 $input_padding: 0.2em
 $button_vpadding: $input_padding
 $button_hpadding: 2 * $input_padding
-$active_button_bottom_padding: 0.5 * $button_vpadding
-$active_button_top_padding: 2 * $button_vpadding - $active_button_bottom_padding
 
 /* Clearfix adapted from Nicolas Gallager's work at http://nicolasgallagher.com/micro-clearfix-hack/ */
 .clear-fix
@@ -250,7 +248,7 @@ span.active-button, a.active-button
 input.button, button
   @extend %button-layout
   &:active
-    padding: $active_button_top_padding $button_hpadding $active_button_bottom_padding $button_hpadding
+    padding: $button_vpadding $button_hpadding
 
 .button-icon
   margin-right: 0.5em
