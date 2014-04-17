@@ -7,7 +7,9 @@ window.lang_global_forms =
   existing: 'Existing'
   uploading: 'Uploading...'
   dropzone: 'Drop files here to upload.'
-  confirm_delete: 'Are you sure you want to delete this item. This action cannot be undone.'
+  delete_item: 'Delete Item'
+  confirm_delete: 'This item will be moved to a trash bin where it will be stored until permenantly deleted or restored.
+                  You may not be able to access the trash bin, in which case, you should notify your site administrator to take further actions.'
   ok: 'OK'
   cancel: 'Cancel'
 #end object

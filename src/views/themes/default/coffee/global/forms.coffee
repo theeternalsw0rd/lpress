@@ -36,6 +36,7 @@ getDialog = (action, options) ->
     when 'delete'
       html = """
         <div class='dialog'>
+          <h2>#{lang_global_forms.delete_item}</h2>
           <p>#{lang_global_forms.confirm_delete}</p>
           <div class='dialog-buttons'>
             <a class='button' href='#{options.url}'>
