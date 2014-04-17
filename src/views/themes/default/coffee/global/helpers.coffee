@@ -12,6 +12,7 @@ $('body').removeClass('nojs')
 ###
 icons = {
   'fa-check': "&#xf00c;"
+  'fa-times': "&#xf00d;"
   'fa-sort': "&#xf0dc;"
   'fa-caret-square-o-down': "&#xf150;"
   'fa-caret-square-o-up': "&#xf151;"

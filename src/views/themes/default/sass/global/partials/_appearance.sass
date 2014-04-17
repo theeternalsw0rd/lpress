@@ -28,6 +28,8 @@
       display: inline-block
     .fa-check
       color: $success_color
+    .fa-times
+      color: $error_text
   @if $button and $real_button
     &:active
       @include background_opacity($form_input_rgba_background, $fallback: $form_input_focused_background)

@@ -31,6 +31,45 @@ $(document).on(
     $label.click()
   #return
 )
+getDialog = (action, options) ->
+  switch action
+    when 'delete'
+      html = """
+        <div class='dialog'>
+          <p>#{lang_global_forms.confirm_delete}</p>
+          <div class='dialog-buttons'>
+            <a class='button' href='#{options.url}'>
+              <span class='button-icon fa-check'>#{icons['fa-check']}</span>
+              <span class='button-label'>#{lang_global_forms.ok}</span>
+            </a>
+            <a href='#' class='button cancel'>
+              <span class='button-icon fa-times'>#{icons['fa-times']}</span>
+              <span class='button-label'>#{lang_global_forms.cancel}</span>
+            </a>
+          </div>
+        </div>
+      """
+    #end when
+  #end switch
+  $.colorbox({'html':html, 'scrolling':FALSE, 'closeButton':FALSE})
+#return
+$(document).on(
+  'click'
+  'a.cancel'
+  (event) ->
+    event.preventDefault()
+    $.colorbox.remove()
+  #return
+)
+$(document).on(
+  'click'
+  'a.delete'
+  (event) ->
+    event.preventDefault()
+    options = { 'url': this.href }
+    getDialog('delete', options)
+  #return
+)
 getUploader = (id, path, target_id, attachment_type) ->
   return $("""
     <div id='#{id}' class='colorbox'>
