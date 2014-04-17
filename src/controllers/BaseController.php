@@ -18,7 +18,26 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
 
 class BaseController extends Controller {
+	protected static function hasModelPermission($model_name) {
+		$user = Auth::user();
+		if($user->hasPermission('root') || 
+			(
+				$model_name == __NAMESPACE__.'\User') && $user->hasPermission('user-manager')
+			)
+		) {
+			return TRUE;
+		}
+		return TRUE;
+	}
 	protected static function processModelForm($model_name, $id = NULL) {
+		if(!self::hasModelPermission($model_name)) {
+			return Redirect::back()->with(
+				'std_errors',
+				array(
+					Lang::get('l-press::errors.executePermissionsError')
+				)
+			);
+		}
 		if(is_null($id)) {
 			$model = new $model_name();
 		}
@@ -47,6 +66,14 @@ class BaseController extends Controller {
 	}
 
 	protected static function delete($model_name, $id) {
+		if(!self::hasModelPermission($model_name)) {
+			return Redirect::back()->with(
+				'std_errors',
+				array(
+					Lang::get('l-press::errors.executePermissionsError')
+				)
+			);
+		}
 		if($model_name == __NAMESPACE__.'\User' && $id == Auth::user()->id) {
 			return Redirect::back()->with(
 				'std_errors',
