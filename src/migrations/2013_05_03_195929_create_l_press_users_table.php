@@ -24,6 +24,7 @@ class CreateLPressUsersTable extends Migration {
 			$table->text('bio');
 			$table->integer('image');
 			$table->string('password', 100);
+			$table->string('remember_token', 100)->nullable();
 			$table->timestamps();
 			$table->softDeletes();
 		});
