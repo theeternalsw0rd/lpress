@@ -45,7 +45,14 @@ class BaseController extends Controller {
 		}
 		$model->fill(Input::all());
 		$model->saveItem($action);
-		return Redirect::to(URL::previous());
+		if(Session::has('model_post_redirect')) {
+			$url = Session::get('model_post_redirect');
+			Session::forget('model_post_redirect');
+		}
+		else {
+			$url = URL::previous();
+		}
+		return Redirect::to($url);
 	}
 
 	protected static function delete($model_name, $id) {
@@ -69,6 +76,7 @@ class BaseController extends Controller {
 
 	public static function getModelForm($slug, $model_name, $id = NULL) {
 		extract(self::prepareMake());
+		Session::set('model_post_redirect', URL::previous());
 		$model_basename = explode('\\', $model_name);
 		$model_basename = end($model_basename);
 		if(is_null($id)) {
