@@ -6,12 +6,8 @@
 	@parent
 	<h2>
 		{{ $title }}
-		<span class='small'>
-			{{ HTML::new_model_link($new_model) }}&nbsp;
-			{{ HTML::trash_bin_link($new_model) }}
-		</span>
 	</h2>
-	{{ HTML::collection_editor($collection) }}
+	{{ HTML::collection_editor($collection, 'trash') }}
 	{{ $collection->links() }}
 @stop
 @section('footer_scripts')

@@ -22,7 +22,7 @@ return array(
 	'invalidURL' => 'No records could be found for this url.',
 	'templateMissing' => 'No template could be found for this RecordType.',
 	'saveFailed' => 'Some data was not saved to the database.',
-	'invalidIdFormat' => 'Path must end with either "create", or the id number of a model.',
+	'invalidIdFormat' => 'Path must end with one of "create", "delete" or the id number of a model.',
 	'invalidRoute' => 'The url provided has no matching route.',
 	'modelNotFound' => 'Could not find the model for the slug ":slug".',
 	'applicationAlreadyInstalled' => 'Application is already installed. You cannot run the installer again.',

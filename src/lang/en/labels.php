@@ -22,6 +22,8 @@ return array(
 	'verify_password' => 'Verify Password',
 	'remember_me' => 'Remember me.',
 	'new_model' => '+Add New',
+	'trash' => 'Trash Bin',
 	'delete_button' => 'Delete',
+	'restore_button' => 'Restore',
 	'update_button' => 'Edit'
 );

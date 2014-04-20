@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Redirect;
 class BaseModel extends Eloquent {
 	protected $special_inputs = array('description' => 'text:textarea');
 
+	protected $softDelete = TRUE;
+
 	protected function hasModelPermission($action) {
 		$user = Auth::user();
 		return $user->hasPermission('root');
@@ -26,6 +28,19 @@ class BaseModel extends Eloquent {
 		}
 		$this->save();
 	}
+
+	public function restoreItem() {
+		if(!$this->hasModelPermission('restore')) {
+			return Redirect::back()->with(
+				'std_errors',
+				array(
+					Lang::get('l-press::errors.executePermissionsError')
+				)
+			);
+		}
+		$this->restore();
+	}
+
 	public function deleteItem() {
 		if(!$this->hasModelPermission('delete')) {
 			return Redirect::back()->with(

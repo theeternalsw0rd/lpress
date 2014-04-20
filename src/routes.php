@@ -293,6 +293,13 @@ Route::group(
 			)
 		);
 		Route::get(
+			'{slug}/{id}/restore',
+			array(
+				'before' => 'theme|dashboard',
+				'uses' => 'EternalSword\LPress\DashboardController@routeRestoreAction'
+			)
+		);
+		Route::get(
 			'{slug}/{id}/delete',
 			array(
 				'before' => 'theme|dashboard',

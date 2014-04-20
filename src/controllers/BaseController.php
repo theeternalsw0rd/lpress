@@ -55,6 +55,25 @@ class BaseController extends Controller {
 		return Redirect::to($url);
 	}
 
+	protected static function restore($model_name, $id) {
+		$model = $model_name::onlyTrashed()->where('id', $id)->first();
+		if(is_null($model)) {
+			return Redirect::back()->with(
+				'std_errors',
+				array(
+					Lang::get(
+						'l-press::errors.modelIdNotFound',
+						array('id' => $id)
+					)
+				)
+			);
+		}
+		$model->restoreItem();
+		$url = URL::previous();
+		$url = preg_replace('/\/[0-9]+$/', '', $url);
+		return Redirect::to($url);
+	}
+
 	protected static function delete($model_name, $id) {
 		$model = $model_name::find($id);
 		if(is_null($model)) {
@@ -136,6 +155,23 @@ class BaseController extends Controller {
 			return View::make($slug_view, $pass_to_view);
 		}
 		return View::make($view_prefix . '.dashboard.models.index', $pass_to_view);
+	}
+
+	public static function getModelTrash($slug, $model_name, $per_page) {
+		extract(self::prepareMake());
+		$model_basename = explode('\\', $model_name);
+		$model_basename = end($model_basename);
+		$collection = $model_name::onlyTrashed()->paginate($per_page);
+		$pass_to_view = array(
+			'view_prefix' => $view_prefix,
+			'title' => Lang::get('l-press::headers.model_trash_bin', array('model' => $model_basename)),
+			'collection' => $collection
+		);
+		$slug_view = $view_prefix . '.dashboard.' . $slug . '.trash';
+		if(View::exists($slug_view)) {
+			return View::make($slug_view, $pass_to_view);
+		}
+		return View::make($view_prefix . '.dashboard.models.trash', $pass_to_view);
 	}
 
 	public static function hasPermission() {
@@ -648,7 +684,13 @@ class BaseController extends Controller {
 			$label = Lang::get('l-press::labels.new_model');
 			return "<a href='${url}' class='create model' data-model='" . get_class($model) . "'>${label}</a>";
 		});
-		HTML::macro('collection_editor', function($collection) {
+		HTML::macro('trash_bin_link', function($model) {
+			$dashboard_prefix = self::getDashboardPrefix();
+			$url = $dashboard_prefix . '/' . $model->getTable() . '/trash';
+			$label = Lang::get('l-press::labels.trash');
+			return "<a href='${url}' class='trash model' data-model='" . get_class($model) . "'>${label}</a>";
+		});
+		HTML::macro('collection_editor', function($collection, $type = 'standard') {
 			$rows = array();
 			$html = "<ul class='collection'>";
 			$dashboard_prefix = self::getDashboardPrefix();
@@ -657,11 +699,22 @@ class BaseController extends Controller {
 			$trash_title = Lang::get('l-press::labels.delete_button');
 			$edit_icon = $icon_font->getIcon('fa-pencil-square-o');
 			$edit_title = Lang::get('l-press::labels.update_button');
+			$restore_icon = $icon_font->getIcon('fa-undo');
+			$restore_title = Lang::get('l-press::labels.restore_button');
 			foreach($collection as $model) {
 				$url = $dashboard_prefix . '/' . $model->getTable() . '/' . $model->id;
 				$html .= "<li class='item'><span class='label'>" . $model->label . "</span>";
-				$html .= "<a href='${url}/delete' class='button-icon delete' title='${trash_title}'>$trash_icon</a>";
-				$html .= "<a href='${url}' class='button-icon' title='${edit_title}'>$edit_icon</a>";
+				switch($type) {
+					case 'trash': {
+						$html .= "<a href='${url}/delete?type=force' class='button-icon force delete' title='${trash_title}'>$trash_icon</a>";
+						$html .= "<a href='${url}/restore' class='button-icon restore' title='${restore_title}'>$restore_icon</a>";
+						break;
+					}
+					default: {
+						$html .= "<a href='${url}/delete' class='button-icon delete' title='${trash_title}'>$trash_icon</a>";
+						$html .= "<a href='${url}' class='button-icon' title='${edit_title}'>$edit_icon</a>";
+					}
+				}
 				$html .= "</li>";
 			}
 			$html .= "</ul>";
