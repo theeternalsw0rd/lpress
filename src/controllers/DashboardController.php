@@ -56,10 +56,12 @@ class DashboardController extends BaseController {
 			$id = NULL;
 		}
 		else {
-			if(!is_numeric($id) && $id != 'trash') {
-				return App::abort(422, Lang::get('l-press::errors.invalidIdFormat'));
+			if(!is_numeric($id)) {
+				if($id != 'trash') {
+					return App::abort(422, Lang::get('l-press::errors.invalidIdFormat'));
+				}
+				$trash = TRUE;
 			}
-			$trash = TRUE;
 		}
 		$model_info = self::getModelInfo($slug);
 		if($model_info === FALSE) {
