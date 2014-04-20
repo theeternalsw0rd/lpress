@@ -4,7 +4,7 @@
 @stop
 @section('content')
 	@parent
-	<h2>{{ $title }} {{ Form::new_model_link($new_model) }}</h2>
+	<h2>{{ $title }} {{ HTML::new_model_link($new_model) }}</h2>
 	{{ HTML::collection_editor($collection) }}
 	{{ $collection->links() }}
 @stop

@@ -642,7 +642,7 @@ class BaseController extends Controller {
 			$html .= Form::close();
 			return $html;
 		});
-		Form::macro('new_model_link', function($model) {
+		HTML::macro('new_model_link', function($model) {
 			$dashboard_prefix = self::getDashboardPrefix();
 			$url = $dashboard_prefix . '/' . $model->getTable() . '/create';
 			$model_label = $model->label;
