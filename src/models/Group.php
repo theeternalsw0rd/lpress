@@ -10,6 +10,6 @@ class Group extends BaseModel {
 	}
 
 	public function site() {
-		return $this->belongsTo('\EternalSword\LPress\Site');
+		return $this->belongsToMany('\EternalSword\LPress\Site', 'group_user');
 	}
 }

@@ -16,7 +16,6 @@ class CreateLPressGroupsTable extends Migration {
 			$table->increments('id');
 			$table->string('label')->unique();
 			$table->text('description');
-			$table->integer('site_id');
 			$table->integer('record_type_id');
 			$table->softDeletes();
 			$table->timestamps();

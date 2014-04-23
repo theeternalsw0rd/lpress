@@ -9,6 +9,7 @@ class LPressGroupUserTableSeeder extends Seeder {
 			array(
 				'group_id' => '1',
 				'user_id' => '1',
+				'site_id' => '0',
 				'created_at' => $date,
 				'updated_at' => $date
 			)

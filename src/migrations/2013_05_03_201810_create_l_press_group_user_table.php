@@ -16,6 +16,7 @@ class CreateLPressGroupUserTable extends Migration {
 			$table->increments('id');
 			$table->integer('group_id');
 			$table->integer('user_id');
+			$table->integer('site_id'); // can be 0 for wildcard
 			$table->timestamps();
 			$table->softDeletes();
 		});

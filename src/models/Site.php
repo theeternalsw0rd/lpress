@@ -36,7 +36,11 @@ class Site extends BaseModel {
 	 * @return array of User objects 
 	 */
 	public function users() {
-		return $this->belongsToMany('EternalSword\LPress\User')->withPivot('permission_id');
+		return $this->hasMany('EternalSword\LPress\User', 'group_user');
+	}
+
+	public function groups() {
+		return $this->hasMany('EternalSword\LPress\Group', 'group_user');
 	}
 
 	public function theme() {

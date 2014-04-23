@@ -140,7 +140,7 @@ class User extends BaseModel implements UserInterface, RemindableInterface {
 		$user = $this->loadPermissions();
 		$permission_array = is_string($permission) ? array($permission) : $permission;
 		foreach($user->groups as $group) {
-			if(($group->site_id === 0 || $group->site_id == SITE) /* site check (value of 0 is wildcard) */
+			if(($group->pivot->site_id === 0 || $group->pivot->site_id == SITE) /* site check (value of 0 is wildcard) */
 			&& ($group->record_type_id === 0 || $group->record_type_id === $record_type->id) /* record type check (value of 0 is wildcard) */ ) {
 				foreach($group->permissions as $permission) {
 					if($permission->slug === 'root' || in_array($permission_array, $permission->slug)) {
@@ -155,7 +155,7 @@ class User extends BaseModel implements UserInterface, RemindableInterface {
 	public function isRoot() {
 		$user = $this->loadPermissions();
 		foreach($user->groups as $group) {
-			if($group->site_id === 0) {
+			if($group->pivot->site_id === 0) {
 				foreach($group->permissions as $permission) {
 					if($permission->slug === 'root') {
 						return TRUE;
@@ -183,7 +183,7 @@ class User extends BaseModel implements UserInterface, RemindableInterface {
 	}
 
 	public function groups() {
-		return $this->belongsToMany('\EternalSword\LPress\Group');
+		return $this->belongsToMany('\EternalSword\LPress\Group')->withPivot(array('site_id'));
 	}
 
 	private function loadPermissions() {
