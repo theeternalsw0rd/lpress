@@ -1,5 +1,8 @@
 This is not a comprehensive list, just some things to be thought through at this time.
 
+# Refactoring
+1.  Break apart BaseController, moving relevant stuff into libs
+
 # User Management
 1.  Site scope.
 2.  Add password option to model form macro. Include column name for password field to go after.
