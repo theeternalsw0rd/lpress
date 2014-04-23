@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Str;
 
@@ -103,7 +104,13 @@ class UploadController extends BaseController {
 		$json = new \stdClass;
 		$command = Input::get('upload_command');
 		$handler = __NAMESPACE__ . '\RecordController::' . $command . 'AttachmentRecord';
-		if(is_callable($handler) && $user->hasPermission($command)) {
+		if(is_callable($handler)) {
+			if(!$user->hasPermission($command)) {
+				$status_code = 403;
+				$json->status_code = $status_code;
+				$json->error = Lang::get('l-press::errors.executePermissionError');
+				return Response::json($json, $status_code);
+			}
 			if($command == 'edit') {
 				$json = $this->verifyRecord($user, $route);
 				$status_code = $json->status_code;
