@@ -196,20 +196,6 @@ class BaseController extends Controller {
 		return $result;
 	}
 
-	public static function getRoutePrefix() {
-		$route_prefix = Config::get('l-press::route_prefix');
-		$route_prefix = $route_prefix == '/' ? '' : $route_prefix;
-		return $route_prefix;
-	}
-
-	public static function getDashboardPrefix() {
-		$route_prefix = self::getRoutePrefix();
-		$route_prefix = empty($route_prefix) ? '/' : $route_prefix;
-		$url_prefix = rtrim('//' . DOMAIN . '/' . $route_prefix, '/');
-		$dashboard_route = '+' . Config::get('l-press::dashboard_route');
-		return $url_prefix . '/' . $dashboard_route;
-	}
-
 	public static function verifyTheme() {
 		define('DOMAIN', Request::server('HTTP_HOST'));
 		$site = NULL;
@@ -346,9 +332,9 @@ class BaseController extends Controller {
 		$route = new \stdClass;
 		$route->throw404 = FALSE;
 		$route->json = FALSE;
-		$route_prefix = self::getRoutePrefix();
+		$route_prefix = (new PrefixGenerator)->getPrefix();
 		if(!empty($route_prefix)) {
-			$real_path = explode(self::getRoutePrefix(), $path);
+			$real_path = explode($route_prefix, $path);
 			$real_path = $real_path[1];
 		}
 		else {
@@ -526,8 +512,10 @@ class BaseController extends Controller {
 			if ($root_type->slug != 'attachments') {
 				return "<div class='error'>" . Lang::get('l-press::errors.invalidRecordType', array('slug' => $slug)) . "</div>";
 			}
-			$dashboard_prefix = self::getDashboardPrefix();
-			$prefix = self::getRoutePrefix();
+			$prefix_generator = new PrefixGenerator;
+			$prefix = $prefix_generator->getPrefix();
+			$prefix_generator->setType('dashboard');
+			$dashboard_prefix = $prefix_generator->getPrefix();
 			$url_path = $prefix . '/' . $url_path;
 			$url = $dashboard_prefix . "/upload?path=${file_path}/&uri=${url_path}/&upload_command=${upload_command}";
 			$attribute_string = self::getAttributeString($attributes);
@@ -551,7 +539,7 @@ class BaseController extends Controller {
 		HTML::macro('asset', function($type, $path, $attributes = array()) {
 			$asset_domain = Config::get('l-press::asset_domain');
 			$asset_domain = empty($asset_domain) ? DOMAIN : $asset_domain;
-			$route_prefix = self::getRoutePrefix();
+			$route_prefix = (new PrefixGenerator)->getPrefix();
 			$open = '';
 			$close = '';
 			switch($type) {
@@ -599,7 +587,8 @@ class BaseController extends Controller {
 		});
 		Form::macro('model_form', function($model, $url = NULL) {
 			if(is_null($url)) {
-				$url = self::getDashboardPrefix() . '/' . $model->getTable() . '/create';
+				$dashboard_prefix = (new PrefixGenerator('dashboard'))->getPrefix();
+				$url = $dashboard_prefix . '/' . $model->getTable() . '/create';
 			}
 			$html = Form::open(array('url' => $url));
 			$columns = $model->getColumns();
@@ -687,13 +676,13 @@ class BaseController extends Controller {
 			return $html;
 		});
 		HTML::macro('new_model_link', function($model) {
-			$dashboard_prefix = self::getDashboardPrefix();
+			$dashboard_prefix = (new PrefixGenerator('dashboard'))->getPrefix();
 			$url = $dashboard_prefix . '/' . $model->getTable() . '/create';
 			$label = Lang::get('l-press::labels.new_model');
 			return "<a href='${url}' class='create model' data-model='" . get_class($model) . "'>${label}</a>";
 		});
 		HTML::macro('trash_bin_link', function($model) {
-			$dashboard_prefix = self::getDashboardPrefix();
+			$dashboard_prefix = (new PrefixGenerator('dashboard'))->getPrefix();
 			$url = $dashboard_prefix . '/' . $model->getTable() . '/trash';
 			$label = Lang::get('l-press::labels.trash');
 			return "<a href='${url}' class='trash model' data-model='" . get_class($model) . "'>${label}</a>";
@@ -701,7 +690,7 @@ class BaseController extends Controller {
 		HTML::macro('collection_editor', function($collection, $type = 'standard') {
 			$rows = array();
 			$html = "<ul class='collection'>";
-			$dashboard_prefix = self::getDashboardPrefix();
+			$dashboard_prefix = (new PrefixGenerator('dashboard'))->getPrefix();
 			$icon_font = new IconFont;
 			$trash_icon = $icon_font->getIcon('fa-trash-o');
 			$trash_title = Lang::get('l-press::labels.delete_button');

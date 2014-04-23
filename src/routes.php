@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-$route_prefix = BaseController::getRoutePrefix();
+$route_prefix = (new PrefixGenerator)->getPrefix();
 $dashboard_route = '+' . Config::get('l-press::dashboard_route');
 
 // filtering placement thanks to http://markvaneijk.com/minify-the-html-output-in-laravel-4
