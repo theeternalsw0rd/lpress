@@ -12,7 +12,7 @@ class UploadController extends BaseController {
 	protected function getOptions() {
 		$options = array();
 		$options['image_versions'] = array();
-		$asset_path = parent::getAssetPath(TRUE);
+		$asset_path = AssetController::getAssetPath(TRUE);
 		$date = new \DateTime();
 		$date = $date->format('Y/m/');
 		$options['upload_dir'] = $asset_path . Input::get('path') . $date;

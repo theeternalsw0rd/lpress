@@ -211,42 +211,6 @@ class BaseController extends Controller {
 		return $error;
 	}
 
-	public static function getAssetPath($attachment = FALSE) {
-		$path = '';
-		if($attachment) {
-			$attachment_config = Config::get('l-press::attachments');
-			$attachment_path_base = $attachment_config['path_base'];
-			switch($attachment_path_base) {
-				case 'package': {
-					$path = PATH . '/';
-					break;
-				}
-				case 'laravel': {
-					$path = base_path() . '/';
-					break;
-				}
-				default: {
-					$path = $attachment_path_base . '/';
-				}
-			}
-		}
-		else {
-			$theme_config = Config::get('l-press::themes');
-			$theme_path_base = $theme_config['path_base'];
-			switch($theme_path_base) {
-				case 'package':
-					$path = PATH . '/' . $theme_config['path'] . '/' . THEME . '/assets';
-					break;
-				case 'laravel':
-					$path = base_path() . '/' . $theme_config['path'] . '/' . THEME . '/assets';
-					break;
-				default:
-					$path = $theme_path_base . '/' . $theme_config['path'] . '/' . THEME . '/assets';
-			}
-		}
-		return $path;
-	}
-
 	public static function prepareMake() {
 		if(!defined('THEME')) {
 			echo Lang::get('l-press::errors.httpStatus500');
@@ -494,7 +458,7 @@ class BaseController extends Controller {
 				}
 			}
 			$version = '';
-			$version = @filemtime(self::getAssetPath() . '/' . $path);
+			$version = @filemtime(AssetController::getAssetPath() . '/' . $path);
 			if($version == '') {
 				$close = "' data-err='$path could not be found" . $close;
 			}

@@ -88,8 +88,45 @@ class AssetController extends BaseController {
 		$count = count($segments);
 		$path = $this->verifyPath($segments, $count);
 		$attachment_config = Config::get('l-press::attachments');
-		$path = parent::getAssetPath($segments[0] == $attachment_config['path']) . $path;
+		$path = self::getAssetPath($segments[0] == $attachment_config['path']) . $path;
 		$file_name = $segments[--$count];
 		$this->sendFile($path, $file_name);
 	}
+
+	public static function getAssetPath($attachment = FALSE) {
+		$path = '';
+		if($attachment) {
+			$attachment_config = Config::get('l-press::attachments');
+			$attachment_path_base = $attachment_config['path_base'];
+			switch($attachment_path_base) {
+				case 'package': {
+					$path = PATH . '/';
+					break;
+				}
+				case 'laravel': {
+					$path = base_path() . '/';
+					break;
+				}
+				default: {
+					$path = $attachment_path_base . '/';
+				}
+			}
+		}
+		else {
+			$theme_config = Config::get('l-press::themes');
+			$theme_path_base = $theme_config['path_base'];
+			switch($theme_path_base) {
+				case 'package':
+					$path = PATH . '/' . $theme_config['path'] . '/' . THEME . '/assets';
+					break;
+				case 'laravel':
+					$path = base_path() . '/' . $theme_config['path'] . '/' . THEME . '/assets';
+					break;
+				default:
+					$path = $theme_path_base . '/' . $theme_config['path'] . '/' . THEME . '/assets';
+			}
+		}
+		return $path;
+	}
+
 }
