@@ -2,6 +2,7 @@ This is not a comprehensive list, just some things to be thought through at this
 
 # Refactoring
 *  Break apart BaseController, moving relevant stuff into libs
+*  Break apart SlugRouter getRoute into submethod getters and change to setRoute
 
 # User Management
 *  Add password option to model form macro. Include column name for password field to go after.

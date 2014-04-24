@@ -131,7 +131,7 @@ class UploadController extends BaseController {
 		$user = Auth::user();
 		$user->load('groups.permissions');
 		$json = new \stdClass;
-		$route = parent::slugsToRoute(Input::get('uri'));
+		$route = (new SlugRouter(Input::get('uri')))->getRoute();
 		if($route->throw404) {
 			$status_code = 404;
 			$json->error = Lang::get('l-press::errors.invalidRoute');

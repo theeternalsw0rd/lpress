@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\View;
 
 class RecordController extends BaseController {
 	public static function parseRoute($path) {
-		$route = BaseController::slugsToRoute($path);
+		$route = (new SlugRouter($path))->getRoute();
 		$route->path = $path;
 		if($route->throw404) {
 			if($route->json) {
