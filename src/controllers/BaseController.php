@@ -178,18 +178,12 @@ class BaseController extends Controller {
 		return Auth::user()->isRoot();
 	}
 
-	// returns namespaced classes autoloaded by composer
-	public static function getClasses() {
-		$loader = require dirname(PATH) . '/vendor/autoload.php';
-		return array_filter(array_keys($loader->getClassMap()), function($value) {
-			return strpos($value, __NAMESPACE__) !== FALSE;
-		});
-	}
-
 	public static function getModels() {
-		$base_class = 'EternalSword\\LPress\\BaseModel';
+		$namespace = __NAMESPACE__;
+		$base_class = $namespace . '\\BaseModel';
 		$result = array();
-		foreach (self::getClasses() as $class) {
+		$autoload_path = dirname(PATH) . '/vendor/autoload.php';
+		foreach (ClassLoader::getClasses($autoload_path, $namespace) as $class) {
 			if (is_subclass_of($class, $base_class))
 				$result[] = $class;
 		}
