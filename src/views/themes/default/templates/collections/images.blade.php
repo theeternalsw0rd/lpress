@@ -24,7 +24,7 @@
 			@foreach ($record_type->records as $record)
 				<li>
 					<a class='gallery' title='{{ $record->label }}' href='/{{ $path }}/{{ $record->slug }}?v{{ strtotime($record->updated_at) }}'>
-						<img src='/{{ $path }}/{{ $record->slug }}?v{{ strtotime($record->updated_at) }}' alt='{{ HTML::imageAlt($record) }}' />
+						<img src='/{{ $path }}/{{ $record->slug }}?v{{ strtotime($record->updated_at) }}' alt='{{ HTML::image_alt($record) }}' />
 						<span class='caption'>{{ $record->label }}</span>
 					</a>
 				</li>
