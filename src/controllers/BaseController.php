@@ -221,10 +221,6 @@ class BaseController extends Controller {
 		return array("view_prefix" => $view_prefix, "site" => Site::find(SITE));
 	}
 
-	public static function getBoolInput($key) {
-		return Input::has($key) ? Input::get($key) : NULL;
-	}
-
 	public static function setMacros() {
 		Form::macro('text_input', function($type, $name, $label, $value, $attributes = array()) {
 			$error = self::getValidationError($name);
