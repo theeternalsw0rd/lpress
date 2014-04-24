@@ -59,7 +59,7 @@ App::error(function(\Illuminate\Session\TokenMismatchException $exception) {
 Route::filter(
 	'theme',
 	function() {
-		BaseController::verifyTheme();
+		ThemeController::verifyTheme();
 	}
 );
 
