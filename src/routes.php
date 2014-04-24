@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
+require_once PATH . '/helpers/ssl.php';
+
 $route_prefix = (new PrefixGenerator)->getPrefix();
 $dashboard_route = '+' . Config::get('l-press::dashboard_route');
 
@@ -66,7 +68,7 @@ Route::filter(
 Route::filter(
 	'general',
 	function() {
-		return BaseController::checkSSL();
+		return checkSSL();
 	}
 );
 
@@ -83,14 +85,14 @@ Route::filter(
 			Session::set('redirect', URL::full());
 			return Redirect::route('lpress-login');
 		}
-		return BaseController::checkSSL('dashboard');
+		return checkSSL('dashboard');
 	}
 );
 
 Route::filter(
 	'login-ssl',
 	function() {
-		return BaseController::checkSSL('login');
+		return checkSSL('login');
 	}
 );
 
