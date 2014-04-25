@@ -8,7 +8,7 @@
 		<h1>{{ Lang::get('l-press::headers.collection', array('label' => $label)) }}</h1>
 		<div id='type-children' class='dropdown'>
 			<ul class='dropdown-menu types'>
-				<li class='hide'>{{ Lang::get('l-press::headers.subcollection') }}</li>
+				<li class='hide'>{{ Lang::get('l-press::headers.subcollections') }}</li>
 				@foreach ($record_type->children as $child)
 					<li>
 						<a title='{{ $child->label}}' href='/{{ $path }}/{{ $child->slug }}'>{{ $child->label }}</a>
