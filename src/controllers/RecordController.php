@@ -128,6 +128,21 @@ class RecordController extends BaseController {
 		if($json) {
 			return Response::json($record_type);
 		}
+		$descendents = $record_type->getDescendents();
+		$records = $record_type->records->all();
+		foreach($descendents as $descendent) {
+			$descendent->load('records');
+			if(count($descendent->records) > 0) {
+				$descendent->records->load(
+					'author',
+					'publisher',
+					'values.field',
+					'values.current_revision.author',
+					'values.current_revision.publisher'
+				);
+				$records = array_merge($records, $descendent->records->all());
+			}
+		}
 		$slugs = $router->getSlugs();
 		extract(parent::prepareMake());
 		$label = $record_type->label_plural;
@@ -142,6 +157,7 @@ class RecordController extends BaseController {
 						'title' => $site['label'] . '::' . $label,
 						'label' => $label,
 						'slugs' => $slugs,
+						'records' => $records,
 						'path' => $router->getPath(),
 						'record_type' => $original_record_type,
 						'route_prefix' => Config::get('l-press::route_prefix')

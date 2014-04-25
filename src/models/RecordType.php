@@ -34,5 +34,6 @@ class RecordType extends BaseModel {
 	public function fields() {
 		return $this->hasMany('\EternalSword\LPress\Field');
 	}
+
 }
 

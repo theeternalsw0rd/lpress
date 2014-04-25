@@ -50,4 +50,17 @@ class Record extends BaseModel {
 	public function site() {
 		return $this->belongsTo('\EternalSword\LPress\Site');
 	}
+
+	public function getPath($record_type, $path) {
+		$current_record_type = $this->record_type()->first();
+		if($current_record_type->id == $record_type->id) {
+			return $path;
+		}
+		$path_ending = '';
+		while($current_record_type->id != $record_type->id) {
+			$path_ending = '/' . $current_record_type->slug;
+			$current_record_type = $current_record_type->parent_type()->first();
+		}
+		return $path . $path_ending;
+	}
 }

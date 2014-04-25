@@ -6,6 +6,7 @@ use \Str as Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Collection;
 
 class BaseModel extends Eloquent {
 	protected $special_inputs = array('description' => 'text:textarea');
@@ -102,5 +103,27 @@ class BaseModel extends Eloquent {
 
 	public function getSpecialInputs() {
 		return $this->special_inputs;
+	}
+
+	public function getDescendents($descendents = NULL) {
+		if(is_null($descendents)) {
+			$this->load('children');
+			$descendents = $this->children;
+		}
+		if($descendents->count() == 0) {
+			return new Collection;
+		}
+		$grandchildren = new Collection;
+		foreach($descendents as $descendent) {
+			$incubator = $descendent->children();
+			if($incubator->count() > 0) {
+				$grandchildren->merge($incubator);
+			}
+		}
+		$incubator = $this->getDescendents($grandchildren);
+		if($incubator->count() > 0) {
+			$descendents->merge($incubator);
+		}
+		return $descendents;
 	}
 }

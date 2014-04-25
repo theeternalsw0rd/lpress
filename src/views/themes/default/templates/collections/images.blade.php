@@ -7,6 +7,7 @@
 	@if (count($record_type->children) > 0)
 		<h1>{{ Lang::get('l-press::headers.collection', array('label' => $label)) }}</h1>
 		<div id='type-children' class='dropdown'>
+			{$ $descendents = $record_type->getDescendents() $}
 			<ul class='dropdown-menu types'>
 				<li class='hide'>{{ Lang::get('l-press::headers.subcollections') }}</li>
 				@foreach ($record_type->children as $child)
@@ -19,12 +20,13 @@
 	@else
 		<h1>{{ $label }}</h1>
 	@endif
-	@if (count($record_type->records) > 0)
+	@if (count($records) > 0)
 		<ul id='gallery'>
-			@foreach ($record_type->records as $record)
+			@foreach ($records as $record)
+				{$ $current_path = $record->getPath($record_type, $path) $}
 				<li>
-					<a class='gallery' title='{{ $record->label }}' href='/{{ $path }}/{{ $record->slug }}?v{{ strtotime($record->updated_at) }}'>
-						<img src='/{{ $path }}/{{ $record->slug }}?v{{ strtotime($record->updated_at) }}' alt='{{ HTML::image_alt($record) }}' />
+					<a class='gallery' title='{{ $record->label }}' href='/{{ $current_path }}/{{ $record->slug }}?v{{ strtotime($record->updated_at) }}'>
+						<img src='/{{ $current_path }}/{{ $record->slug }}?v{{ strtotime($record->updated_at) }}' alt='{{ HTML::image_alt($record) }}' />
 						<span class='caption'>{{ $record->label }}</span>
 					</a>
 				</li>
