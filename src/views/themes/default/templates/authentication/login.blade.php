@@ -51,7 +51,7 @@
 		@endif
 		{{ Form::token() }}
 		<div class='submit'>
-			{{ Form::icon_button(Lang::get('l-press::labels.submit_button'), 'submit', array('class' => 'button', 'tabindex' => '${button_index}'), 'fa-check') }}
+			{{ HTML::icon_button(Lang::get('l-press::labels.submit_button'), 'submit', array('class' => 'button', 'tabindex' => '${button_index}'), 'fa-check') }}
 		</div>
 		{{ Form::close() }}
 	</div>
