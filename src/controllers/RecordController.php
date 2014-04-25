@@ -11,10 +11,9 @@ use Illuminate\Support\Facades\View;
 
 class RecordController extends BaseController {
 	public static function parseRoute($path) {
-		$route = (new SlugRouter($path))->getRoute();
-		$route->path = $path;
-		if($route->throw404) {
-			if($route->json) {
+		$router = new SlugRouter($path);
+		if($router->getStatusCode() == 404) {
+			if($router->hasJSON()) {
 				$json = new \stdClass;
 				$json->status_code = 404;
 				$json->reason = Lang::get('l-press::errors.invalidURL');
@@ -22,15 +21,16 @@ class RecordController extends BaseController {
 			}
 			return App::abort(404, Lang::get('l-press::errors.invalidURL'));
 		}
-		if($route->slug_types[0] == 'record') {
-			return self::getRecord($route);
+		$slug_types = $router->getSlugTypes();
+		if($slug_types[0] == 'record') {
+			return self::getRecord($router);
 		}
-		if($route->slug_types[0] == 'record_type') {
-			return self::getRecordsByRecordType($route);
+		if($slug_types[0] == 'record_type') {
+			return self::getRecordsByRecordType($router);
 		}
 	}
 
-	public static function getRecord($route, $public = TRUE) {
+	public static function getRecord($router, $public = TRUE) {
 		$verifyAttachment = function($record) use (&$path) {
 			$found = FALSE;
 			foreach($record->values as $value) {
@@ -47,8 +47,8 @@ class RecordController extends BaseController {
 			}
 			return $found;
 		};
-		$json = $route->json;
-		$record = $route->record;
+		$json = $router->hasJSON();
+		$record = $router->getRecord();
 		if($record->public != $public) {
 			if($json) {
 				$json = new \stdClass;
@@ -67,8 +67,9 @@ class RecordController extends BaseController {
 			'values.current_revision.author',
 			'values.current_revision.publisher'
 		);
+		$root_record_type = $router->getRootRecordType();
 		if($json) {
-			if($route->root_record_type->slug == 'attachments') {
+			if($root_record_type->slug == 'attachments') {
 				if(!$verifyAttachment($record)) {
 					$json = new \stdClass;
 					$json->status_code = 404;
@@ -78,9 +79,9 @@ class RecordController extends BaseController {
 			}
 			return Response::json($record);
 		}
-		if($route->root_record_type->slug == 'attachments') {
+		if($root_record_type->slug == 'attachments') {
 			$site = $record->site()->first();
-			$path = dirname($route->path);
+			$path = dirname($router->getPath());
 			$attachment_config = Config::get('l-press::attachments');
 			$path = $attachment_config['path'] . '/' . $site->domain . '/' . $path;
 			if(!$verifyAttachment($record)) {
@@ -91,9 +92,9 @@ class RecordController extends BaseController {
 		}
 	}
 
-	public static function getRecordsByRecordType($route, $public = TRUE) {
-		$json = $route->json;
-		$record_type = $route->record_type;
+	public static function getRecordsByRecordType($router, $public = TRUE) {
+		$json = $router->hasJSON();
+		$record_type = $router->getRecordType();
 		$record_type->load('children');
 		$record_type->load(array('symlinks' => function($query) {
 			$query->where('site_id', '=', SITE);
@@ -127,7 +128,7 @@ class RecordController extends BaseController {
 		if($json) {
 			return Response::json($record_type);
 		}
-		$slugs = $route->slugs;
+		$slugs = $router->getSlugs();
 		extract(parent::prepareMake());
 		$label = $record_type->label_plural;
 		$original_record_type = $record_type;
@@ -140,7 +141,7 @@ class RecordController extends BaseController {
 						'title' => $site['label'] . '::' . $label,
 						'label' => $label,
 						'slugs' => $slugs,
-						'path' => $route->path,
+						'path' => $router->getPath(),
 						'record_type' => $original_record_type,
 						'route_prefix' => Config::get('l-press::route_prefix')
 					)

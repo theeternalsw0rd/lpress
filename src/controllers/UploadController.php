@@ -38,7 +38,7 @@ class UploadController extends BaseController {
 		return Input::file('file')->move($destination_path, $file_name);
 	}
 
-	protected function processFile($user, $route, $handler) {
+	protected function processFile($user, $handler) {
 		$options = $this->getOptions();
 		$json = new \stdClass;
 		$file_path = '';
@@ -79,7 +79,7 @@ class UploadController extends BaseController {
 		return Response::json($json, $status_code);
 	}
 
-	protected function verifyRecord($user, $route) {
+	protected function verifyRecord() {
 		if(Input::has('record')) {
 			$record_id = Input::get('record');
 			$record = is_int($record_id) ? Record::find($record_id) : Record::find(0);
@@ -100,7 +100,7 @@ class UploadController extends BaseController {
 		return $json;
 	}
 
-	protected function processPost($user, $route) {
+	protected function processPost($user) {
 		$json = new \stdClass;
 		$command = Input::get('upload_command');
 		$handler = __NAMESPACE__ . '\RecordController::' . $command . 'AttachmentRecord';
@@ -112,14 +112,14 @@ class UploadController extends BaseController {
 				return Response::json($json, $status_code);
 			}
 			if($command == 'edit') {
-				$json = $this->verifyRecord($user, $route);
+				$json = $this->verifyRecord();
 				$status_code = $json->status_code;
 				if($status_code == 200) {
-					return $this->processFile($user, $route, $handler, $json);
+					return $this->processFile($user, $handler, $json);
 				}
 				return Response::json($json, $status_code);
 			}
-			return $this->processFile($user, $route, $handler);
+			return $this->processFile($user, $handler);
 		}
 		$status_code = 500;
 		$json->status_code = $status_code;
@@ -131,15 +131,15 @@ class UploadController extends BaseController {
 		$user = Auth::user();
 		$user->load('groups.permissions');
 		$json = new \stdClass;
-		$route = (new SlugRouter(Input::get('uri')))->getRoute();
-		if($route->throw404) {
+		$router = new SlugRouter(Input::get('uri'));
+		if($router->getStatusCode() == 404) {
 			$status_code = 404;
 			$json->error = Lang::get('l-press::errors.invalidRoute');
 			$json->status_code = $status_code;
 			return Response::json($json, $status_code);
 		}
 		if(Input::has('upload_command')) {
-			return $this->processPost($user, $route);
+			return $this->processPost($user);
 		}
 		$json->error = Lang::get('l-press::errors.uploadCommandMissing');
 		$status_code = 500;
