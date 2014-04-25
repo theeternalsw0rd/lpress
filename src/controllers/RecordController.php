@@ -134,7 +134,8 @@ class RecordController extends BaseController {
 		$original_record_type = $record_type;
 		while($record_type->depth > 0) {
 			try {
-				return View::make($view_prefix . '.collections.' . $record_type->slug, 
+				return View::make(
+					$view_prefix . '.collections.' . $record_type->slug,
 					array(
 						'domain' => DOMAIN,
 						'view_prefix' => $view_prefix,
