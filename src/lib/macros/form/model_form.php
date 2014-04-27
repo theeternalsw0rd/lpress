@@ -10,10 +10,16 @@ Form::macro('model_form', function($model, $url = NULL) {
 		$dashboard_prefix = (new PrefixGenerator('dashboard'))->getPrefix();
 		$url = $dashboard_prefix . '/' . $model->getTable() . '/create';
 	}
+	if(strpos($url, 'create') !== FALSE) {
+		if(property_exists($model, 'password_for')) {
+			$password_for = $model->password_for;
+		}
+	}
 	$html = Form::open(array('url' => $url));
 	$columns = $model->getColumns();
 	$rules = $model->getRules();
 	$special = $model->getSpecialInputs();
+	$label_separator = Lang::get('l-press::labels.label_separator');
 	foreach($columns as $column) {
 		$property = $column['name'];
 		$label = $column['label'];
@@ -71,7 +77,7 @@ Form::macro('model_form', function($model, $url = NULL) {
 				break;
 			}
 			case 'selection': {
-				$label .= Lang::get('l-press::labels.label_separator');
+				$label .= $label_separator;
 				$html .= Form::select_input($property, $label, $options_list, $value, array());
 				break;
 			}
@@ -81,12 +87,18 @@ Form::macro('model_form', function($model, $url = NULL) {
 				break;
 			}
 			default: {
-				$label .= Lang::get('l-press::labels.label_separator');
+				$label .= $label_separator;
 				if(!isset($text_type)) {
 					$text_type = 'text';
 				}
 				$html .= Form::text_input($text_type, $property, $label, $value, array());
 			}
+		}
+		if(isset($password_for) && $property == $password_for) {
+			$label = Lang::get('l-press::labels.password') . $label_separator;
+			$html .= Form::text_input('password', 'password', $label, '', array());
+			$label = Lang::get('l-press::labels.verify_password') . $label_separator;
+			$html .= Form::text_input('password', 'verify_password', $label, '', array());
 		}
 	}
 	$html .= "<div class='submit'>";

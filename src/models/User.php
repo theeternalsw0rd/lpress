@@ -58,6 +58,8 @@ class User extends BaseModel implements UserInterface, RemindableInterface {
 		'email' => 'text:email'
 	);
 
+	public $password_for = 'username';
+
 	protected function hasModelPermission($action) {
 		$user = Auth::user();
 		return $user->hasPermission('user-manager');
