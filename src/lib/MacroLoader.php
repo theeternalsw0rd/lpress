@@ -19,7 +19,7 @@ class MacroLoader {
 		$error = "";
 		if(Session::has('errors')) {
 			$errors = Session::get('errors');
-			if($errors->has($name)) {
+			if(!is_array($errors) && $errors->has($name)) {
 				$error = $errors->first($name, " <span class='error'>:message</span>");
 			}
 		}

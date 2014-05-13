@@ -92,6 +92,7 @@ Form::macro('model_form', function($model, $url = NULL) {
 					$text_type = 'text';
 				}
 				$html .= Form::text_input($text_type, $property, $label, $value, array());
+				unset($text_type);
 			}
 		}
 		if(isset($password_for) && $property == $password_for) {
