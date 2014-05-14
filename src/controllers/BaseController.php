@@ -3,6 +3,7 @@
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Redirect;
@@ -39,6 +40,9 @@ class BaseController extends Controller {
 			return Redirect::back()->withInput()->withErrors($validator);
 		}
 		$model->fill(Input::all());
+		if(Input::has('password')) {
+			$model->password = Hash::make(Input::get('password'));
+		}
 		$model->saveItem($action);
 		if(Session::has('model_post_redirect')) {
 			$url = Session::get('model_post_redirect');

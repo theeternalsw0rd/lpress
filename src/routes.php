@@ -206,22 +206,6 @@ Route::group(
 		);
 		Route::group(
 			array(
-				'prefix' => 'users',
-			),
-			function() {
-				$group = 'lpress-dashboard';
-				Route::post(
-					'{id}',
-					array(
-						'as' => $group . '.users.update',
-						'before' => 'dashboard|csrf',
-						'uses' => 'EternalSword\LPress\UserController@updateUser'
-					)
-				);
-			}
-		);
-		Route::group(
-			array(
 				'prefix' => 'upload'
 			),
 			function() {
