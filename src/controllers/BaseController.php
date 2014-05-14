@@ -74,6 +74,18 @@ class BaseController extends Controller {
 	}
 
 	protected static function delete($model_name, $id) {
+		if(Input::has('type') && Input::get('type') == 'force') {
+			self::forceDelete($model_name, $id);
+		}
+		else {
+			self::trash($model_name, $id);
+		}
+		$url = URL::previous();
+		$url = preg_replace('/\/[0-9]+$/', '', $url);
+		return Redirect::to($url);
+	}
+
+	protected static function trash($model_name, $id) {
 		$model = $model_name::find($id);
 		if(is_null($model)) {
 			return Redirect::back()->with(
@@ -87,10 +99,24 @@ class BaseController extends Controller {
 			);
 		}
 		$model->deleteItem();
-		$url = URL::previous();
-		$url = preg_replace('/\/[0-9]+$/', '', $url);
-		return Redirect::to($url);
 	}
+
+	protected static function forceDelete($model_name, $id) {
+		$model = $model_name::withTrashed()->where('id', $id);
+		if(is_null($model)) {
+			return Redirect::back()->with(
+				'std_errors',
+				array(
+					Lang::get(
+						'l-press::errors.modelIdNotFound',
+						array('id' => $id)
+					)
+				)
+			);
+		}
+		$model->forceDelete();
+	}
+
 
 	public static function getModelForm($slug, $model_name, $id = NULL) {
 		extract(self::prepareMake());
