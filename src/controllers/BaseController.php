@@ -11,10 +11,17 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Str;
 
 class BaseController extends Controller {
+	protected static function getRedirect() {
+		if(Session::has('model_post_redirect')) {
+			return Session::get('model_post_redirect');
+		}
+		return URL::previous();
+	}
 
-	protected static function processModelForm($model_name, $id = NULL) {
+	protected static function processModelForm($model_name, $redirect_url, $id = NULL) {
 		if(is_null($id)) {
 			$model = new $model_name();
 			$action = 'create';
@@ -44,14 +51,7 @@ class BaseController extends Controller {
 			$model->password = Hash::make(Input::get('password'));
 		}
 		$model->saveItem($action);
-		if(Session::has('model_post_redirect')) {
-			$url = Session::get('model_post_redirect');
-			Session::forget('model_post_redirect');
-		}
-		else {
-			$url = URL::previous();
-		}
-		return Redirect::to($url);
+		return Redirect::to($redirect_url);
 	}
 
 	protected static function restore($model_name, $id) {
@@ -162,6 +162,54 @@ class BaseController extends Controller {
 			return View::make($slug_view, $pass_to_view);
 		}
 		return View::make($view_prefix . '.dashboard.models.form', $pass_to_view);
+	}
+
+	public static function getPivotEditor($slug, $model_name, $id, $pivot) {
+		extract(self::prepareMake());
+		$model_basename = explode('\\', $model_name);
+		$model_basename = end($model_basename);
+		$pivot_name = Str::title($pivot);
+		$model = $model_name::find($id);
+		if(is_null($model)) {
+			return App::abort(
+				404, 
+				Lang::get(
+					'l-press::errors.modelIdNotFound',
+					array('id' => $id)
+				)
+			);
+		}
+		try {
+			$model->load($pivot);
+		} catch(\Exception $e) {
+			return App::abort(
+				404,
+				Lang::get(
+					'l-press::errors.pivotNotFound',
+					array('model_name' => $model_name, 'pivot' => $pivot)
+				)
+			);
+		}
+		$title = Lang::get(
+			'l-press::titles.updateModel',
+			array(
+				'model_basename' => $model_basename,
+				'model_label' => $model->label
+			)
+		);
+		$pass_to_view = array(
+			'view_prefix' => $view_prefix,
+			'title' => $title,
+			'model' => $model,
+			'pivot_name' => $pivot_name,
+			'pivot' => $pivot,
+			'model_basename' => $model_basename
+		);
+		$slug_view = $view_prefix . '.dashboard.' . $slug . '.' . $pivot . '.index';
+		if(View::exists($slug_view)) {
+			return View::make($slug_view, $pass_to_view);
+		}
+		return View::make($view_prefix . '.dashboard.models.pivot.index', $pass_to_view);
 	}
 
 	public static function getModelIndex($slug, $model_name, $per_page) {

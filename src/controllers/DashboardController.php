@@ -99,9 +99,42 @@ class DashboardController extends BaseController {
 		if(!$controller::hasPermission($id)) {
 			return App::abort(403, Lang::get('l-press::errors.executePermissionError'));
 		}
-		return $controller::processModelForm($model_name, $id);
+		$redirect_url = $controller::getRedirect($id);
+		return $controller::processModelForm($model_name, $redirect_url, $id);
 	}
 
+	public static function routeGetPivotAction($slug, $id, $pivot) {
+		if(!is_numeric($id)) {
+			return App::abort(422, Lang::get('l-press::errors.invalidIdFormat'));
+		}
+		$model_info = self::getModelInfo($slug);
+		if($model_info === FALSE) {
+			return App::abort(404, Lang::get('l-press::errors.modelNotFound', array('slug' => $slug)));
+		}
+		$controller = $model_info['controller'];
+		$model_name = $model_info['model_name'];
+		if(!$controller::hasPermission($id)) {
+			return App::abort(403, Lang::get('l-press::errors.executePermissionError'));
+		}
+		return $controller::getPivotEditor($slug, $model_name, $id, $pivot);
+	}
+
+	public static function routePostPivotAction($slug, $id, $pivot) {
+		if(!is_numeric($id)) {
+			return App::abort(422, Lang::get('l-press::errors.invalidIdFormat'));
+		}
+		$model_info = self::getModelInfo($slug);
+		if($model_info === FALSE) {
+			return App::abort(404, Lang::get('l-press::errors.modelNotFound', array('slug' => $slug)));
+		}
+		$controller = $model_info['controller'];
+		$model_name = $model_info['model_name'];
+		if(!$controller::hasPermission($id)) {
+			return App::abort(403, Lang::get('l-press::errors.executePermissionError'));
+		}
+		return $controller::processPivotModelForm($slug, $model_name, $id, $pivot);
+	}
+		
 	public static function routeRestoreAction($slug, $id) {
 		if(!is_numeric($id)) {
 			return App::abort(422, Lang::get('l-press::errors.invalidIdFormat'));

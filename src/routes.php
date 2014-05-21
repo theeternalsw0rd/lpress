@@ -292,6 +292,20 @@ Route::group(
 				'uses' => 'EternalSword\LPress\DashboardController@routeDeleteAction'
 			)
 		);
+		Route::get(
+			'{slug}/{id}/{pivot}',
+			array(
+				'before' => 'theme|dashboard',
+				'uses' => 'EternalSword\LPress\DashboardController@routeGetPivotAction'
+			)
+		);
+		Route::post(
+			'{slug}/{id}/{pivot}',
+			array(
+				'before' => 'csrf|theme|dashboard',
+				'uses' => 'EternalSword\LPress\DashboardController@routePostPivotAction'
+			)
+		);
 		Route::delete(
 			'{slug}/{id}',
 			array(
