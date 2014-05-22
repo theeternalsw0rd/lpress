@@ -25,5 +25,7 @@ return array(
 	'trash' => 'Trash Bin',
 	'delete_button' => 'Delete',
 	'restore_button' => 'Restore',
-	'update_button' => 'Edit'
+	'update_button' => 'Edit',
+	'description' => 'Description',
+	'record_type' => 'Record Type'
 );
