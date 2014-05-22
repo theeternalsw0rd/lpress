@@ -58,6 +58,10 @@ class User extends BaseModel implements UserInterface, RemindableInterface {
 		'email' => 'text:email'
 	);
 
+	protected $pivots = array(
+		'groups' => 'fa-users'
+	);
+
 	public $password_for = 'username';
 
 	protected function hasModelPermission($action) {

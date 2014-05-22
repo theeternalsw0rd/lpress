@@ -21,11 +21,13 @@ HTML::macro('collection_editor', function($collection, $type = 'standard') {
 			case 'trash': {
 				$html .= "<a href='${url}/delete?type=force' class='button-icon force delete' title='${trash_title}'>$trash_icon</a>";
 				$html .= "<a href='${url}/restore' class='button-icon restore' title='${restore_title}'>$restore_icon</a>";
+				$html .= HTML::pivot_icons($model, $url);
 				break;
 			}
 			default: {
 				$html .= "<a href='${url}/delete' class='button-icon delete' title='${trash_title}'>$trash_icon</a>";
 				$html .= "<a href='${url}' class='button-icon' title='${edit_title}'>$edit_icon</a>";
+				$html .= HTML::pivot_icons($model, $url);
 			}
 		}
 		$html .= "</li>";

@@ -13,9 +13,22 @@ class BaseModel extends Eloquent {
 
 	protected $softDelete = TRUE;
 
+	protected $pivots = array();
+
+
 	protected function hasModelPermission($action) {
 		$user = Auth::user();
 		return $user->hasPermission('root');
+	}
+
+	public function getPivots() {
+		return $this->pivots;
+	}
+
+	public function setPivots($pivots) {
+		if(is_array($pivots)) {
+			$this->pivots = $pivots;
+		}
 	}
 
 	public function saveItem($action) {
