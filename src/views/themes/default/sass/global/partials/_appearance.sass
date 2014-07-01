@@ -96,6 +96,10 @@ ul.tabular, ul.select
       @include background_opacity($label_rgba_background, 0.4, $label_background)
   a.disabled:hover
     @include background_opacity($label_rgba_background, 0.3, $label_background, true)
+  a.close
+    opacity: 0.6
+    &:hover
+      opacity: 1
 
 ul.tabular, ul.select
   li.active > a.label

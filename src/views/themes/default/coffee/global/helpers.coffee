@@ -14,6 +14,7 @@ icons = {
   'fa-check': "&#xf00c;"
   'fa-times': "&#xf00d;"
   'fa-sort': "&#xf0dc;"
+  'fa-times-circle': "&#xf057;"
   'fa-caret-square-o-down': "&#xf150;"
   'fa-caret-square-o-up': "&#xf151;"
 }
@@ -57,6 +58,9 @@ ulSlideToggle = (event, clickElement) ->
         $focusables = getFocusables($(document))
         $focusElement = getFocusables($(this)).first()
         rebuildTabindex($focusables, $focusElement)
+        $root = $(this).closest('ul.select')
+        if $root.length > 0
+          pinToBottom($root, $root.find('a.label'), $root.find('a.close'), 'right')
       #return
     )
   else
@@ -71,7 +75,40 @@ ulSlideToggle = (event, clickElement) ->
     )
   #endif
 #return
-
+pinToBottom = ($root, $width_element, $target, position) ->
+  offset = $width_element.offset()
+  left = offset.left
+  if position is 'right'
+    x = left + $width_element.outerWidth()
+  else
+    x = left - $target.outerWidth()
+  $target.css({'left': x + 'px'})
+  if topIsVisible($root)
+    $root.addClass('top_is_visible')
+  else
+    $root.removeClass('top_is_visible')
+  if bottomIsVisible($root)
+    $target.css({'position': 'absolute', 'left': $width_element.outerWidth() + 'px'})
+  else
+    $target.css({'position': 'fixed', 'left': left + $width_element.outerWidth() + 'px'})
+  #endif
+#return
+topIsVisible = ($target) ->
+  top = $target.offset().top
+  height = $target.outerHeight()
+  $window = $(window)
+  window_height = $window.height()
+  scroll_top = $window.scrollTop()
+  return window_height + scroll_top > top && scroll_top < top
+#return
+bottomIsVisible = ($target) ->
+  top = $target.offset().top
+  height = $target.outerHeight()
+  $window = $(window)
+  window_height = $window.height()
+  scroll_top = $window.scrollTop()
+  return window_height + scroll_top > height + top
+#return
 initializeTabindex = do ->
   $focusables = getFocusables($(document))
   $focusElement = $focusables.first()

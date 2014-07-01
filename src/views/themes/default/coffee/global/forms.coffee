@@ -18,6 +18,29 @@ $(document).on(
   #return
 )
 $(document).on(
+  'scroll'
+  (event) ->
+    $('a.close').each(
+      ->
+        $this = $(this)
+        $root = $(this).closest('ul.select')
+        if $root.length > 0
+          $width_element = $root.find('a.label')
+          if topIsVisible($root)
+            $root.addClass('top_is_visible')
+          else
+            $root.removeClass('top_is_visible')
+          if bottomIsVisible($root)
+            $this.css({'position': 'absolute', 'left': $width_element.outerWidth() + 'px'})
+          else
+            $this.css({'position': 'fixed', 'left': $root.offset().left + $width_element.outerWidth() + 'px'})
+          #endif
+        #endif
+      #return
+    )
+  #return
+)
+$(document).on(
   'click'
   'a.option'
   (event) ->
@@ -87,27 +110,64 @@ getUploader = (id, path, target_id, attachment_type) ->
     </div>
   """)
 #return
+option_html = (id, $option) ->
+  return "<li><a class='option' href='##{ id }' data-value='#{ $option.attr('value') }'>#{ $option.html() }</a></li>"
+#return
+multiple_select = ($select, $options, label) ->
+  $selected = $select.find('option[selected="selected"]')
+  if $options.length > 1
+    html = "<ul class='select'><li class='inactive'>"
+    html += "<a href='#' class='label'>#{label}<span class='icon'>#{icons['fa-sort']}</span></a>"
+    html += "<ul class='options'>"
+    $options.each(
+      ->
+        $option = $(this)
+        html += option_html($select.attr('id'), $option)
+      #return
+    )
+    html += "</ul><a href='#' class='close icon'>#{icons['fa-times-circle']}</a></li></ul>"
+  else
+    $select.addClass('disabled')
+    html = "<ul class='select'><li><a class='label disabled'>#{label} #{current}<span class='icon disabled'>#{icons['fa-sort']}</span></a></li></ul>"
+  #endif
+  $select.after(html)
+#return
+single_select = ($select, $options, label) ->
+  current = $select.find('option[selected="selected"]').html()
+  if $options.length > 1
+    html = "<ul class='select'><li class='inactive'>"
+    html += "<a href='#' class='label'>#{label}<span class='current'> #{current}</span><span class='icon'>#{icons['fa-sort']}</span></a>"
+    html += "<ul class='options'>"
+    $options.each(
+      ->
+        $option = $(this)
+        html += option_html($select.attr('id'), $option)
+      #return
+    )
+    html += "</ul><a href='#'>Close Select</a></li></ul>"
+  else
+    $select.addClass('disabled')
+    html = "<ul class='select'><li><a class='label disabled'>#{label} #{current}<span class='icon disabled'>#{icons['fa-sort']}</span></a></li></ul>"
+  #endif
+  $select.after(html)
+#return
+$(document).on('click', 'ul.select a.close', (event) ->
+  event.preventDefault()
+  $(this).closest('ul.select').find('a.label').click()
+)
 $('select').each(
   ->
     $select = $(this)
     $label = $select.prev().hide()
     label = $label.html()
     $options = $select.find('option')
-    current = $select.find('option[selected="selected"]').html()
-    if $options.length > 1
-      html = "<ul class='select'><li class='inactive'><a href='#' class='label'>#{label}<span class='current'> #{current}</span><span class='icon'>#{icons['fa-sort']}</span></a><ul class='options'>"
-      $options.each(
-        ->
-          $option = $(this)
-          html += "<li><a class='option' href='##{ $select.attr('id') }' data-value='#{ $option.attr('value') }'>#{ $option.html() }</a></li>"
-        #return
-      )
-      html += "</ul></li></ul>"
+    if($options.length < 1)
+      return
+    if $select.attr('multiple') is 'multiple'
+      multiple_select($select, $options, label)
     else
-      $select.addClass('disabled')
-      html = "<ul class='select'><li><a class='label disabled'>#{label} #{current}<span class='icon disabled'>#{icons['fa-sort']}</span></a></li></ul>"
+      single_select($select, $options, label)
     #endif
-    $select.after(html)
   #return
 )
 $(document).on(
