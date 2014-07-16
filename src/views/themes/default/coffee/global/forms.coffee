@@ -119,6 +119,7 @@ multiple_select = ($select, $options, label) ->
     html = "<ul class='select'><li class='inactive'>"
     html += "<a href='#' class='label'>#{label}<span class='icon'>#{icons['fa-sort']}</span></a>"
     html += "<ul class='options'>"
+    html += "<li class='filter'><div class='clearfix'><span class='icon'>#{icons['fa-search']}</span><span class='editable' contentEditable='true'></span></div></li>"
     $options.each(
       ->
         $option = $(this)
@@ -154,6 +155,13 @@ single_select = ($select, $options, label) ->
 $(document).on('click', 'ul.select a.close', (event) ->
   event.preventDefault()
   $(this).closest('ul.select').find('a.label').click()
+)
+$(document).on('keyup', 'li.filter span.editable', (event) ->
+  $this = $(this)
+  filter($this.closest('ul, ol'), $this.text())
+)
+$(document).on('keypress', 'li.filter span.editable', (event) ->
+  return event.which isnt 13
 )
 $('select').each(
   ->

@@ -4,9 +4,23 @@
 ###
 
 $ = jQuery
-
+###
+Thanks css-tricks.com/snippets/jquery/make-jquery-contains-case-insensitive
+###
+$.expr[":"].containsNS = $.expr.createPseudo(
+  (arg) ->
+    (elem) ->
+      $(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0
+    #return
+  #return
+)
 $('body').removeClass('nojs')
-
+filter = ($list, needle) ->
+  $items = $list.children().removeClass('filtered')
+  if needle isnt ''
+    $items.has(':not(:containsNS("' + needle + '"))').not('.filter').addClass('filtered')
+  #endif
+#return
 ###
  start icon codes from font awesome
 ###
@@ -17,6 +31,7 @@ icons = {
   'fa-times-circle': "&#xf057;"
   'fa-caret-square-o-down': "&#xf150;"
   'fa-caret-square-o-up': "&#xf151;"
+  'fa-search': "&#xf002;"
 }
 ###
  end icon codes
