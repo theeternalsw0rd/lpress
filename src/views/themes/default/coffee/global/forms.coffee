@@ -8,16 +8,16 @@
 
 Dropzone.autoDiscover = false
 $html = $('html')
-$body = $('body')
+$body = $(document.body)
 $page = $(document.getElementById('page'))
-$(document).on(
+$document.on(
   'click'
   'ul.select > li > a'
   (event) ->
     ulSlideToggle(event, this)
   #return
 )
-$(document).on(
+$document.on(
   'scroll'
   (event) ->
     $('a.close').each(
@@ -35,7 +35,7 @@ $(document).on(
           else
             $this.css({'position': 'fixed', 'left': $root.offset().left + $width_element.outerWidth() + 'px'})
           #endif
-          $focusables = getFocusables($(document))
+          $focusables = getFocusables($document)
           $focusElement = $(':focus')
           if $focusElement.length == 0
             $focusElement = getFocusables($root).first()
@@ -46,7 +46,7 @@ $(document).on(
     )
   #return
 )
-$(document).on(
+$document.on(
   'click'
   'a.option'
   (event) ->
@@ -83,7 +83,7 @@ getDialog = (action, options) ->
   #end switch
   $.colorbox({'html':html, 'scrolling':FALSE, 'closeButton':FALSE})
 #return
-$(document).on(
+$document.on(
   'click'
   'a.cancel'
   (event) ->
@@ -91,7 +91,7 @@ $(document).on(
     $.colorbox.remove()
   #return
 )
-$(document).on(
+$document.on(
   'click'
   'a.delete'
   (event) ->
@@ -153,7 +153,7 @@ multiple_select = ($select, $options, label) ->
   $list = $(html)
   $list.find('ul a').last().addClass('last')
   $select.after($list)
-  $focusables = getFocusables($(document))
+  $focusables = getFocusables($document)
   $focusElement = $(':focus')
   if $focusElement.length == 0
     $focusElement = $focusables.first()
@@ -181,18 +181,18 @@ single_select = ($select, $options, label) ->
   $list.find('ul a').last().addClass('last')
   $select.after(html)
 #return
-$(document).on('click', 'ul.select a.close', (event) ->
+$document.on('click', 'ul.select a.close', (event) ->
   event.preventDefault()
   $(this).closest('ul.select').find('a.label').click()
 )
-$(document).on('keyup', 'li.filter span.editable', (event) ->
+$document.on('keyup', 'li.filter span.editable', (event) ->
   $this = $(this)
   filter($this.closest('ul, ol'), $this.text())
 )
-$(document).on('keypress', 'li.filter span.editable', (event) ->
+$document.on('keypress', 'li.filter span.editable', (event) ->
   return event.which isnt 13
 )
-$(document).on('keyup', 'ul.select', (event) ->
+$document.on('keyup', 'ul.select', (event) ->
   switch event.which
     when 38
       $this = $(this)
@@ -215,7 +215,7 @@ $(document).on('keyup', 'ul.select', (event) ->
   #endswitch
 )
 
-$(document).on('click', 'div.selected a.unselect', (event) ->
+$document.on('click', 'div.selected a.unselect', (event) ->
   event.preventDefault()
   $this = $(this)
   value = $this.parent().data('value')
@@ -240,7 +240,7 @@ $('select').each(
     #endif
   #return
 )
-$(document).on(
+$document.on(
   'click'
   'ul.etabs'
   (event) ->
@@ -307,7 +307,7 @@ $(document).on(
     #endif
   #return
 )
-$(document).on(
+$document.on(
   'click',
   'a.file_select',
   (event) ->
@@ -357,14 +357,14 @@ if $html.hasClass('lt-ie8')
       )
     #return
   )
-  $(document).on(
+  $document.on(
     'mousedown'
     'label.checkbox'
     (event) ->
       $(this).find('input.checkbox').focus()
     #return
   )
-  $(document).on(
+  $document.on(
     'click'
     'a.submit'
     (event) ->
@@ -372,7 +372,7 @@ if $html.hasClass('lt-ie8')
       $(this).closest('form').submit()
     #return
   )
-  $(document).on(
+  $document.on(
     'focus'
     'input, textarea'
     (event) ->
@@ -383,7 +383,7 @@ if $html.hasClass('lt-ie8')
       $this.addClass('focused')
     #return
   )
-  $(document).on(
+  $document.on(
     'blur'
     'input, textarea'
     (event) ->
@@ -394,7 +394,7 @@ if $html.hasClass('lt-ie8')
       $this.removeClass('focused')
     #return
   )
-  $(document).on(
+  $document.on(
     'keydown'
     'input[type=file]'
     (event) ->
@@ -405,7 +405,7 @@ if $html.hasClass('lt-ie8')
       #endif
     #return
   )
-  $(document).on(
+  $document.on(
     'keydown'
     'input[type=text], input[type=password]'
     (event) ->
@@ -414,28 +414,28 @@ if $html.hasClass('lt-ie8')
     #return
   )
 #endif
-$(document).on(
+$document.on(
   'mouseup'
   (event) ->
     $('.active-button').removeClass('active-button')
     $('.active-checkbox').removeClass('active-checkbox')
   #return
 )
-$(document).on(
+$document.on(
   'mousedown'
   '.button, button'
   (event) ->
     $(this).addClass('active-button')
   #return
 )
-$(document).on(
+$document.on(
   'focus'
   '.button, button'
   (event) ->
     $(this).addClass('focused-button')
   #return
 )
-$(document).on(
+$document.on(
   'blur'
   '.button, button'
   (event) ->
@@ -443,7 +443,7 @@ $(document).on(
   #return
 )
 if $html.hasClass('opacity') or $html.hasClass('ie')
-  $(document).on(
+  $document.on(
     'mousedown'
     'label.checkbox'
     (event) ->
@@ -584,14 +584,14 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
     #return
   )
   ### firefox doesn't support focus psuedo-class on input type file ###
-  $(document).on(
+  $document.on(
     'focus'
     'input.file'
     (event) ->
       $(this).next().addClass('focused-button')
     #return
   )
-  $(document).on(
+  $document.on(
     'blur'
     'input.file'
     (event) ->
@@ -600,7 +600,7 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
   )
   ### workaround browsers that have two-tab focus on file input ###
   if navigator.appName is 'Opera'
-    $(document).on(
+    $document.on(
       'keydown'
       '*[tabindex]'
       (event) ->
@@ -646,7 +646,7 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
       #return
     )
     ### unify browser accessibility experience for opera ###
-    $(document).on(
+    $document.on(
       'keydown'
       'input.file'
       (event) ->
@@ -662,7 +662,7 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
   if $html.hasClass('ie')
     ### unify browser accessibility experience for ie ###
     ### this.id.substring(4) removes the 'for-' from the id ###
-    $(document).on(
+    $document.on(
       'keydown'
       'div.upload a.button'
       (event) ->
@@ -675,7 +675,7 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
       #return
     )
     ### this.id.substring(4) removes the 'for-' from the id ###
-    $(document).on(
+    $document.on(
       'click'
       'div.upload a.button'
       (event) ->
@@ -687,7 +687,7 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
       #return
     )
   #endif
-  $(document).on(
+  $document.on(
     'click'
     'label.checkbox'
     (event) ->
@@ -696,7 +696,7 @@ if $html.hasClass('opacity') or $html.hasClass('ie')
       $('#' + $this.attr('for')).click()
     #return
   )
-  $(document).on(
+  $document.on(
     'click'
     'input.checkbox'
     (event) ->

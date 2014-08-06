@@ -4,6 +4,7 @@
 ###
 
 $ = jQuery
+$document = $(document)
 ###
 Thanks css-tricks.com/snippets/jquery/make-jquery-contains-case-insensitive
 ###
@@ -71,7 +72,7 @@ ulSlideToggle = (event, clickElement) ->
       'fast'
       ->
         $item.removeClass('inactive').addClass('active')
-        $focusables = getFocusables($(document))
+        $focusables = getFocusables($document)
         $focusElement = getFocusables($(this)).first()
         rebuildTabindex($focusables, $focusElement)
         $root = $(this).closest('ul.select')
@@ -84,7 +85,7 @@ ulSlideToggle = (event, clickElement) ->
       'fast'
       ->
         $item.removeClass('active').addClass('inactive')
-        $focusables = getFocusables($(document))
+        $focusables = getFocusables($document)
         $focusElement = $this
         rebuildTabindex($focusables, $focusElement)
       #return
@@ -108,7 +109,7 @@ pinToBottom = ($root, $width_element, $target, position) ->
   else
     $target.css({'position': 'fixed', 'left': left + $width_element.outerWidth() + 'px'})
   #endif
-  $focusables = getFocusables($(document))
+  $focusables = getFocusables($document)
   $focusElement = $(':focus')
   if $focusElement.length == 0
     $focusElement = getFocusables($root).first()
