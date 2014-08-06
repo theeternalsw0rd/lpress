@@ -145,10 +145,11 @@ class DashboardController extends BaseController {
 		}
 		$controller = $model_info['controller'];
 		$model_name = $model_info['model_name'];
+		$pivot_info = self::getModelInfo($pivot);
 		if(!$controller::hasPermission($id)) {
 			return App::abort(403, Lang::get('l-press::errors.executePermissionError'));
 		}
-		return $controller::getPivotEditor($slug, $model_name, $id, $pivot);
+		return $controller::getPivotEditor($slug, $model_name, $id, $pivot, $pivot_info['model_name']);
 	}
 
 	public static function routePostPivotAction($slug, $id, $pivot) {

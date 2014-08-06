@@ -123,6 +123,12 @@ ul.top_is_visible
   a.close
     display: none !important
 
+div.selected > div.item
+  display: inline-block
+  padding: 0.2em
+  margin: 0.5em 0
+  float:left
+
 li.filter
   max-width: 470px
   width: 90%
@@ -138,7 +144,7 @@ li.filter
   span.editable
     padding-left: 2em
 
-.filtered
+.filtered, ul.select li.selected
   display: none
 
 ul.etabs

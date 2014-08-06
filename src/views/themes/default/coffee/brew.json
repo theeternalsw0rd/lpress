@@ -11,7 +11,8 @@
 				"global/forms.coffee",
 				"global/gallery.coffee",
 				"global/tabular.coffee",
-				"global/flexnav.coffee"
+				"global/flexnav.coffee",
+				"global/postsetup.coffee"
 			]
 		}
 	}

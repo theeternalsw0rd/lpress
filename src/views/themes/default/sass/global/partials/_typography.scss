@@ -123,6 +123,9 @@ html.win-chrome-font {
 		font-family: $icon_font_winchrome;
 	}
 }
+a {
+	text-decoration: none;
+}
 h1 {
     font-size: 1.7em;
 }
@@ -147,15 +150,11 @@ html.win-chrome-font {
 ul.tabular {
 	div.label {
 		font-weight: bold;
-		text-decoration: underline;
-	}
-	div.label:hover {
-		text-decoration: none;
 	}
 }
-ul.select {
-	a.close {
-		text-decoration: none;
+div.item {
+	a.remove {
+		font-size: 0.6em;
 	}
 }
 .opacity span.checkmark {
@@ -166,9 +165,6 @@ ul.select {
 }
 .ie div.file input.file {
     font-size: 1em !important;
-}
-a.button, a.button-icon {
-    text-decoration: none;
 }
 span.caption {
 	font-size: 0.8em;

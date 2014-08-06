@@ -164,11 +164,13 @@ class BaseController extends Controller {
 		return View::make($view_prefix . '.dashboard.models.form', $pass_to_view);
 	}
 
-	public static function getPivotEditor($slug, $model_name, $id, $pivot) {
+	public static function getPivotEditor($slug, $model_name, $id, $pivot, $pivot_name) {
 		extract(self::prepareMake());
 		$model_basename = explode('\\', $model_name);
 		$model_basename = end($model_basename);
-		$pivot_name = Str::title($pivot);
+		$pivot_basename = explode('\\', $pivot_name);
+		$pivot_basename = end($pivot_basename);
+		$pivot_label = Str::title($pivot);
 		$model = $model_name::find($id);
 		if(is_null($model)) {
 			return App::abort(
@@ -201,8 +203,10 @@ class BaseController extends Controller {
 			'view_prefix' => $view_prefix,
 			'title' => $title,
 			'model' => $model,
+			'pivot_basename' => $pivot_basename,
 			'pivot_name' => $pivot_name,
 			'pivot' => $pivot,
+			'pivot_label' => $pivot_label,
 			'model_basename' => $model_basename
 		);
 		$slug_view = $view_prefix . '.dashboard.' . $slug . '.' . $pivot . '.index';

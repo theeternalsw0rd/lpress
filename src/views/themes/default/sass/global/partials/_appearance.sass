@@ -1,3 +1,41 @@
+$default_round_amount: 5px
+@mixin border_radius($amount: $default_round_amount, $position: 'all')
+  @if $position == 'all'
+    @include border_radius_all($amount)
+  @if $position == 'top' or $position == 'topleft' or $position == 'left'
+    @include border_radius_top_left($amount)
+  @if $position == 'top' or $position == 'topright' or $position == 'right'
+    @include border_radius_top_right($amount)
+  @if $position == 'bottom' or $position == 'bottomleft' or $position == 'left'
+    @include border_radius_bottom_left($amount)
+  @if $position == 'bottom' or $position == 'bottomright' or $position == 'right'
+    @include border_radius_bottom_right($amount)
+
+@mixin border_radius_all($amount: $default_round_amount)
+  border-radius: $amount
+  -moz-border-radius: $amount
+  -webkit-border-radius: $amount
+
+@mixin border_radius_top_left($amount: $default_round_amount)
+  border-top-left-radius: $amount
+  -moz-border-topleft-radius: $amount
+  -webkit-border-top-left-radius: $amount
+
+@mixin border_radius_top_right($amount: $default_round_amount)
+  border-top-right-radius: $amount
+  -moz-border-topright-radius: $amount
+  -webkit-border-top-right-radius: $amount
+
+@mixin border_radius_bottom_left($amount: $default_round_amount)
+  border-bottom-left-radius: $amount
+  -moz-border-bottomleft-radius: $amount
+  -webkit-border-bottom-left-radius: $amount
+
+@mixin border_radius_bottom_right($amount: $default_round_amount)
+  border-bottom-right-radius: $amount
+  -moz-border-bottomright-radius: $amount
+  -webkit-border-bottom-right-radius: $amount
+
 @mixin background_opacity($color, $opacity: 0.6, $fallback: $color, $important: false)
   @if $important
     background: $fallback !important
@@ -22,23 +60,24 @@
   color: $form_input_text
   @if $button
     cursor: pointer
-    text-decoration: underline
     .button-icon
-      text-decoration: none
       display: inline-block
     .fa-check
       color: $success_color
     .fa-times
       color: $error_text
+    .button-label
+      color: $link_color
+    &:hover
+      @include background_opacity($form_input_rgba_background, $fallback: $form_input_focused_background)
+      span.button-label
+        color: $link_hover_color
   @if $button and $real_button
     &:active
       @include background_opacity($form_input_rgba_background, $fallback: $form_input_focused_background)
       outline: 2px inset $input_outline_color !important /* need to override focus on IE for .active class */
     &:focus
       @include background_opacity($form_input_rgba_background, $fallback: $form_input_focused_background)
-  @if $button
-    &:hover
-      text-decoration: none
   @if $button == false
     &:focus
       @include background_opacity($form_input_rgba_background, $fallback: $form_input_focused_background)
@@ -67,10 +106,10 @@ body
   color: $text_color
   background: url(#{$base_path}/images/backgrounds/body.png?v1)
 
-a
+a, div.label
   color: $link_color
   &:hover
-    text-decoration: none
+    color: $link_hover_color
 
 .nojs a.file
   display: none !important
@@ -83,17 +122,18 @@ h1, h2, h3
   border-width: 0 3px 0 3px
   border-style: double
 
-ul.collection
-  a
-    color: $icon_color
-    &:hover
-      color: $icon_hover_color
+.icon
+  color: $icon_color
+
+a, .button-icon, li.filter > div
+  &:hover .icon
+    color: $icon_hover_color
 
 ul.tabular, ul.select
   a.label, a.option
     @include background_opacity($label_rgba_background, 0.3, $label_background)
     &:hover
-      @include background_opacity($label_rgba_background, 0.4, $label_background)
+      @include background_opacity($label_rgba_background, 0.5, $label_background)
   li.filter
     @include background_opacity($label_rgba_background, 0.3, $label_background)
   a.disabled:hover
@@ -106,6 +146,27 @@ ul.tabular, ul.select
 ul.tabular, ul.select
   li.active > a.label
     @include background_opacity($label_rgba_background, 0.6, $label_background)
+
+ul.select
+  & > li > a.label
+    @include border_radius(4px)
+    border: 1px solid $text_color
+  & > li.active
+    & > a.label
+      @include border_radius(4px, 'top')
+      @include border_radius(0px, 'bottom')
+      border-bottom: none
+    ul a, li.filter
+      border-left: 1px solid $text_color
+      border-right: 1px solid $text_color
+    a.last
+      @include border_radius(4px, 'bottom')
+      border-bottom: 1px solid $text_color
+
+div.selected > div.item
+  @include background_opacity($label_rgba_background, 0.3, $label_background)
+  @include border_radius(4px)
+  border: 1px solid $text_color
 
 div.dz-success-mark .button-icon
   text-shadow: 0px 0px 2px $text_color, 0px 0px 2px $text_color

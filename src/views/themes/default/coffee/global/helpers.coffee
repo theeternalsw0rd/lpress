@@ -28,6 +28,7 @@ icons = {
   'fa-check': "&#xf00c;"
   'fa-times': "&#xf00d;"
   'fa-sort': "&#xf0dc;"
+  'fa-trash-o': "&#xf014;"
   'fa-times-circle': "&#xf057;"
   'fa-caret-square-o-down': "&#xf150;"
   'fa-caret-square-o-up': "&#xf151;"
@@ -47,11 +48,11 @@ parseURI = (uri) ->
 #return
 
 getFocusables = ($element) ->
-  return $element.find('a[href], input, select, button, textarea, *[contenteditable="true"]').filter(':not(.disabled)').filter(':visible')
+  return $element.find('a[href], input, button, textarea, *[contenteditable="true"]').filter(':not(.disabled)').filter(':visible')
 #return
 
 rebuildTabindex = ($focusables, $focusElement) ->
-  $('*[tabindex="*"]').attr('tabindex', '-1')
+  $('*[tabindex]').attr('tabindex', '-1')
   $focusables.each(
     (index, element) ->
       $this = $(element)
@@ -107,6 +108,12 @@ pinToBottom = ($root, $width_element, $target, position) ->
   else
     $target.css({'position': 'fixed', 'left': left + $width_element.outerWidth() + 'px'})
   #endif
+  $focusables = getFocusables($(document))
+  $focusElement = $(':focus')
+  if $focusElement.length == 0
+    $focusElement = getFocusables($root).first()
+  #endif
+  rebuildTabindex($focusables, $focusElement)
 #return
 topIsVisible = ($target) ->
   top = $target.offset().top
@@ -124,12 +131,7 @@ bottomIsVisible = ($target) ->
   scroll_top = $window.scrollTop()
   return window_height + scroll_top > height + top
 #return
-initializeTabindex = do ->
-  $focusables = getFocusables($(document))
-  $focusElement = $focusables.first()
-  #endif
-  rebuildTabindex($focusables, $focusElement)
-#return
+
 
 ###
  * close global/helpers.coffee

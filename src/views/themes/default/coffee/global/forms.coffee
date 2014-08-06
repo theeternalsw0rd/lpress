@@ -35,6 +35,12 @@ $(document).on(
           else
             $this.css({'position': 'fixed', 'left': $root.offset().left + $width_element.outerWidth() + 'px'})
           #endif
+          $focusables = getFocusables($(document))
+          $focusElement = $(':focus')
+          if $focusElement.length == 0
+            $focusElement = getFocusables($root).first()
+          #endif
+          rebuildTabindex($focusables, $focusElement)
         #endif
       #return
     )
@@ -110,12 +116,24 @@ getUploader = (id, path, target_id, attachment_type) ->
     </div>
   """)
 #return
-option_html = (id, $option) ->
-  return "<li><a class='option' href='##{ id }' data-value='#{ $option.attr('value') }'>#{ $option.html() }</a></li>"
+option_html = (id, $option, selected = -1) ->
+  attrs = if selected > -1 then " class='selected'" else ""
+  return "<li#{attrs}><a class='option' href='##{ id }' data-value='#{ $option.attr('value') }'>#{ $option.html() }</a></li>"
 #return
 multiple_select = ($select, $options, label) ->
   $selected = $select.find('option[selected="selected"]')
-  if $options.length > 1
+  $selected_list = $("<div class='selected'></div>")
+  selected_ids = new Array()
+  remove = "<a href='#' class='icon remove unselect'>#{icons['fa-times']}</a>"
+  $selected.each(
+    ->
+      $this = $(this)
+      value = this.value
+      $("<div class='item' data-value='#{value}'>#{$this.text()} #{remove}</div>").appendTo($selected_list)
+      selected_ids.push(value)
+    #return
+  )
+  if $options.length isnt $selected.length
     html = "<ul class='select'><li class='inactive'>"
     html += "<a href='#' class='label'>#{label}<span class='icon'>#{icons['fa-sort']}</span></a>"
     html += "<ul class='options'>"
@@ -123,7 +141,7 @@ multiple_select = ($select, $options, label) ->
     $options.each(
       ->
         $option = $(this)
-        html += option_html($select.attr('id'), $option)
+        html += option_html($select.attr('id'), $option, $.inArray(this.value, selected_ids))
       #return
     )
     html += "</ul><a href='#' class='close icon'>#{icons['fa-times-circle']}</a></li></ul>"
@@ -131,7 +149,16 @@ multiple_select = ($select, $options, label) ->
     $select.addClass('disabled')
     html = "<ul class='select'><li><a class='label disabled'>#{label} #{current}<span class='icon disabled'>#{icons['fa-sort']}</span></a></li></ul>"
   #endif
-  $select.after(html)
+  $select.before($selected_list)
+  $list = $(html)
+  $list.find('ul a').last().addClass('last')
+  $select.after($list)
+  $focusables = getFocusables($(document))
+  $focusElement = $(':focus')
+  if $focusElement.length == 0
+    $focusElement = $focusables.first()
+  #endif
+  rebuildTabindex($focusables, $focusElement)
 #return
 single_select = ($select, $options, label) ->
   current = $select.find('option[selected="selected"]').html()
@@ -150,6 +177,8 @@ single_select = ($select, $options, label) ->
     $select.addClass('disabled')
     html = "<ul class='select'><li><a class='label disabled'>#{label} #{current}<span class='icon disabled'>#{icons['fa-sort']}</span></a></li></ul>"
   #endif
+  $list = $(html)
+  $list.find('ul a').last().addClass('last')
   $select.after(html)
 #return
 $(document).on('click', 'ul.select a.close', (event) ->
@@ -163,6 +192,39 @@ $(document).on('keyup', 'li.filter span.editable', (event) ->
 $(document).on('keypress', 'li.filter span.editable', (event) ->
   return event.which isnt 13
 )
+$(document).on('keyup', 'ul.select', (event) ->
+  switch event.which
+    when 38
+      $this = $(this)
+      tabindex = parseInt($this.find(':focus').attr('tabindex'), 10) - 1
+      $previous = $this.find("*[tabindex='#{tabindex}']")
+      if $previous.length == 0
+        $previous = $this.find('li').last().find("*[tabindex]")
+      #endif
+      $previous.focus()
+    #endwhen
+    when 40
+      $this = $(this)
+      tabindex = parseInt($this.find(':focus').attr('tabindex'), 10) + 1
+      $next = $this.find("*[tabindex='#{tabindex}']")
+      if $next.length == 0
+        $next = $this.find('li').first().find("*[tabindex]")
+      #endif
+      $next.focus()
+    #endwhen
+  #endswitch
+)
+
+$(document).on('click', 'div.selected a.unselect', (event) ->
+  event.preventDefault()
+  $this = $(this)
+  value = $this.parent().data('value')
+  $select = $this.closest('div.selected').next()
+  $list = $select.next()
+  $list.find("a[data-value='#{value}']").parent().removeClass('selected')
+  $select.find("option[value='#{value}']").prop('selected', FALSE).removeAttr('selected')
+)
+
 $('select').each(
   ->
     $select = $(this)
