@@ -46,20 +46,6 @@ $document.on(
     )
   #return
 )
-$document.on(
-  'click'
-  'a.option'
-  (event) ->
-    event.preventDefault()
-    $this = $(this)
-    $target = $($this.attr('href'))
-    $target.val($this.data('value'))
-    $target.find('option[selected="selected"]').removeAttr('selected')
-    $label = $this.closest('ul').prev()
-    $label.find('span.current').html(' ' + $this.html())
-    $label.click()
-  #return
-)
 getDialog = (action, options) ->
   switch action
     when 'delete'
@@ -116,38 +102,43 @@ getUploader = (id, path, target_id, attachment_type) ->
     </div>
   """)
 #return
-option_html = (id, $option, selected = -1) ->
+selected_option_html = (id, $option, selected = -1) ->
+  unselect = "<a href='#' class='icon unselect'>#{icons['fa-times']}</a>"
+  attrs = " data-value='#{ $option.val() }'"
+  attrs += if selected == -1 then " class='item unselected'" else " class='item'"
+  return "<div#{ attrs }>#{ $option.text() }#{ unselect }</div>"
+#return
+list_option_html = (id, $option, selected = -1) ->
   attrs = if selected > -1 then " class='selected'" else ""
-  return "<li#{attrs}><a class='option' href='##{ id }' data-value='#{ $option.attr('value') }'>#{ $option.html() }</a></li>"
+  return "<li#{attrs}><a class='option' href='##{ id }' data-value='#{ $option.val() }'>#{ $option.html() }</a></li>"
 #return
 multiple_select = ($select, $options, label) ->
   $selected = $select.find('option[selected="selected"]')
   $selected_list = $("<div class='selected'></div>")
   selected_ids = new Array()
-  remove = "<a href='#' class='icon remove unselect'>#{icons['fa-times']}</a>"
   $selected.each(
     ->
-      $this = $(this)
-      value = this.value
-      $("<div class='item' data-value='#{value}'>#{$this.text()} #{remove}</div>").appendTo($selected_list)
-      selected_ids.push(value)
+      selected_ids.push(this.value)
     #return
   )
   if $options.length isnt $selected.length
-    html = "<ul class='select'><li class='inactive'>"
+    html = "<ul class='multiselect select'><li class='inactive'>"
     html += "<a href='#' class='label'>#{label}<span class='icon'>#{icons['fa-sort']}</span></a>"
     html += "<ul class='options'>"
     html += "<li class='filter'><div class='clearfix'><span class='icon'>#{icons['fa-search']}</span><span class='editable' contentEditable='true'></span></div></li>"
     $options.each(
       ->
         $option = $(this)
-        html += option_html($select.attr('id'), $option, $.inArray(this.value, selected_ids))
+        id = $select.attr('id')
+        selected = $.inArray(this.value, selected_ids)
+        html += list_option_html(id, $option, selected)
+        $selected_list.append(selected_option_html(id, $option, selected))
       #return
     )
     html += "</ul><a href='#' class='close icon'>#{icons['fa-times-circle']}</a></li></ul>"
   else
     $select.addClass('disabled')
-    html = "<ul class='select'><li><a class='label disabled'>#{label} #{current}<span class='icon disabled'>#{icons['fa-sort']}</span></a></li></ul>"
+    html = "<ul class='multiselect select'><li><a class='label disabled'>#{label} #{current}<span class='icon disabled'>#{icons['fa-sort']}</span></a></li></ul>"
   #endif
   $select.before($selected_list)
   $list = $(html)
@@ -163,7 +154,7 @@ multiple_select = ($select, $options, label) ->
 single_select = ($select, $options, label) ->
   current = $select.find('option[selected="selected"]').html()
   if $options.length > 1
-    html = "<ul class='select'><li class='inactive'>"
+    html = "<ul class='singleselect select'><li class='inactive'>"
     html += "<a href='#' class='label'>#{label}<span class='current'> #{current}</span><span class='icon'>#{icons['fa-sort']}</span></a>"
     html += "<ul class='options'>"
     $options.each(
@@ -175,7 +166,7 @@ single_select = ($select, $options, label) ->
     html += "</ul><a href='#'>Close Select</a></li></ul>"
   else
     $select.addClass('disabled')
-    html = "<ul class='select'><li><a class='label disabled'>#{label} #{current}<span class='icon disabled'>#{icons['fa-sort']}</span></a></li></ul>"
+    html = "<ul class='singleselect select'><li><a class='label disabled'>#{label} #{current}<span class='icon disabled'>#{icons['fa-sort']}</span></a></li></ul>"
   #endif
   $list = $(html)
   $list.find('ul a').last().addClass('last')
@@ -214,17 +205,50 @@ $document.on('keyup', 'ul.select', (event) ->
     #endwhen
   #endswitch
 )
-
-$document.on('click', 'div.selected a.unselect', (event) ->
-  event.preventDefault()
-  $this = $(this)
-  value = $this.parent().data('value')
-  $select = $this.closest('div.selected').next()
-  $list = $select.next()
-  $list.find("a[data-value='#{value}']").parent().removeClass('selected')
-  $select.find("option[value='#{value}']").prop('selected', FALSE).removeAttr('selected')
+$document.on(
+  'click'
+  'div.selected a.unselect'
+  (event) ->
+    event.preventDefault()
+    $this = $(this)
+    $item = $this.closest('div.item')
+    $item.addClass('unselected')
+    value = $item.data('value')
+    $select = $this.closest('div.selected').next()
+    $list = $select.next()
+    $list.find("a[data-value='#{value}']").parent().removeClass('selected')
+    $select.find("option[value='#{value}']").prop('selected', FALSE).removeAttr('selected')
+  #return
 )
-
+$document.on(
+  'click'
+  'ul.multiselect a.option'
+  (event) ->
+    event.preventDefault()
+    $this = $(this)
+    $item = $this.closest('li')
+    $item.addClass('selected')
+    value = $this.data('value')
+    $select = $item.closest('ul.select').prev()
+    $selected = $select.prev()
+    $selected.find("div[data-value='#{value}']").removeClass('unselected')
+    $select.find("option[value='#{value}']").prop('selected', TRUE).attr('selected', 'selected')
+  #return
+)
+$document.on(
+  'click'
+  'ul.singleselect a.option'
+  (event) ->
+    event.preventDefault()
+    $this = $(this)
+    $target = $($this.attr('href'))
+    $target.val($this.data('value'))
+    $target.find('option[selected="selected"]').removeAttr('selected')
+    $label = $this.closest('ul').prev()
+    $label.find('span.current').html(' ' + $this.html())
+    $label.click()
+  #return
+)
 $('select').each(
   ->
     $select = $(this)

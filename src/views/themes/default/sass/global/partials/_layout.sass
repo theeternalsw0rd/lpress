@@ -123,11 +123,16 @@ ul.top_is_visible
   a.close
     display: none !important
 
-div.selected > div.item
-  display: inline-block
-  padding: 0.2em
-  margin: 0.5em 0
-  float:left
+div.selected
+  max-width: 470px
+  & > div.item
+    display: inline-block
+    padding: 0.2em
+    margin: 0.5em 0.5em 0.5em 0
+    a.unselect
+      margin-left: 0.3em
+  & > div.unselected
+    display: none !important
 
 li.filter
   max-width: 470px
