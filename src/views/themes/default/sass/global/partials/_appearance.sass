@@ -1,4 +1,5 @@
-$default_round_amount: 5px
+$default_round_amount: 4px
+$default_blur: 4px
 @mixin border_radius($amount: $default_round_amount, $position: 'all')
   @if $position == 'all'
     @include border_radius_all($amount)
@@ -12,29 +13,42 @@ $default_round_amount: 5px
     @include border_radius_bottom_right($amount)
 
 @mixin border_radius_all($amount: $default_round_amount)
-  border-radius: $amount
   -moz-border-radius: $amount
   -webkit-border-radius: $amount
+  border-radius: $amount
 
 @mixin border_radius_top_left($amount: $default_round_amount)
-  border-top-left-radius: $amount
   -moz-border-topleft-radius: $amount
   -webkit-border-top-left-radius: $amount
+  border-top-left-radius: $amount
 
 @mixin border_radius_top_right($amount: $default_round_amount)
-  border-top-right-radius: $amount
   -moz-border-topright-radius: $amount
   -webkit-border-top-right-radius: $amount
+  border-top-right-radius: $amount
 
 @mixin border_radius_bottom_left($amount: $default_round_amount)
-  border-bottom-left-radius: $amount
   -moz-border-bottomleft-radius: $amount
   -webkit-border-bottom-left-radius: $amount
+  border-bottom-left-radius: $amount
 
 @mixin border_radius_bottom_right($amount: $default_round_amount)
-  border-bottom-right-radius: $amount
   -moz-border-bottomright-radius: $amount
   -webkit-border-bottom-right-radius: $amount
+  border-bottom-right-radius: $amount
+
+@function build_box_shadow($type: '', $hpos: 0px, $vpos: 0px, $blur: $default_blur, $spread: 0px, $color: $link_color)
+  @return #{$type} $hpos $vpos $blur $spread $color
+
+@mixin box_shadow($list)
+  -moz-box-shadow: $list
+  -webkit-box-shadow: $list
+  box-shadow: $list
+
+@mixin text_shadow($hpos: 0px, $vpos: 0px, $blur: $default_blur, $color: $link_color)
+  -moz-text-shadow: $hpos $vpos $blur $color
+  -webkit-text-shadow: $hpos $vpos $blur $color
+  text-shadow: $hpos $vpos $blur $color
 
 @mixin background_opacity($color, $opacity: 0.6, $fallback: $color, $important: false)
   @if $important
@@ -54,9 +68,9 @@ $default_round_amount: 5px
 
 @mixin form_common($button: false, $real_button: false)
   @include background_opacity($form_input_rgba_background, 0.3, $fallback: $form_input_background)
-  border: none
-  outline: 2px outset $input_outline_color
-  outline-offset: -2px
+  @include border_radius()
+  border: 1px solid $form_input_text
+  outline: none
   color: $form_input_text
   @if $button
     cursor: pointer
@@ -66,8 +80,7 @@ $default_round_amount: 5px
       color: $success_color
     .fa-times
       color: $error_text
-    .button-label
-      color: $link_color
+    color: $link_color
     &:hover
       @include background_opacity($form_input_rgba_background, $fallback: $form_input_focused_background)
       span.button-label
@@ -75,13 +88,18 @@ $default_round_amount: 5px
   @if $button and $real_button
     &:active
       @include background_opacity($form_input_rgba_background, $fallback: $form_input_focused_background)
-      outline: 2px inset $input_outline_color !important /* need to override focus on IE for .active class */
+      outline: none !important /* need to override focus on IE for .active class */
     &:focus
       @include background_opacity($form_input_rgba_background, $fallback: $form_input_focused_background)
+      outline: none !important
+      @include box_shadow(build_box_shadow())
   @if $button == false
+    &:hover
+      @include background_opacity($form_input_rgba_background, $fallback: $form_input_focused_background)
     &:focus
       @include background_opacity($form_input_rgba_background, $fallback: $form_input_focused_background)
-      outline: 2px inset $input_outline_color
+      outline: none !important
+      @include box_shadow(build_box_shadow())
 
 %real-button
   @include form_common($button: true, $real_button: true)
@@ -108,11 +126,21 @@ body
 
 a, div.label
   color: $link_color
+  @include border_radius()
   &:hover
     color: $link_hover_color
+    @include box_shadow(build_box_shadow($blur: 0px, $spread: 2px, $color: $form_input_focused_background))
+    background: $form_input_focused_background
 
-.nojs a.file
-  display: none !important
+a
+  &:focus
+    outline: none
+    @include box_shadow(build_box_shadow($blur: 0px, $spread: 2px, $color: $form_input_focused_background))
+    background: $form_input_focused_background
+  &.button:hover
+    @include box_shadow(build_box_shadow($blur: 0px))
+  &.button:focus:hover
+    @include box_shadow(build_box_shadow())
 
 h1, h2, h3
   color: $heading_color
@@ -224,15 +252,11 @@ ul.collection > li.item
     @include background_opacity($label_rgba_background, 0.4, $label_background)
 
 .lt-ie8
-  input, textarea, span.faux-checkbox, span.button, a.button
-    border: 2px outset $input_outline_color
   input.focused, textarea.focused
-    border: 2px inset $input_outline_color
     @include background_opacity($form_input_rgba_background, $fallback: $form_input_focused_background)
   span.focused-button, a.focused-button
     @include background_opacity($form_input_rgba_background, $fallback: $form_input_focused_background)
   span.active-button, a.active-button
-    border: 2px inset $input_outline_color
     @include background_opacity($form_input_rgba_background, $fallback: $form_input_focused_background)
   input.file
     background: $form_input_background

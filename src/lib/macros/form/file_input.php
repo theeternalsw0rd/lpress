@@ -37,5 +37,5 @@ Form::macro('file_input', function($slug, $upload_command = 'create', $single = 
 	$hidden_name = $attributes['data-target_id'];
 	$value = Input::old($hidden_name, $value);
 	$hidden = "<input id='${hidden_name}' name='${hidden_name}' type='hidden' value='${value}' />";
-	return "<div class='file'><a href='#${slug}' title='${label}'  class='${class}' ${data} ${attribute_string}>${label}</a>${hidden}</div>";
+	return "<div class='file'><a href='#${slug}' title='${label}'  class='${class} button' ${data} ${attribute_string}>${label}</a>${hidden}</div>";
 });

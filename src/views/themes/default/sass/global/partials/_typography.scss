@@ -125,6 +125,12 @@ html.win-chrome-font {
 }
 a {
 	text-decoration: none;
+	&:focus {
+		text-decoration: underline;
+	}
+	&.button:focus {
+		text-decoration: none;
+	}
 }
 h1 {
     font-size: 1.7em;

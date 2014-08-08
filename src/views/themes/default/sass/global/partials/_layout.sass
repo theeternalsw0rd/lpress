@@ -2,6 +2,11 @@ $input_padding: 0.2em
 $button_vpadding: $input_padding
 $button_hpadding: 2 * $input_padding
 
+@mixin box_sizing($type: border-box)
+  -moz-box-sizing: $type
+  -webkit-box-sizing: $type
+  box-sizing: $type
+
 /* Clearfix adapted from Nicolas Gallager's work at http://nicolasgallagher.com/micro-clearfix-hack/ */
 .clear-fix
   *zoom: 1
@@ -28,10 +33,11 @@ textarea
 
 #page
   width: 82%
-  padding: 0 2%
+  padding: 0 2% 1em 0
   max-width: 960px
   margin: 0 auto
   min-height: 100%
+  @include box_sizing()
 
 div.error, div.message
   padding: 0 0.5em 1em 0.5em
@@ -257,9 +263,8 @@ html.win-chrome-font
   height: 1em
   width: 1em
 
-.no-js input.file
-  margin: 0.5em 0 0 0
-  padding: $input_padding
+.nojs a.file
+  display: none !important
 
 .no-fileinput form div.file
   visibility: hidden !important
