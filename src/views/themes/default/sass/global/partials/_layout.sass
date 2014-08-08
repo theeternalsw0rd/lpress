@@ -90,11 +90,12 @@ ul.collection
     width: 100%
     max-width: 490px
     overflow-y: hidden
-    a
+    span.icons
+      display: block
       float: right
+    a
       padding: 0.3em
       position: relative
-      top: -0.3em
 
 ul.tabular, ul.select
   margin: 0.5em 0
@@ -131,13 +132,13 @@ ul.top_is_visible
 
 div.selected
   max-width: 470px
-  & > div.item
+  & > a.unselect
     display: inline-block
     padding: 0.2em
     margin: 0.5em 0.5em 0.5em 0
-    a.unselect
+    span.icon
       margin-left: 0.3em
-  & > div.unselected
+  & > a.unselected
     display: none !important
 
 li.filter

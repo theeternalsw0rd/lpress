@@ -11,7 +11,8 @@ Thanks css-tricks.com/snippets/jquery/make-jquery-contains-case-insensitive
 $.expr[":"].containsNS = $.expr.createPseudo(
   (arg) ->
     (elem) ->
-      $(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0
+      text = $(elem).text().substring(0, arg.length).toUpperCase()
+      return text == arg.toUpperCase()
     #return
   #return
 )
@@ -20,7 +21,14 @@ filter = ($list, needle) ->
   $items = $list.children().removeClass('filtered')
   if needle isnt ''
     $items.has(':not(:containsNS("' + needle + '"))').not('.filter').addClass('filtered')
+  rebuildTabindex(getFocusables($document), $(':focus'))
   #endif
+#return
+nextFocusable = () ->
+  $currentFocusables = getFocusables($document)
+  focusIndex = $currentFocusables.index(':focus')
+  $focusElement = $currentFocusables.get(++focusIndex)
+  return $focusElement
 #return
 ###
  start icon codes from font awesome

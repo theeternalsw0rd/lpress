@@ -120,6 +120,16 @@ $default_blur: 4px
   @include background_opacity($error_background, 0.3)
   border: 1px solid $error_border
 
+%link-icon-only
+  background: transparent !important
+  @include box_shadow(build_box_shadow($blur: 0px))
+  opacity: 0.7
+  &:hover
+    opacity: 1
+  &:focus
+    opacity: 1
+    @include text_shadow($color: $form_input_focused_background)
+
 body
   color: $text_color
   background: url(#{$base_path}/images/backgrounds/body.png?v1)
@@ -137,10 +147,15 @@ a
     outline: none
     @include box_shadow(build_box_shadow($blur: 0px, $spread: 2px, $color: $form_input_focused_background))
     background: $form_input_focused_background
-  &.button:hover
+  &.button:hover, &.option:hover
     @include box_shadow(build_box_shadow($blur: 0px))
-  &.button:focus:hover
+  &.button
+    @extend %unselectable
+    @extend button
+  &.button:focus:hover, &.option:focus:hover
     @include box_shadow(build_box_shadow())
+  &.option
+    @include border_radius(0px)
 
 h1, h2, h3
   color: $heading_color
@@ -158,18 +173,21 @@ a, .button-icon, li.filter > div
     color: $icon_hover_color
 
 ul.tabular, ul.select
-  a.label, a.option
+  a.option
     @include background_opacity($label_rgba_background, 0.3, $label_background)
-    &:hover
-      @include background_opacity($label_rgba_background, 0.5, $label_background)
+    &:hover, &:focus
+      @include background_opacity($label_rgba_background, 0.6, $label_background)
+      @include box_shadow(build_box_shadow($blur: 0px))
   li.filter
     @include background_opacity($label_rgba_background, 0.3, $label_background)
   a.disabled:hover
     @include background_opacity($label_rgba_background, 0.3, $label_background, true)
   a.close
-    opacity: 0.6
-    &:hover
-      opacity: 1
+    @extend %link-icon-only
+
+ul.collection
+  a.button-icon
+    @extend %link-icon-only
 
 ul.tabular, ul.select
   li.active > a.label
@@ -187,14 +205,9 @@ ul.select
     ul a, li.filter
       border-left: 1px solid $text_color
       border-right: 1px solid $text_color
-    a.last
+    a.last, li.last
       @include border_radius(4px, 'bottom')
       border-bottom: 1px solid $text_color
-
-div.selected > div.item
-  @include background_opacity($label_rgba_background, 0.3, $label_background)
-  @include border_radius(4px)
-  border: 1px solid $text_color
 
 div.dz-success-mark .button-icon
   text-shadow: 0px 0px 2px $text_color, 0px 0px 2px $text_color
@@ -292,7 +305,7 @@ label.checkbox
     &:focus + span.button /* for mouse */
       @extend %real-button:focus
 
-span.button, a.button
+span.button
   @extend %unselectable
   @extend %faux-button
 

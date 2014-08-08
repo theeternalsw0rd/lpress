@@ -128,7 +128,7 @@ a {
 	&:focus {
 		text-decoration: underline;
 	}
-	&.button:focus {
+	&.button:focus, &.close:focus, &.button-icon:focus {
 		text-decoration: none;
 	}
 }
@@ -158,8 +158,8 @@ ul.tabular {
 		font-weight: bold;
 	}
 }
-div.item {
-	a.unselect {
+a.unselect {
+	span.icon {
 		font-size: 0.6em;
 	}
 }

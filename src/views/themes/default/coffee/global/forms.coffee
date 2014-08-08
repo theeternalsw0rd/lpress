@@ -103,10 +103,10 @@ getUploader = (id, path, target_id, attachment_type) ->
   """)
 #return
 selected_option_html = (id, $option, selected = -1) ->
-  unselect = "<a href='#' class='icon unselect'>#{icons['fa-times']}</a>"
+  unselect = "<span class='icon'>#{icons['fa-times']}</span>"
   attrs = " data-value='#{ $option.val() }'"
-  attrs += if selected == -1 then " class='item unselected'" else " class='item'"
-  return "<div#{ attrs }>#{ $option.text() }#{ unselect }</div>"
+  attrs += if selected == -1 then " class='unselect button unselected'" else " class='unselect button'"
+  return "<a href='#'#{ attrs }>#{ $option.text() }#{ unselect }</a>"
 #return
 list_option_html = (id, $option, selected = -1) ->
   attrs = if selected > -1 then " class='selected'" else ""
@@ -123,7 +123,7 @@ multiple_select = ($select, $options, label) ->
   )
   if $options.length isnt $selected.length
     html = "<ul class='multiselect select'><li class='inactive'>"
-    html += "<a href='#' class='label'>#{label}<span class='icon'>#{icons['fa-sort']}</span></a>"
+    html += "<a href='#' class='button label'>#{label}<span class='icon'>#{icons['fa-sort']}</span></a>"
     html += "<ul class='options'>"
     html += "<li class='filter'><div class='clearfix'><span class='icon'>#{icons['fa-search']}</span><span class='editable' contentEditable='true'></span></div></li>"
     $options.each(
@@ -179,6 +179,13 @@ $document.on('click', 'ul.select a.close', (event) ->
 $document.on('keyup', 'li.filter span.editable', (event) ->
   $this = $(this)
   filter($this.closest('ul, ol'), $this.text())
+  $list = $this.closest('ul')
+  $list.find('.last').removeClass('last')
+  $last = $list.find('a.option:visible').last()
+  if $last.length == 0
+    $last = $list.find('li.filter')
+  #endif
+  $last.addClass('last')
 )
 $document.on('keypress', 'li.filter span.editable', (event) ->
   return event.which isnt 13
@@ -188,7 +195,7 @@ $document.on('keyup', 'ul.select', (event) ->
     when 38
       $this = $(this)
       tabindex = parseInt($this.find(':focus').attr('tabindex'), 10) - 1
-      $previous = $this.find("*[tabindex='#{tabindex}']")
+      $previous = $this.find("*[tabindex='#{tabindex}']").not('a.close')
       if $previous.length == 0
         $previous = $this.find('li').last().find("*[tabindex]")
       #endif
@@ -197,9 +204,9 @@ $document.on('keyup', 'ul.select', (event) ->
     when 40
       $this = $(this)
       tabindex = parseInt($this.find(':focus').attr('tabindex'), 10) + 1
-      $next = $this.find("*[tabindex='#{tabindex}']")
+      $next = $this.find("*[tabindex='#{tabindex}']").not('a.close')
       if $next.length == 0
-        $next = $this.find('li').first().find("*[tabindex]")
+        $next = $this.find('li').first().find("*[tabindex]").first()
       #endif
       $next.focus()
     #endwhen
@@ -210,14 +217,15 @@ $document.on(
   'div.selected a.unselect'
   (event) ->
     event.preventDefault()
-    $this = $(this)
-    $item = $this.closest('div.item')
-    $item.addClass('unselected')
-    value = $item.data('value')
+    $this = $(this).focus()
+    $this.addClass('unselected')
+    value = $this.data('value')
     $select = $this.closest('div.selected').next()
     $list = $select.next()
+    $focusElement = nextFocusable()
     $list.find("a[data-value='#{value}']").parent().removeClass('selected')
     $select.find("option[value='#{value}']").prop('selected', FALSE).removeAttr('selected')
+    rebuildTabindex(getFocusables($document), $focusElement)
   #return
 )
 $document.on(
@@ -225,13 +233,13 @@ $document.on(
   'ul.multiselect a.option'
   (event) ->
     event.preventDefault()
-    $this = $(this)
+    $this = $(this).focus()
     $item = $this.closest('li')
     $item.addClass('selected')
     value = $this.data('value')
     $select = $item.closest('ul.select').prev()
     $selected = $select.prev()
-    $selected.find("div[data-value='#{value}']").removeClass('unselected')
+    $selected.find("a[data-value='#{value}']").removeClass('unselected')
     $select.find("option[value='#{value}']").prop('selected', TRUE).attr('selected', 'selected')
   #return
 )
