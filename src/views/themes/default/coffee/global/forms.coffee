@@ -142,7 +142,6 @@ multiple_select = ($select, $options, label) ->
   #endif
   $select.before($selected_list)
   $list = $(html)
-  $list.find('ul a').last().addClass('last')
   $select.after($list)
   $focusables = getFocusables($document)
   $focusElement = $(':focus')
@@ -169,8 +168,13 @@ single_select = ($select, $options, label) ->
     html = "<ul class='singleselect select'><li><a class='label disabled'>#{label} #{current}<span class='icon disabled'>#{icons['fa-sort']}</span></a></li></ul>"
   #endif
   $list = $(html)
-  $list.find('ul a').last().addClass('last')
-  $select.after(html)
+  $select.after($list)
+  $focusables = getFocusables($document)
+  $focusElement = $(':focus')
+  if $focusElement.length == 0
+    $focusElement = $focusables.first()
+  #endif
+  rebuildTabindex($focusables, $focusElement)
 #return
 $document.on('click', 'ul.select a.close', (event) ->
   event.preventDefault()
@@ -180,12 +184,7 @@ $document.on('keyup', 'li.filter span.editable', (event) ->
   $this = $(this)
   filter($this.closest('ul, ol'), $this.text())
   $list = $this.closest('ul')
-  $list.find('.last').removeClass('last')
-  $last = $list.find('a.option:visible').last()
-  if $last.length == 0
-    $last = $list.find('li.filter')
-  #endif
-  $last.addClass('last')
+  setLastItem($list, 'a.option:visible', 'li.filter')
 )
 $document.on('keypress', 'li.filter span.editable', (event) ->
   return event.which isnt 13
@@ -222,9 +221,10 @@ $document.on(
     value = $this.data('value')
     $select = $this.closest('div.selected').next()
     $list = $select.next()
-    $focusElement = nextFocusable()
     $list.find("a[data-value='#{value}']").parent().removeClass('selected')
+    setLastItem($list, 'a.option:visible', 'li.filter')
     $select.find("option[value='#{value}']").prop('selected', FALSE).removeAttr('selected')
+    $focusElement = nextFocusable()
     rebuildTabindex(getFocusables($document), $focusElement)
   #return
 )
@@ -237,10 +237,12 @@ $document.on(
     $item = $this.closest('li')
     $item.addClass('selected')
     value = $this.data('value')
-    $select = $item.closest('ul.select').prev()
+    $list = $item.closest('ul.select')
+    setLastItem($list, 'a.option:visible', 'li.filter')
+    $select = $list.prev()
+    $select.find("option[value='#{value}']").prop('selected', TRUE).attr('selected', 'selected')
     $selected = $select.prev()
     $selected.find("a[data-value='#{value}']").removeClass('unselected')
-    $select.find("option[value='#{value}']").prop('selected', TRUE).attr('selected', 'selected')
   #return
 )
 $document.on(

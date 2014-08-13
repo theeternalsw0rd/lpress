@@ -30,6 +30,15 @@ nextFocusable = () ->
   $focusElement = $currentFocusables.get(++focusIndex)
   return $focusElement
 #return
+setLastItem = ($root, selector, fallback) ->
+  fallback = fallback || '';
+  $root.find('.last').removeClass('last')
+  $last = $root.find(selector).last()
+  if $last.length == 0 && fallback != ''
+    $last = $root.find(fallback)
+  #endif
+  $last.addClass('last')
+#return
 ###
  start icon codes from font awesome
 ###
@@ -84,6 +93,7 @@ ulSlideToggle = (event, clickElement) ->
         $focusElement = getFocusables($(this)).first()
         rebuildTabindex($focusables, $focusElement)
         $root = $(this).closest('ul.select')
+        setLastItem($root, 'a.option:visible', 'li.filter')
         if $root.length > 0
           pinToBottom($root, $root.find('a.label'), $root.find('a.close'), 'right')
       #return
