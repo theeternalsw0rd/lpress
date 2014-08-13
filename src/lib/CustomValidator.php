@@ -31,6 +31,8 @@ class CustomValidator extends \Illuminate\Validation\Validator {
 	}
 
 	public function validateBool($attribute, $value, $parameters) {
+		if($value == 'on') $value = TRUE;
+		if($value == 'off') $value = FALSE;
 		return is_bool($value) || is_null($value);
 	}
 
