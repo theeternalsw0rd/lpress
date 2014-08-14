@@ -3,6 +3,7 @@
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Lang;
@@ -51,6 +52,7 @@ class BaseController extends Controller {
 			$model->password = Hash::make(Input::get('password'));
 		}
 		$model->saveItem($action);
+		$redirect_url = str_replace(':id:', $model->id, $redirect_url);
 		return Redirect::to($redirect_url);
 	}
 
@@ -215,6 +217,43 @@ class BaseController extends Controller {
 		}
 		return View::make($view_prefix . '.dashboard.models.pivot.index', $pass_to_view);
 	}
+
+	public static function processPivotModelForm($slug, $model_name, $id, $pivot, $pivot_name) {
+		extract(self::prepareMake());
+		$model = $model_name::find($id);
+		if(is_null($model)) {
+			return App::abort(
+				404, 
+				Lang::get(
+					'l-press::errors.modelIdNotFound',
+					array('id' => $id)
+				)
+			);
+		}
+		try {
+			$model->load($pivot);
+		} catch(\Exception $e) {
+			return App::abort(
+				404,
+				Lang::get(
+					'l-press::errors.pivotNotFound',
+					array('model_name' => $model_name, 'pivot' => $pivot)
+				)
+			);
+		}
+		$rules = array($pivot => 'pivot:' . $pivot_name);
+		$validator = Validator::make(Input::all(), $rules, CustomValidator::getOwnMessages());
+		$validator->setAttributeNames(Lang::get('l-press::labels'));
+		if($validator->fails()) {
+			return Redirect::back()->withInput()->withErrors($validator);
+		}
+		$model->{$pivot}()->sync(Input::get($pivot));
+		$route_prefix = (new PrefixGenerator)->getPrefix();
+		$dashboard_route = '+' . Config::get('l-press::dashboard_route');
+		$prefix = $route_prefix . '/' . $dashboard_route;
+		return Redirect::to($prefix . '/' . $slug);
+	}
+
 
 	public static function getModelIndex($slug, $model_name, $per_page) {
 		extract(self::prepareMake());

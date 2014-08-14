@@ -165,6 +165,7 @@ class DashboardController extends BaseController {
 		if(!$controller::hasPermission($id)) {
 			return App::abort(403, Lang::get('l-press::errors.executePermissionError'));
 		}
-		return $controller::processPivotModelForm($slug, $model_name, $id, $pivot);
+		$pivot_info = self::getModelInfo($pivot);
+		return $controller::processPivotModelForm($slug, $model_name, $id, $pivot, $pivot_info['model_name']);
 	}
 }

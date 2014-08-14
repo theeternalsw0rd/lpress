@@ -5,6 +5,9 @@
 
 $ = jQuery
 $document = $(document)
+$html = $('html')
+$body = $(document.body).removeClass('nojs')
+$page = $(document.getElementById('page'))
 ###
 Thanks css-tricks.com/snippets/jquery/make-jquery-contains-case-insensitive
 ###
@@ -16,7 +19,6 @@ $.expr[":"].containsNS = $.expr.createPseudo(
     #return
   #return
 )
-$('body').removeClass('nojs')
 filter = ($list, needle) ->
   $items = $list.children().removeClass('filtered')
   if needle isnt ''
@@ -24,10 +26,37 @@ filter = ($list, needle) ->
   rebuildTabindex(getFocusables($document), $(':focus'))
   #endif
 #return
-nextFocusable = () ->
-  $currentFocusables = getFocusables($document)
-  focusIndex = $currentFocusables.index(':focus')
-  $focusElement = $currentFocusables.get(++focusIndex)
+$(document).on('cbox_open', ->
+  $focusables = getFocusables($document)
+  recall_id = $focusables.index($(this))
+  $body.data('focus-recall-id', recall_id)
+)
+$(document).on('cbox_complete', ->
+  $focusables = getFocusables($(document.getElementById('colorbox')))
+  $focusElement = $focusables.first()
+  rebuildTabindex($focusables, $focusElement)
+)
+$(document).on('cbox_close', ->
+  colorbox_focus_id = parseInt($body.data('colorbox-focus-id'), 10)
+  $focusables = getFocusables($document)
+  if $focusables.length >= colorbox_focus_id
+    $focusElement = $focusables.eq(colorbox_focus_id)
+  else
+    $focusElement = $focusables.first()
+  #endif
+  rebuildTabindex($focusables, $focusElement)
+)
+nextFocusable = ($current, wraparound) ->
+  next_index = parseInt($current.attr('tabindex'), 10) + 1
+  fallback_index = next_index - 2
+  $focusElement = $("*[tabindex='#{next_index}']")
+  if $focusElement.length == 0
+    if (typeof wraparound isnt 'undefined' and wraparound) or fallback_index < 1
+      $focusElement = $("*[tabindex='1']")
+    else
+      $focusElement = $("*[tabindex='#{fallback_index}']")
+    #endif
+  #endif
   return $focusElement
 #return
 setLastItem = ($root, selector, fallback) ->
@@ -55,7 +84,38 @@ icons = {
 ###
  end icon codes
 ###
-
+getDialog = (action, options) ->
+  url = options.url.split(':')[1]
+  switch action
+    when 'delete'
+      html = """
+        <div class='dialog'>
+          <h2>#{lang_global_forms.delete_item}</h2>
+          <p>#{lang_global_forms.confirm_delete}</p>
+          <div class='dialog-buttons'>
+            <a class='button' href='#{url}'>
+              <span class='button-icon fa-check'>#{icons['fa-check']}</span>
+              <span class='button-label'>#{lang_global_forms.ok}</span>
+            </a>
+            <a href='#' class='button cancel'>
+              <span class='button-icon fa-times'>#{icons['fa-times']}</span>
+              <span class='button-label'>#{lang_global_forms.cancel}</span>
+            </a>
+          </div>
+        </div>
+      """
+    #end when
+  #end switch
+  $focusables = getFocusables($document)
+  colorbox_focus_id = -1
+  $focusables.each((index, element) ->
+    $element = $(element)
+    if $element.attr('href') == url
+      colorbox_focus_id = index
+  )
+  $body.data('colorbox-focus-id', colorbox_focus_id)
+  $.colorbox({'html':html, 'scrolling':FALSE, 'closeButton':FALSE})
+#return
 parseURI = (uri) ->
   query_string = uri.split('?')[1]
   queries = {}

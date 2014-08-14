@@ -7,9 +7,6 @@
 ###
 
 Dropzone.autoDiscover = false
-$html = $('html')
-$body = $(document.body)
-$page = $(document.getElementById('page'))
 $document.on(
   'click'
   'ul.select > li > a'
@@ -46,35 +43,20 @@ $document.on(
     )
   #return
 )
-getDialog = (action, options) ->
-  switch action
-    when 'delete'
-      html = """
-        <div class='dialog'>
-          <h2>#{lang_global_forms.delete_item}</h2>
-          <p>#{lang_global_forms.confirm_delete}</p>
-          <div class='dialog-buttons'>
-            <a class='button' href='#{options.url}'>
-              <span class='button-icon fa-check'>#{icons['fa-check']}</span>
-              <span class='button-label'>#{lang_global_forms.ok}</span>
-            </a>
-            <a href='#' class='button cancel'>
-              <span class='button-icon fa-times'>#{icons['fa-times']}</span>
-              <span class='button-label'>#{lang_global_forms.cancel}</span>
-            </a>
-          </div>
-        </div>
-      """
-    #end when
-  #end switch
-  $.colorbox({'html':html, 'scrolling':FALSE, 'closeButton':FALSE})
-#return
 $document.on(
   'click'
   'a.cancel'
   (event) ->
     event.preventDefault()
     $.colorbox.remove()
+    $focusables = getFocusables($document)
+    colorbox_focus_id = parseInt($body.data('colorbox-focus-id'), 10)
+    if $focusables.length >= colorbox_focus_id
+      $focusElement = $focusables.eq(colorbox_focus_id)
+    else
+      $focusElement = $focusables.first()
+    #endif
+    rebuildTabindex($focusables, $focusElement)
   #return
 )
 $document.on(
@@ -224,7 +206,7 @@ $document.on(
     $list.find("a[data-value='#{value}']").parent().removeClass('selected')
     setLastItem($list, 'a.option:visible', 'li.filter')
     $select.find("option[value='#{value}']").prop('selected', FALSE).removeAttr('selected')
-    $focusElement = nextFocusable()
+    $focusElement = nextFocusable($this)
     rebuildTabindex(getFocusables($document), $focusElement)
   #return
 )
@@ -233,11 +215,21 @@ $document.on(
   'ul.multiselect a.option'
   (event) ->
     event.preventDefault()
-    $this = $(this).focus()
+    $this = $(this)
     $item = $this.closest('li')
+    next_tabindex = parseInt($this.attr('tabindex'), 10) + 1
     $item.addClass('selected')
-    value = $this.data('value')
     $list = $item.closest('ul.select')
+    $focusElement = $("*[tabindex='#{next_tabindex}'")
+    if $focusElement.length == 0 or !$focusElement.hasClass('option')
+      $focusElement = $("*[tabindex='#{next_tabindex - 2}']")
+      if $focusElement.length == 0
+        $focusElement = $list.find("*[contentEditable='true']")
+      #endif
+    #endif
+    $focusables = getFocusables($document)
+    rebuildTabindex($focusables, $focusElement)
+    value = $this.data('value')
     setLastItem($list, 'a.option:visible', 'li.filter')
     $select = $list.prev()
     $select.find("option[value='#{value}']").prop('selected', TRUE).attr('selected', 'selected')

@@ -27,5 +27,6 @@ return array(
 	'restore_button' => 'Restore',
 	'update_button' => 'Edit',
 	'description' => 'Description',
-	'record_type' => 'Record Type'
+	'record_type' => 'Record Type',
+	'groups' => 'Groups',
 );

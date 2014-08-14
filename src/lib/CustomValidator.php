@@ -11,6 +11,7 @@ class CustomValidator extends \Illuminate\Validation\Validator {
 		'RequiredIf',
 		'Accepted',
 		'Bool',
+		'Pivot',
 		'RecordExists',
 		'Same'
 	);
@@ -34,6 +35,12 @@ class CustomValidator extends \Illuminate\Validation\Validator {
 		if($value == 'on') $value = TRUE;
 		if($value == 'off') $value = FALSE;
 		return is_bool($value) || is_null($value);
+	}
+
+	public function validatePivot($attribute, $values, $parameters) {
+		$pivot_name = $parameters[0];
+		$acceptible = $pivot_name::all()->lists('id');
+		return count(array_diff($values, $acceptible)) === 0;
 	}
 
 	public function validateRecordExists($attribute, $value, $parameters) {
