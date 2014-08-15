@@ -12,11 +12,15 @@ class InstallController extends BaseController {
 		extract(parent::prepareMake());	
 		$user = Auth::user();
 		if($user && $user->username == 'lpress') {
-			return View::make($view_prefix . '.dashboard.create_user',
+			$route_prefix = (new PrefixGenerator)->getPrefix();
+			$dashboard_prefix = '+' . Config::get('l-press::dashboard_route');
+			$form_url = $route_prefix . $dashboard_prefix . '/users/1';
+			return View::make($view_prefix . '.dashboard.installer',
 				array(
 					'view_prefix' => $view_prefix,
 					'title' => Lang::get('l-press::titles.newModel', array('model_basename' => 'User')),
-					'install' => TRUE
+					'install' => TRUE,
+					'form_url' => $form_url
 				)
 			);
 		}

@@ -6,11 +6,7 @@
 	@parent
 	<h2>Create User</h2>
 	<div class='form clearfix'>
-		@if ($install)
-			{{ Form::open(array('route' => array('lpress-dashboard.users.update', 1))) }}
-		@else
-			{{ Form::open(array('route' => 'lpress-dashboard.users.create')) }}
-		@endif
+		{{ Form::open(array('url' => $form_url)) }}
 		<div class='text'>
 			{{ Form::text_input(
 				'text',
@@ -134,5 +130,4 @@
 @stop
 @section('footer_scripts')
 	@parent
-	{{ HTML::asset('js', 'compiled/dashboard/ready.js') }}
 @stop
