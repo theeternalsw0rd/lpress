@@ -149,7 +149,7 @@ class User extends BaseModel implements UserInterface, RemindableInterface {
 			if(($group->pivot->site_id === 0 || $group->pivot->site_id == SITE) /* site check (value of 0 is wildcard) */
 			&& ($group->record_type_id === 0 || $group->record_type_id === $record_type->id) /* record type check (value of 0 is wildcard) */ ) {
 				foreach($group->permissions as $permission) {
-					if($permission->slug === 'root' || in_array($permission_array, $permission->slug)) {
+					if($permission->slug === 'root' || in_array($permission->slug, $permission_array)) {
 						return TRUE;
 					}
 				}
