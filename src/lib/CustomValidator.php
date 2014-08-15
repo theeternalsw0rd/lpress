@@ -43,6 +43,13 @@ class CustomValidator extends \Illuminate\Validation\Validator {
 		return count(array_diff($values, $acceptible)) === 0;
 	}
 
+	public function validateExistsOrZero($attribute, $value, $parameters) {
+		if($value == 0) {
+			return TRUE;
+		}
+		return $this->validateExists($attribute, $value, $parameters);
+	}
+
 	public function validateRecordExists($attribute, $value, $parameters) {
 		if(empty($value)) {
 			return TRUE;

@@ -2,9 +2,12 @@
 
 return array(
 	'application_key' => 'Application Key',
+	'all' => 'All :type',
 	'label_separator' => ':',
 	'label' => 'Label',
 	'domain' => 'Domain',
+	'sites' => 'Sites',
+	'site' => 'Site',
 	'theme' => 'Theme',
 	'in_production' => 'Site is in production.',
 	'username' => 'Username',
