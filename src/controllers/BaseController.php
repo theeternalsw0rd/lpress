@@ -166,18 +166,12 @@ class BaseController extends Controller {
 		return View::make($view_prefix . '.dashboard.models.form', $pass_to_view);
 	}
 
-	public static function getPivotEditor($slug, $model_name, $id, $pivot, $pivot_name) {
-		extract(self::prepareMake());
-		$model_basename = explode('\\', $model_name);
-		$model_basename = end($model_basename);
-		$pivot_basename = explode('\\', $pivot_name);
-		$pivot_basename = end($pivot_basename);
-		$pivot_label = Str::title($pivot);
-		$model = $model_name::find($id);
+	protected static function verifyPivot($model_name, $model_id, $pivot) {
+		$model = $model_name::find($model_id);
 		if(is_null($model)) {
-			return App::abort(
-				404, 
-				Lang::get(
+			return array(
+				'code' => 404,
+				'data' => Lang::get(
 					'l-press::errors.modelIdNotFound',
 					array('id' => $id)
 				)
@@ -186,14 +180,33 @@ class BaseController extends Controller {
 		try {
 			$model->load($pivot);
 		} catch(\Exception $e) {
-			return App::abort(
-				404,
-				Lang::get(
+			return array(
+				'code' => 404,
+				'data' => Lang::get(
 					'l-press::errors.pivotNotFound',
 					array('model_name' => $model_name, 'pivot' => $pivot)
 				)
 			);
 		}
+		return array(
+			'code' => 200,
+			'data' => $model
+		);
+	}
+
+	public static function getPivotEditor($slug, $model_name, $model_id, $pivot, $pivot_name, $extra_column = array()) {
+		extract(self::prepareMake());
+		$pivot_test = self::verifyPivot($model_name, $model_id, $pivot);
+		$code = $pivot_test['code'];
+		if($code != 200) {
+			return App::abort($code, $pivot_test['data']);
+		}
+		$model = $pivot_test['data'];
+		$model_basename = explode('\\', $model_name);
+		$model_basename = end($model_basename);
+		$pivot_basename = explode('\\', $pivot_name);
+		$pivot_basename = end($pivot_basename);
+		$pivot_label = Str::title($pivot);
 		$title = Lang::get(
 			'l-press::titles.updateModel',
 			array(
@@ -209,7 +222,8 @@ class BaseController extends Controller {
 			'pivot_name' => $pivot_name,
 			'pivot' => $pivot,
 			'pivot_label' => $pivot_label,
-			'model_basename' => $model_basename
+			'model_basename' => $model_basename,
+			'extra_column' => $extra_column
 		);
 		$slug_view = $view_prefix . '.dashboard.' . $slug . '.' . $pivot . '.index';
 		if(View::exists($slug_view)) {
@@ -218,36 +232,29 @@ class BaseController extends Controller {
 		return View::make($view_prefix . '.dashboard.models.pivot.index', $pass_to_view);
 	}
 
-	public static function processPivotModelForm($slug, $model_name, $id, $pivot, $pivot_name) {
-		extract(self::prepareMake());
-		$model = $model_name::find($id);
-		if(is_null($model)) {
-			return App::abort(
-				404, 
-				Lang::get(
-					'l-press::errors.modelIdNotFound',
-					array('id' => $id)
-				)
-			);
+	public static function processPivotModelForm($slug, $model_name, $model_id, $pivot, $pivot_name, $extra_column = array()) {
+		$pivot_test = self::verifyPivot($model_name, $model_id, $pivot);
+		$code = $pivot_test['code'];
+		if($code != 200) {
+			return App::abort($code, $pivot_test['data']);
 		}
-		try {
-			$model->load($pivot);
-		} catch(\Exception $e) {
-			return App::abort(
-				404,
-				Lang::get(
-					'l-press::errors.pivotNotFound',
-					array('model_name' => $model_name, 'pivot' => $pivot)
-				)
-			);
-		}
+		$model = $pivot_test['data'];
 		$rules = array($pivot => 'pivot:' . $pivot_name);
-		$validator = Validator::make(Input::all(), $rules, CustomValidator::getOwnMessages());
+		$validator = Validator::make(Input::only($pivot), $rules, CustomValidator::getOwnMessages());
 		$validator->setAttributeNames(Lang::get('l-press::labels'));
 		if($validator->fails()) {
 			return Redirect::back()->withInput()->withErrors($validator);
 		}
-		$model->{$pivot}()->sync(Input::get($pivot));
+		$pivot_ids = Input::get($pivot);
+		if(count($extra_column) > 0) {
+			for($i=count($pivot_ids);$i>0;) {
+				$pivot_data[$pivot_ids[--$i]] = $extra_column;
+			}
+		}
+		else {
+			$pivot_data = $pivot_ids;
+		}
+		$model->{$pivot}()->sync($pivot_data);
 		$route_prefix = (new PrefixGenerator)->getPrefix();
 		$dashboard_route = '+' . Config::get('l-press::dashboard_route');
 		$prefix = $route_prefix . '/' . $dashboard_route;
