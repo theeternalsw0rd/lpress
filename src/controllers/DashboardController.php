@@ -24,6 +24,8 @@ class DashboardController extends BaseController {
 			$sites = Site::take(5)->get();
 			$pass_to_view['sites'] = $sites;
 			$pass_to_view['new_site'] = new Site;
+		}
+		if($is_root || $user->hasPermission('user-manager')) {
 			$users = User::take(5)->get();
 			$pass_to_view['users'] = $users;
 			$pass_to_view['new_user'] = new User;

@@ -26,6 +26,17 @@
 		{{ HTML::collection_editor($users, $new_user) }}
 		<a href="{{ URL::route('lpress-dashboard') }}/users">{{ Lang::get('l-press::messages.manage_all', array('model' => 'users')) }}</a>
 	@endif
+	@if($user->hasPermission('user-manager'))
+		<h2>
+			{{ Lang::get('l-press::headers.model_management', array('model' => 'User')) }}
+			<span class='small'>
+				{{ HTML::new_model_link($new_user) }}&nbsp;
+				{{ HTML::trash_bin_link($new_user) }}
+			</span>
+		</h2>
+		{{ HTML::collection_editor($users, $new_user) }}
+		<a href="{{ URL::route('lpress-dashboard') }}/users">{{ Lang::get('l-press::messages.manage_all', array('model' => 'users')) }}</a>
+	@endif
 @stop
 @section('footer_scripts')
 	@parent
