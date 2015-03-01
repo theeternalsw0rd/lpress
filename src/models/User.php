@@ -197,7 +197,7 @@ class User extends BaseModel implements UserInterface, RemindableInterface {
 			$this->load('groups.permissions');
 		}
 		else {
-			foreach($this->groups as &$group) {
+			foreach($this->groups as $group) {
 				if(!isset($group->permissions)) {
 					$group->load('permissions');
 				}
