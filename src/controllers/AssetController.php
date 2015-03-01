@@ -57,7 +57,8 @@ class AssetController extends BaseController {
 				die;
 			}
 		}
-		if(extension_loaded('zlib')){ob_start('ob_gzhandler');}
+		if (@ini_get('zlib.output_compression') || defined('HHVM_VERSION')) {ob_start();}
+		else {ob_start('ob_gzhandler');}
 		$modified = gmdate('D, d M Y H:i:s T', filemtime($path));
 		if(array_key_exists('download', Input::all())) {
 			header('X-Download-Options: noopen'); // disable directly opening download on IE
@@ -74,7 +75,7 @@ class AssetController extends BaseController {
 		header('Last-Modified: ' . $modified);
 		header('Expires: Sun, 17-Jan-2038 19:14:07 GMT');
 		readfile($path);
-		if(extension_loaded('zlib')){ob_end_flush();}
+		ob_end_flush();
 		die;
 	}
 
