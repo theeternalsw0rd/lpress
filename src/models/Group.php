@@ -30,4 +30,8 @@ class Group extends BaseModel {
 	public function site() {
 		return $this->belongsToMany('\EternalSword\LPress\Site', 'group_user');
 	}
+
+	public function getSiteIdAttribute() {
+		return (int)$this->pivot->site_id;
+	}
 }

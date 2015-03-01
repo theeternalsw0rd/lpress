@@ -36,8 +36,8 @@ class UserController extends BaseController {
 		$sites = array('name' => 'site', 'labels' => array(), 'ids' => array());
 		foreach($user->groups as $group) {
 			if($group->id == 1 || $group->id == 2) {
-				$site_id = $group->pivot->site_id;
-				if($site_id == 0) {
+				$site_id = $group->site_id;
+				if($site_id === 0) {
 					$sites_cache = Site::all();
 					$sites['ids'] = $sites_cache->lists('id');
 					$sites['labels'] = $sites_cache->lists('label');
