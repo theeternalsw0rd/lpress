@@ -15,7 +15,6 @@ class BaseModel extends Eloquent {
 
 	protected $pivots = array();
 
-
 	protected function hasModelPermission($action) {
 		$user = Auth::user();
 		return $user->hasPermission('root');
