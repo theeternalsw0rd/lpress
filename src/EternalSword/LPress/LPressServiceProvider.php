@@ -30,6 +30,12 @@ class LPressServiceProvider extends ServiceProvider {
 			return new CustomValidator($translator, $data, $rules, $messages);
 		});
 		define('PATH', dirname(dirname(__DIR__)));
+		$this->loadViewsFrom(PATH . '/views', 'l-press');
+		$this->publishes([
+			PATH . '/views' => base_path('resources/views/vendor/l-press'),
+			PATH . '/config/config.php' => config_path('config.php')
+		]);
+		$this->loadTranslationsFrom(PATH . '/lang', 'l-press');
 		require PATH . '/routes.php';
 	}
 
