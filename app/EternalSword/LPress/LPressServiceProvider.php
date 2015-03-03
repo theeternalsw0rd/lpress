@@ -30,10 +30,6 @@ class LPressServiceProvider extends ServiceProvider {
 		});
 		define('PATH', dirname(dirname(__DIR__)));
 		$this->loadViewsFrom(PATH . '/views', 'l-press');
-		$this->publishes([
-			PATH . '/views' => base_path('resources/views/vendor/l-press'),
-			PATH . '/config/config.php' => config_path('config.php')
-		]);
 		$this->loadTranslationsFrom(PATH . '/lang', 'l-press');
 		require PATH . '/routes.php';
 	}
@@ -45,6 +41,9 @@ class LPressServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
+		$this->mergeConfigFrom(
+			dirname(dirname(__DIR__)).'/config/config.php', 'l-press'
+		);
 	}
 
 	/**
