@@ -16,14 +16,14 @@
     },
     "autoload": {
         "classmap": [
-            "src/migrations",
-            "src/seeds",
-            "src/controllers",
-            "src/models",
-            "src/lib"
+            "app/migrations",
+            "app/seeds",
+            "app/controllers",
+            "app/models",
+            "app/lib"
         ],
-        "psr-0": {
-            "EternalSword\\LPress": "src/"
+        "psr-4": {
+            "EternalSword\\": "App/EternalSword"
         }
     },
     "minimum-stability": "dev"
