@@ -19,7 +19,6 @@ class LPressServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-		$this->package('eternal-sword/l-press');
 		$db_type = Config::get('database.default');
 		$db_connections = Config::get('database.connections');
 		$db_connections[$db_type]['prefix'] .= Config::get('l-press::db_prefix');
