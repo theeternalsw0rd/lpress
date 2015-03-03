@@ -23,7 +23,7 @@
             "app/lib"
         ],
         "psr-4": {
-            "EternalSword\\": "App/EternalSword"
+            "EternalSword\\": "app/EternalSword"
         }
     },
     "minimum-stability": "dev"
