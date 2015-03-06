@@ -21,7 +21,8 @@ class LPressServiceProvider extends ServiceProvider {
 	{
 		$db_type = Config::get('database.default');
 		$db_connections = Config::get('database.connections');
-		$db_connections[$db_type]['prefix'] .= Config::get('l-press::db_prefix');
+		$db_connections[$db_type]['prefix'] .= Config::get('lpress::settings.db_prefix');
+		var_dump($db_connections[$db_type]['prefix'];
 		Config::set('database.connections', $db_connections);
 		Config::set('auth.driver', 'eloquent');
 		Config::set('auth.model', 'EternalSword\LPress\User');
@@ -41,9 +42,20 @@ class LPressServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
-		$this->mergeConfigFrom(
-			dirname(dirname(__DIR__)).'/config/config.php', 'l-press'
-		);
+	}
+
+	protected function registerResources()
+	{
+		$userConfigFile    = app()->configPath().'/lpress/settings.php';
+		$packageConfigFile = __DIR__.'/../../config/lpress.php';
+		$config            = $this->app['files']->getRequire($packageConfigFile);
+
+		if (file_exists($userConfigFile)) {
+			$userConfig = $this->app['files']->getRequire($userConfigFile);
+			$config     = array_replace_recursive($config, $userConfig);
+		}
+
+		$this->app['config']->set('lpress::settings', $config);
 	}
 
 	/**
