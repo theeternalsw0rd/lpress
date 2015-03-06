@@ -22,7 +22,7 @@ class LPressServiceProvider extends ServiceProvider {
 		$db_type = Config::get('database.default');
 		$db_connections = Config::get('database.connections');
 		$db_connections[$db_type]['prefix'] .= Config::get('lpress::settings.db_prefix');
-		var_dump($db_connections[$db_type]['prefix'];
+		var_dump($db_connections[$db_type]['prefix']);die;
 		Config::set('database.connections', $db_connections);
 		Config::set('auth.driver', 'eloquent');
 		Config::set('auth.model', 'EternalSword\LPress\User');
