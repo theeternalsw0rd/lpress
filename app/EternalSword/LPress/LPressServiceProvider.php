@@ -42,10 +42,6 @@ class LPressServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
-	}
-
-	protected function registerResources()
-	{
 		$userConfigFile    = app()->configPath().'/lpress/settings.php';
 		$packageConfigFile = __DIR__.'/../../config/lpress.php';
 		$config            = $this->app['files']->getRequire($packageConfigFile);
