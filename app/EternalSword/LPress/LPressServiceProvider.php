@@ -31,8 +31,8 @@ class LPressServiceProvider extends ServiceProvider {
 		define('PATH', dirname(dirname(__DIR__)));
 		$this->loadViewsFrom(PATH . '/views', 'l-press');
 		$this->loadTranslationsFrom(PATH . '/lang', 'l-press');
-		require PATH . '/routes.php';
 		echo "hello";die;
+		require PATH . '/routes.php';
 	}
 
 	/**
