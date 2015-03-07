@@ -21,7 +21,8 @@
             "database/seeds"
         ],
         "psr-4": {
-            "App\\": "app"
+            "App\\": "app",
+	    "EternalSword\\": "EternalSword"
         }
     },
     "minimum-stability": "dev"
