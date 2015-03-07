@@ -1,4 +1,4 @@
-<?php namespace EternalSword\Models;
+<?php namespace EternalSword;
 
 use \DB as DB;
 use \Eloquent as Eloquent;

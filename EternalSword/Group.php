@@ -1,4 +1,4 @@
-<?php namespace EternalSword\Models;
+<?php namespace EternalSword;
 
 class Group extends BaseModel { 
 	protected $table = 'groups';
@@ -20,15 +20,15 @@ class Group extends BaseModel {
 	);
 	
 	public function permissions() {
-		return $this->belongsToMany('\EternalSword\Models\Permission');
+		return $this->belongsToMany('\EternalSword\Permission');
 	}
 
 	public function users() {
-		return $this->belongsToMany('\EternalSword\Models\User');
+		return $this->belongsToMany('\EternalSword\User');
 	}
 
 	public function site() {
-		return $this->belongsToMany('\EternalSword\Models\Site', 'group_user');
+		return $this->belongsToMany('\EternalSword\Site', 'group_user');
 	}
 
 	public function getSiteIdAttribute() {

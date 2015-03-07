@@ -1,4 +1,4 @@
-<?php namespace EternalSword\Models;
+<?php namespace EternalSword;
 
 class FieldType extends BaseModel {
 
@@ -17,7 +17,7 @@ class FieldType extends BaseModel {
 	protected $hidden = array();
 
 	public function fields() {
-		return $this->hasMany('\EternalSword\Models\Field');
+		return $this->hasMany('\EternalSword\Field');
 	}
 }
 

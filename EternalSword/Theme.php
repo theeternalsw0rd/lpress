@@ -1,4 +1,4 @@
-<?php namespace EternalSword\Models;
+<?php namespace EternalSword;
 
 class Theme extends BaseModel {
 
@@ -27,6 +27,6 @@ class Theme extends BaseModel {
 	);
 
 	public function sites() {
-		$this->hasMany('EternalSword\Models\Site');
+		$this->hasMany('EternalSword\Site');
 	}
 }

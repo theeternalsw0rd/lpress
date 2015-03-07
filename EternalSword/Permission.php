@@ -1,4 +1,4 @@
-<?php namespace EternalSword\Models;
+<?php namespace EternalSword;
 
 class Permission extends BaseModel {
 
@@ -17,6 +17,6 @@ class Permission extends BaseModel {
 	protected $hidden = array();
 
 	public function groups() {
-		return $this->belongsToMany('\EternalSword\Models\Group');
+		return $this->belongsToMany('\EternalSword\Group');
 	}
 }

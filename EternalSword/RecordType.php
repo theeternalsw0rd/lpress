@@ -1,4 +1,4 @@
-<?php namespace EternalSword\Models;
+<?php namespace EternalSword;
 
 class RecordType extends BaseModel {
 	/**
@@ -16,23 +16,23 @@ class RecordType extends BaseModel {
 	protected $hidden = array();
 
 	public function parent_type() {
-		return $this->belongsTo('\EternalSword\Models\RecordType', 'parent_id');
+		return $this->belongsTo('\EternalSword\RecordType', 'parent_id');
 	}
 
 	public function children() {
-		return $this->hasMany('\EternalSword\Models\RecordType', 'parent_id');
+		return $this->hasMany('\EternalSword\RecordType', 'parent_id');
 	}
 
 	public function records() {
-		return $this->hasMany('\EternalSword\Models\Record');
+		return $this->hasMany('\EternalSword\Record');
 	}
 
 	public function symlinks() {
-		return $this->hasMany('\EternalSword\Models\Symlink');
+		return $this->hasMany('\EternalSword\Symlink');
 	}
 
 	public function fields() {
-		return $this->hasMany('\EternalSword\Models\Field');
+		return $this->hasMany('\EternalSword\Field');
 	}
 
 }

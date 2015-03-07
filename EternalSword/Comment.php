@@ -1,4 +1,4 @@
-<?php namespace EternalSword\Models;
+<?php namespace EternalSword;
 
 use Illuminate\Auth\UserInterface;
 use Illuminate\Auth\Reminders\RemindableInterface;
@@ -20,18 +20,18 @@ class Comment extends BaseModel {
 	protected $hidden = array();
 
 	public function record() {
-		return $this->belongsTo('\EternalSword\Models\Record');
+		return $this->belongsTo('\EternalSword\Record');
 	}
 
 	public function author() {
-		return $this->belongsTo('\EternalSword\Models\User', 'author_id');
+		return $this->belongsTo('\EternalSword\User', 'author_id');
 	}
 
 	public function publisher() {
-		return $this->belongsTo('\EternalSword\Models\User', 'publisher_id');
+		return $this->belongsTo('\EternalSword\User', 'publisher_id');
 	}
 
 	public function value() {
-		return $this->morphOne('\EternalSword\Models\Value', 'valuable');
+		return $this->morphOne('\EternalSword\Value', 'valuable');
 	}
 }

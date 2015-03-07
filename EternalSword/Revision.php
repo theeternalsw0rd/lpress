@@ -1,4 +1,4 @@
-<?php namespace EternalSword\Models;
+<?php namespace EternalSword;
 
 class Revision extends BaseModel {
 
@@ -17,14 +17,14 @@ class Revision extends BaseModel {
 	protected $hidden = array();
 
 	public function value() {
-		return $this->belongsTo('\EternalSword\Models\Value');
+		return $this->belongsTo('\EternalSword\Value');
 	}
 
 	public function author() {
-		return $this->belongsTo('\EternalSword\Models\User', 'author_id');
+		return $this->belongsTo('\EternalSword\User', 'author_id');
 	}
 
 	public function publisher() {
-		return $this->belongsTo('\EternalSword\Models\User', 'publisher_id');
+		return $this->belongsTo('\EternalSword\User', 'publisher_id');
 	}
 }
