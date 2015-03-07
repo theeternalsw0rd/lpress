@@ -22,7 +22,6 @@ class LPressServiceProvider extends ServiceProvider {
 		$db_type = Config::get('database.default');
 		$db_connections = Config::get('database.connections');
 		$db_connections[$db_type]['prefix'] .= Config::get('lpress::settings.db_prefix');
-		var_dump($db_connections[$db_type]['prefix']);die;
 		Config::set('database.connections', $db_connections);
 		Config::set('auth.driver', 'eloquent');
 		Config::set('auth.model', 'EternalSword\LPress\User');
@@ -42,6 +41,11 @@ class LPressServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
+		$this->registerConfig();
+	}
+
+	// thanks kaidesu from laravel forums
+	public function registerConfig() {
 		$userConfigFile    = app()->configPath().'/lpress/settings.php';
 		$packageConfigFile = __DIR__.'/../../config/lpress.php';
 		$config            = $this->app['files']->getRequire($packageConfigFile);
