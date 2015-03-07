@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 use GrahamCampbell\HTMLMin\Facades\HTMLMin;
 use EternalSword\Lib\PrefixGenerator;
+use EternalSword\Controllers\ThemeController;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 require_once PATH . '/helpers/ssl.php';
