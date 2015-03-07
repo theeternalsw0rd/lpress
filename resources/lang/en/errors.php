@@ -8,6 +8,7 @@ return array(
 	'recordNotFound' => 'Could not find record with id ":id".',
 	'missingRecordType' => 'RecordType ":slug" is missing for this input.',
 	'invalidRecordType' => 'RecordType ":slug" is not valid for this input.',
+	'dbPermissionError' => 'Please check your database configuration. The system is reporting that the credentials passed do not have access to the database.',
 	'dbConnectionError' => 'Could not connect to database.',
 	'dbTableMissing' => 'Could not find ":table" table in the database, please ensure all migrations have been run.',
 	'siteMissing' => 'No valid site found for this domain, if this is not on purpose the database may need to be seeded, or the wildcard domain site was inadvertantly removed.',

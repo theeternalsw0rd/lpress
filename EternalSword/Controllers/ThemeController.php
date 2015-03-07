@@ -26,6 +26,10 @@ class ThemeController extends BaseController {
 		} catch(\Exception $e) {
 			$message = $e->getMessage();
 			$code = $e->getCode();
+			if($code == 28000) {
+				echo Lang::get('l-press::errors.dbPermissionError');
+				die;
+			}
 			if($code == 2002) {
 				echo Lang::get('l-press::errors.dbConnectionError');
 				die;
