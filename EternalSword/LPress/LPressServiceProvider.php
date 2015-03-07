@@ -29,10 +29,9 @@ class LPressServiceProvider extends ServiceProvider {
 		$this->app->validator->resolver(function($translator, $data, $rules, $messages) {
 			return new CustomValidator($translator, $data, $rules, $messages);
 		});
-		define('PATH', dirname(dirname(dirname(__DIR__))));
 		$this->loadViewsFrom(PATH . '/resources/views', 'l-press');
 		$this->loadTranslationsFrom(PATH . '/resources/lang', 'l-press');
-		require PATH . '/app/EternalSword/routes.php';
+		require PATH . '/EternalSword/routes.php';
 	}
 
 	/**
@@ -42,13 +41,14 @@ class LPressServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
+		define('PATH', dirname(dirname(__DIR__)));
 		$this->registerConfig();
 	}
 
 	// thanks kaidesu from laravel forums
 	public function registerConfig() {
 		$userConfigFile    = app()->configPath().'/lpress/settings.php';
-		$packageConfigFile = __DIR__.'/../../../config/lpress.php';
+		$packageConfigFile = PATH . '/config/lpress.php';
 		$config            = $this->app['files']->getRequire($packageConfigFile);
 
 		if (file_exists($userConfigFile)) {
