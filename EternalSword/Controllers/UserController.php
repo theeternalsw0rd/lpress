@@ -11,6 +11,20 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use EternalSword\Lib\CustomValidator;
 use EternalSword\Lib\PrefixGenerator;
+use EternalSword\Models\BaseModel;
+use EternalSword\Models\Comment;
+use EternalSword\Models\Field;
+use EternalSword\Models\FieldType;
+use EternalSword\Models\Group;
+use EternalSword\Models\Permission;
+use EternalSword\Models\Record;
+use EternalSword\Models\RecordType;
+use EternalSword\Models\Revision;
+use EternalSword\Models\Site;
+use EternalSword\Models\Symlink;
+use EternalSword\Models\Theme;
+use EternalSword\Models\User;
+use EternalSword\Models\Value;
 
 class UserController extends BaseController {
 	public static function hasPermission($id = NULL) {

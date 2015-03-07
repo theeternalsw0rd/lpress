@@ -10,6 +10,20 @@ use Illuminate\Support\Str;
 use EternalSword\Lib\MimeHandler;
 use EternalSword\Lib\PrefixGenerator;
 use EternalSword\Lib\SlugRouter;
+use EternalSword\Models\BaseModel;
+use EternalSword\Models\Comment;
+use EternalSword\Models\Field;
+use EternalSword\Models\FieldType;
+use EternalSword\Models\Group;
+use EternalSword\Models\Permission;
+use EternalSword\Models\Record;
+use EternalSword\Models\RecordType;
+use EternalSword\Models\Revision;
+use EternalSword\Models\Site;
+use EternalSword\Models\Symlink;
+use EternalSword\Models\Theme;
+use EternalSword\Models\User;
+use EternalSword\Models\Value;
 
 class UploadController extends BaseController {
 	protected function getOptions() {
