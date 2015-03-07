@@ -3,13 +3,6 @@ composer.phar
 composer.lock
 .DS_Store
 node_modules
-/src/views/themes/default/assets/js/uncompressed/compiled
-/src/views/themes/default/assets/js/uncompressed/compiled/*
-/src/views/themes/default/assets/js/compressed/compiled
-/src/views/themes/default/assets/js/compressed/compiled/*
-/src/views/themes/default/assets/css/uncompressed/compiled
-/src/views/themes/default/assets/css/uncompressed/compiled/*
-/src/views/themes/default/assets/css/compressed/compiled
-/src/views/themes/default/assets/css/compressed/compiled/*
-/src/attachments/*
-!/src/attachments/.gitkeep
+*.css.map
+/resources/attachments/*
+!/resources/attachments/.gitkeep
