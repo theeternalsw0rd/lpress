@@ -21,7 +21,7 @@ require_once PATH . '/helpers/ssl.php';
 $route_prefix = (new PrefixGenerator)->getPrefix();
 $dashboard_route = '+' . Config::get('lpress::settings.dashboard_route');
 
-App::error(function(HttpException $exception) {
+/*App::error(function(HttpException $exception) {
 	// missing can't take filters like routes, so call needed stuff directly.
 	extract(BaseController::prepareMake());
 	$status_code = $exception->getStatusCode();
@@ -48,7 +48,7 @@ App::error(function(\Illuminate\Session\TokenMismatchException $exception) {
 		'status_code' => $status_code,
 		'message' => $message
 	), $status_code);
-});
+});*/
 
 Route::filter(
 	'theme',
