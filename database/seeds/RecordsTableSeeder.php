@@ -8,7 +8,7 @@ class LPressRecordsTableSeeder extends Seeder {
 			array(
 				'label' => 'Key',
 				'slug' => 'key',
-				'public' => TRUE,
+				'public' => true,
 				'author_id' => 1,
 				'publisher_id' => 1,
 				'record_type_id' => 5,

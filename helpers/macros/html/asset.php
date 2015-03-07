@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Config;
 use Illuminate\Html\HtmlBuilder as HTML;
+use EternalSword\Controllers\AssetController;
 
 HTML::macro('asset', function($type, $path, $attributes = array()) {
 	$asset_domain = Config::get('lpress::settings.asset_domain');

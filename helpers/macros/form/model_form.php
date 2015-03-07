@@ -10,7 +10,7 @@ Form::macro('model_form', function($model, $url = NULL) {
 		$dashboard_prefix = (new PrefixGenerator('dashboard'))->getPrefix();
 		$url = $dashboard_prefix . '/' . $model->getTable() . '/create';
 	}
-	if(strpos($url, 'create') !== FALSE) {
+	if(strpos($url, 'create') !== false) {
 		if(property_exists($model, 'password_for')) {
 			$password_for = $model->password_for;
 		}
@@ -30,7 +30,7 @@ Form::macro('model_form', function($model, $url = NULL) {
 			if(count($type) > 0) {
 				switch($type[0]) {
 					case 'attachment': {
-						$attachment_html = Form::file_input($type[1], 'create', FALSE, $value, array('data-target_id' => $property));
+						$attachment_html = Form::file_input($type[1], 'create', false, $value, array('data-target_id' => $property));
 						break;
 					}
 					default: {

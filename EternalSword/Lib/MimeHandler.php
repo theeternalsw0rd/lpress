@@ -22,9 +22,14 @@ class MimeHandler {
 			$this->$allowed_mime_parts = $allowed_mime_parts;
 		}
 		if(is_string($path) && is_string($file_name)) {
-			$extension = pathinfo($file_name, PATHINFO_EXTENSION);
-			$this->setMime($path, $extension);
-			$this->updateStatusCode();
+			if(!file_exists($file_name)) {
+				$this->status_code = 404;
+			}
+			else {
+				$extension = pathinfo($file_name, PATHINFO_EXTENSION);
+				$this->setMime($path, $extension);
+				$this->updateStatusCode();
+			}
 		}
 	}
 

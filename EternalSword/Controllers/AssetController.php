@@ -67,6 +67,10 @@ class AssetController extends BaseController {
 				App::abort($status_code, Lang::get('l-press::errors.mimePermissionError', array('mime' => $mime)));
 				die;
 			}
+			case 404: {
+				App::abort($status_code, Lang::get('l-press::errors.assetNotFound'));
+				die;
+			}
 			default: {
 				App::abort($status_code);
 				die;

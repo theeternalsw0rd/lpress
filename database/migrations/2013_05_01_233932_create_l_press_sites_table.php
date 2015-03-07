@@ -17,7 +17,7 @@ class CreateLPressSitesTable extends Migration {
 			$table->string('label');
 			$table->string('domain')->unique();
 			$table->integer('theme_id');
-			$table->boolean('in_production')->default(FALSE);
+			$table->boolean('in_production')->default(false);
 			$table->timestamps();
 			$table->softDeletes();
 		});

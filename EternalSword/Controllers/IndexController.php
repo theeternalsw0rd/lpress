@@ -22,14 +22,14 @@ use GrahamCampbell\HTMLMin\Facades\HTMLMin;
 
 class IndexController extends BaseController {
 	public function getIndex() {
-		extract(parent::prepareMake());	
-		return HTMLMin::live(View::make($view_prefix . '.index', 
+		extract(parent::prepareMake());
+		return View::make($view_prefix . '.index',
 			array(
 				'domain' => DOMAIN,
 				'view_prefix' => $view_prefix,
-				'title' => $site[0]['label'],
+				'title' => $site->label,
 				'route_prefix' => Config::get('lpress::settings.route_prefix')
 			)
-		));
+		);
 	}
 }

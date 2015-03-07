@@ -4,12 +4,12 @@ use Illuminate\Html\HtmlBuilder as HTML;
 
 HTML::macro('url', function($url, $text = null, $attributes = array()) {
 	$attribute_string = '';
-	$has_title = FALSE;
+	$has_title = false;
 	if(is_array($attributes) && count($attributes) > 0) {
 		foreach($attributes as $attribute => $value) {
 			if($attribute == 'title') {
 				$title = $value;
-				$has_title = TRUE;
+				$has_title = true;
 			}
 			else {
 				$attribute_string .= " ${attribute}='${value}'";

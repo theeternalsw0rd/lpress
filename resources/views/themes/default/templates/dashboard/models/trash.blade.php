@@ -7,7 +7,7 @@
 	<h2>
 		{{ $title }}
 	</h2>
-	{{ HTML::collection_editor($collection, 'trash') }}
+	{!! HTML::collection_editor($collection, 'trash') !!}
 	{{ $collection->links() }}
 @stop
 @section('footer_scripts')
