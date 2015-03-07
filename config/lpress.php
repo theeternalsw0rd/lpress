@@ -8,11 +8,11 @@
 		),
 		'db_prefix' => 'lpress_',
 		'dashboard_route' => 'dashboard',
-		'dashboard_require_ssl' => TRUE,
-		'login_require_ssl' => TRUE,
-		'require_ssl' => FALSE,
+		'dashboard_require_ssl' => true,
+		'login_require_ssl' => true,
+		'require_ssl' => false,
 		'route_prefix' => '/', // must include trailing slash
 		'asset_domain' => '', // will use the same domain as the originating request by default
-		'ssl_is_sha2' => FALSE, // set to TRUE if SSL certificates use SHA2 
+		'ssl_is_sha2' => false, // set to true if SSL certificates use SHA2 
 		'available_languages' => array('en')
 	);

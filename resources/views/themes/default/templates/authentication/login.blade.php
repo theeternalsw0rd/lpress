@@ -45,7 +45,7 @@
 				{!! Form::checkbox_input(
 					'remember_me',
 					Lang::get('l-press::labels.remember_me'),
-					FALSE
+					false
 				) !!}
 			</div>
 		@endif

@@ -35,7 +35,7 @@ class MimeHandler {
 
 	protected function getWoffMime($path) {
 		$file = fopen($path, 'rb');
-		if($file === FALSE) return '';
+		if($file === false) return '';
 		$signature = fread($file, 4);
 		fclose($file);
 		if(strtolower($signature) == 'woff')
@@ -55,11 +55,11 @@ class MimeHandler {
 		// some source files are detected as text/plain
 		switch($extension) {
 			case 'css': {
-				$mime = strpos($mime, 'text') !== FALSE ? 'text/css' : $mime;
+				$mime = strpos($mime, 'text') !== false ? 'text/css' : $mime;
 				break;
 			}
 			case 'js': {
-				$mime = strpos($mime, 'text') !== FALSE ? 'text/javascript' : $mime;
+				$mime = strpos($mime, 'text') !== false ? 'text/javascript' : $mime;
 				break;
 			}
 		}
@@ -67,10 +67,10 @@ class MimeHandler {
 	}
 
 	protected function verifyMimeParts($mime_parts) {
-		$allowed = FALSE;
+		$allowed = false;
 		foreach($this->allowed_mime_parts as $allowed_mime_part) {
 			if(in_array($allowed_mime_part, $mime_parts)) {
-				$allowed = TRUE;
+				$allowed = true;
 			}
 		}
 		return $allowed;

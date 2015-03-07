@@ -5,7 +5,7 @@ class ClassLoader {
 	public static function getClasses($autoload_path, $namespace) {
 		$loader = require $autoload_path;
 		return array_filter(array_keys($loader->getClassMap()), function($value) use ($namespace) {
-			return strpos($value, $namespace) !== FALSE;
+			return strpos($value, $namespace) !== false;
 		});
 	}
 }

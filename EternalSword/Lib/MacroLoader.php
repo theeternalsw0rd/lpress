@@ -40,10 +40,10 @@ class MacroLoader {
 				$files[] = $file;
 			}
 			$this->macros[$type] = $files;
-			return TRUE;
+			return true;
 		}
 		else {
-			return FALSE;
+			return false;
 		}
 	}
 }

@@ -35,12 +35,12 @@ class AuthenticationController extends BaseController {
 		Session::forget('bad_login');
 		$user = Auth::user();
 		$title = Lang::get('l-press::titles.login');
-		$install = FALSE;
+		$install = false;
 		if($first_user->username == 'lpress') {
 			if($user) Auth::logout();
-			$user = FALSE;
+			$user = false;
 			$title = Lang::get('l-press::titles.installer');
-			$install = TRUE;
+			$install = true;
 		}
 		if($user) {
 			return Redirect::route('lpress-logout-logged');
@@ -73,7 +73,7 @@ class AuthenticationController extends BaseController {
 	}
 
 	public function verifyLogin() {
-		$remember = Input::get('remember') || FALSE;
+		$remember = Input::get('remember') || false;
 		if(Auth::attempt(
 			array(
 				'username' => Input::get('username'),

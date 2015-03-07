@@ -23,6 +23,7 @@ use EternalSword\Models\Symlink;
 use EternalSword\Models\Theme;
 use EternalSword\Models\User;
 use EternalSword\Models\Value;
+use EternalSword\Exceptions\ExceptionHandler;
 use GrahamCampbell\HTMLMin\Facades\HTMLMin;
 
 class RecordController extends BaseController {
@@ -35,7 +36,7 @@ class RecordController extends BaseController {
 				$json->reason = Lang::get('l-press::errors.invalidURL');
 				return Response::json($json, 404);
 			}
-			return App::abort(404, Lang::get('l-press::errors.invalidURL'));
+			return ExceptionHandler::renderError(404, Lang::get('l-press::errors.invalidURL'));
 		}
 		$slug_types = $router->getSlugTypes();
 		if($slug_types[0] == 'record') {
@@ -46,9 +47,9 @@ class RecordController extends BaseController {
 		}
 	}
 
-	public static function getRecord($router, $public = TRUE) {
+	public static function getRecord($router, $public = true) {
 		$verifyAttachment = function($record) use (&$path) {
-			$found = FALSE;
+			$found = false;
 			foreach($record->values as $value) {
 				if($value->field->slug == 'file') {
 					if($record->id > 1) {
@@ -57,7 +58,7 @@ class RecordController extends BaseController {
 						$path .= $date;
 					}
 					$path .= '/' . $value->current_revision->contents;
-					$found = TRUE;
+					$found = true;
 					break;
 				}
 			}
@@ -73,7 +74,7 @@ class RecordController extends BaseController {
 				return Response::json($json, 403);
 			}
 			else {
-				return App::abort('403', Lang::get('l-press::errors.permissionError'));
+				return ExceptionHandler::renderError('403', Lang::get('l-press::errors.permissionError'));
 			}
 		}
 		$record->load(
@@ -101,14 +102,14 @@ class RecordController extends BaseController {
 			$attachment_config = Config::get('lpress::settings.attachments');
 			$path = $attachment_config['path'] . '/' . $site->domain . '/' . $path;
 			if(!$verifyAttachment($record)) {
-				return App::abort('404', Lang::get('l-press::errors.attachmentMissing'));
+				return ExceptionHandler::renderError('404', Lang::get('l-press::errors.attachmentMissing'));
 			}
 			$asset = new AssetController;
 			return $asset->getAsset($path);
 		}
 	}
 
-	public static function getRecordsByRecordType($router, $public = TRUE) {
+	public static function getRecordsByRecordType($router, $public = true) {
 		$json = $router->hasJSON();
 		$record_type = $router->getRecordType();
 		$record_type->load('children');
@@ -119,7 +120,7 @@ class RecordController extends BaseController {
 		$record_type->load(array('records' => function($query) use($public, $symlinks) {
 			if($public) {
 				$query
-				->where('public', '=', TRUE)
+				->where('public', '=', true)
 				->where(function($query) use($symlinks) {
 					$query
 					->whereIn('id', count($symlinks) > 0 ? $symlinks : array(0))
@@ -183,7 +184,7 @@ class RecordController extends BaseController {
 				$record_type = RecordType::find($record_type->parent_id);
 			}
 		}
-		return App::abort(404, Lang::get('l-press::errors.templateMissing'));
+		return ExceptionHandler::renderError(404, Lang::get('l-press::errors.templateMissing'));
 	}
 
 	public static function getRecordForm() {
@@ -194,7 +195,7 @@ class RecordController extends BaseController {
 
 	public static function createAttachmentRecord($path, $user) {
 		if(!$user->hasPermission('create')) {
-			return App::abort(403, Lang::get('l-press::errors.executePermissionError'));
+			return ExceptionHandler::renderError(403, Lang::get('l-press::errors.executePermissionError'));
 		}
 		$attachment_config = Config::get('lpress::settings.attachments');
 		$relative_path = explode($attachment_config['path'], $path);
@@ -211,15 +212,15 @@ class RecordController extends BaseController {
 		$record->label = $label[0];
 		$record->slug = $label[0];
 		$record->author_id = $user->id;
-		$can_publish = FALSE;
+		$can_publish = false;
 		if($user->hasPermission(array('publish', 'publish-own'))) {
 			$record->publisher_id = $user->id;
-			$can_publish = TRUE;
+			$can_publish = true;
 		}
 		$record->record_type_id = $record_type->id;
 		$record->site_id = $site->id;
 		if(!$record->save()) {
-			return App::abort(500, Lang::get('l-press::errors.saveFailed'));
+			return ExceptionHandler::renderError(500, Lang::get('l-press::errors.saveFailed'));
 		}
 		$value = new Value();
 		$value->valuable_id = $record->id;
@@ -227,7 +228,7 @@ class RecordController extends BaseController {
 		$value->field_id = 4;
 		$value->current_revision_id = 0;
 		if(!$value->save()) {
-			return App::abort(500, Lang::get('l-press::errors.saveFailed'));
+			return ExceptionHandler::renderError(500, Lang::get('l-press::errors.saveFailed'));
 		}
 		$revision = new Revision();
 		$revision->value_id = $value->id;
@@ -236,16 +237,16 @@ class RecordController extends BaseController {
 		$revision->prev_revision_id = 0;
 		$revision->contents = $file_name;
 		if(!$revision->save()) {
-			return App::abort(500, Lang::get('l-press::errors.saveFailed'));
+			return ExceptionHandler::renderError(500, Lang::get('l-press::errors.saveFailed'));
 		}
 		if($can_publish) {
 			$value->current_revision_id = $revision->id;
 			if(!$value->save()) {
-				return App::abort(500, Lang::get('l-press::errors.saveFailed'));
+				return ExceptionHandler::renderError(500, Lang::get('l-press::errors.saveFailed'));
 			}
-			$record->public = TRUE;
+			$record->public = true;
 			if(!$record->save()) {
-				return App::abort(500, Lang::get('l-press::errors.saveFailed'));
+				return ExceptionHandler::renderError(500, Lang::get('l-press::errors.saveFailed'));
 			}
 		}
 		$record->load(

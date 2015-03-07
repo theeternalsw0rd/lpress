@@ -32,8 +32,8 @@ class CustomValidator extends \Illuminate\Validation\Validator {
 	}
 
 	public function validateBool($attribute, $value, $parameters) {
-		if($value == 'on') $value = TRUE;
-		if($value == 'off') $value = FALSE;
+		if($value == 'on') $value = true;
+		if($value == 'off') $value = false;
 		return is_bool($value) || is_null($value);
 	}
 
@@ -45,21 +45,21 @@ class CustomValidator extends \Illuminate\Validation\Validator {
 
 	public function validateExistsOrZero($attribute, $value, $parameters) {
 		if($value == 0) {
-			return TRUE;
+			return true;
 		}
 		return $this->validateExists($attribute, $value, $parameters);
 	}
 
 	public function validateRecordExists($attribute, $value, $parameters) {
 		if(empty($value)) {
-			return TRUE;
+			return true;
 		}
 		if(!is_numeric($value)) {
-			return FALSE;
+			return false;
 		}
 		$record = Record::find($value);
 		if(count($record) !== 1) {
-			return FALSE;
+			return false;
 		}
 		if(!empty($parameters)) {
 			$record->load('record_type');
@@ -67,28 +67,28 @@ class CustomValidator extends \Illuminate\Validation\Validator {
 			$record_type = $record->record_type;
 			while($record_type->depth > 0) {
 				if($record_type->slug == $record_type_slug) {
-					return TRUE;
+					return true;
 				}
 				$record_type = RecordType::find($record_type->parent_id);
 			}
-			return FALSE;
+			return false;
 		}
-		return TRUE;
+		return true;
 	}
 
 	public function validateDomain($attribute, $value, $parameters) {
 		if($value == 'wildcard') {
-			return TRUE;
+			return true;
 		}
 		$parts = explode('.', $value);
 		foreach($parts as $part) {
 			if(preg_match("/^[\pL\pN][\pL\pN-][\pL\pN]+$/", $part) != 1) {
-				return FALSE;
+				return false;
 			}
 		}
 		if(preg_match("/[\pL]+/", $parts[count($parts) - 1]) != 1) {
-			return FALSE;
+			return false;
 		}
-		return TRUE;
+		return true;
 	}
 }

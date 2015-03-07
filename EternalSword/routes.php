@@ -15,41 +15,12 @@ use Illuminate\Support\Facades\View;
 use GrahamCampbell\HTMLMin\Facades\HTMLMin;
 use EternalSword\Lib\PrefixGenerator;
 use EternalSword\Controllers\ThemeController;
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use EternalSword\Exceptions\ExceptionHandler;
 
 require_once PATH . '/helpers/ssl.php';
 
 $route_prefix = (new PrefixGenerator)->getPrefix();
 $dashboard_route = '+' . Config::get('lpress::settings.dashboard_route');
-
-/*App::error(function(HttpException $exception) {
-	// missing can't take filters like routes, so call needed stuff directly.
-	extract(BaseController::prepareMake());
-	$status_code = $exception->getStatusCode();
-	$message = $exception->getMessage() ?: Lang::get('l-press::errors.httpStatus500');
-	return Response::view($view_prefix . '.errors', array(
-		'view_prefix' => $view_prefix,
-		'title' => 'HttpError: ' + $status_code,
-		'status_code' => $status_code,
-		'message' => $message
-	), $status_code);
-});
-
-App::error(function(\Illuminate\Session\TokenMismatchException $exception) {
-	$status_code = 403;
-	$message = Lang::get('l-press::errors.tokenMismatch');
-	if(Request::ajax()) {
-		$json = new \stdClass;
-		$json->error = $message;
-		return Response::json($json, $status_code);
-	}
-	return Response::view($view_prefix . '.errors', array(
-		'view_prefix' => $view_prefix,
-		'title' => 'HttpError: ' + $status_code,
-		'status_code' => $status_code,
-		'message' => $message
-	), $status_code);
-});*/
 
 Route::filter(
 	'theme',
@@ -333,6 +304,6 @@ Route::get(
 	'{all}',
 	array(
 		'before' => 'theme|general',
-		function($all) { App::abort(404, Lang::get('l-press::errors.invalidRoute')); }
+		function($all) { ExceptionHandler::renderError(404, Lang::get('l-press::errors.invalidRoute')); }
 	)
 )->where('all', '.*');

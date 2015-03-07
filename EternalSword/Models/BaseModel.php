@@ -11,7 +11,7 @@ use Illuminate\Support\Collection;
 class BaseModel extends Eloquent {
 	protected $special_inputs = array('description' => 'text:textarea');
 
-	protected $softDelete = TRUE;
+	protected $softDelete = true;
 
 	protected $pivots = array();
 

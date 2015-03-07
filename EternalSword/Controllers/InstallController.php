@@ -35,7 +35,7 @@ class InstallController extends BaseController {
 				array(
 					'view_prefix' => $view_prefix,
 					'title' => Lang::get('l-press::titles.newModel', array('model_basename' => 'User')),
-					'install' => TRUE,
+					'install' => true,
 					'form_url' => $form_url
 				)
 			));

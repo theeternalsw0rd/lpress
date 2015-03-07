@@ -20,6 +20,7 @@ use EternalSword\Models\Symlink;
 use EternalSword\Models\Theme;
 use EternalSword\Models\User;
 use EternalSword\Models\Value;
+use EternalSword\Exceptions\ExceptionHandler;
 
 class AssetController extends BaseController {
 	// Start from Blueimp UploadHandler
@@ -46,7 +47,7 @@ class AssetController extends BaseController {
 		while($i < $count) {
 			$segment = $segments[$i++];
 			if(substr($segment, 0) == '.') {
-				header('HTTP/1.0 403 Forbidden');
+				header('HTTP/1.1 403 Forbidden');
 				echo '<h1>'.Lang::get('l-press::errors.pathPermissionError').'</h1>';
 				die;
 			}
@@ -64,15 +65,18 @@ class AssetController extends BaseController {
 				break;
 			}
 			case 403: {
-				App::abort($status_code, Lang::get('l-press::errors.mimePermissionError', array('mime' => $mime)));
+				header('HTTP/1.1 403 Forbidden');
+				echo '<h1>'.Lang::get('l-press::errors.mimePermissionError', array('mime' => $mime)).'</h1>';
 				die;
 			}
 			case 404: {
-				App::abort($status_code, Lang::get('l-press::errors.assetNotFound'));
+				header('HTTP/1.1 404 Not Found');
+				echo '<h1>'.Lang::get('l-press::errors.assetNotFound').'</h1>';
 				die;
 			}
 			default: {
-				App::abort($status_code);
+				header('HTTP/1.1 500 Internal Server Error');
+				echo '<h1>'.Lang::get('l-press::errors.httpStatus500').'</h1>';
 				die;
 			}
 		}
@@ -100,7 +104,7 @@ class AssetController extends BaseController {
 
 	public function getAsset($path) {
 		if(!defined('THEME')) {
-			header('HTTP/1.0 404 Not Found');
+			header('HTTP/1.1 404 Not Found');
 			echo '<h1>'.Lang::get('l-press::errors.assetNotFound').'</h1>';
 			die;
 		}
@@ -113,7 +117,7 @@ class AssetController extends BaseController {
 		$this->sendFile($path, $file_name);
 	}
 
-	public static function getAssetPath($attachment = FALSE) {
+	public static function getAssetPath($attachment = false) {
 		$path = '';
 		if($attachment) {
 			$attachment_config = Config::get('lpress::settings.attachments');

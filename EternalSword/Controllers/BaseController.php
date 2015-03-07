@@ -31,6 +31,7 @@ use EternalSword\Models\Symlink;
 use EternalSword\Models\Theme;
 use EternalSword\Models\User;
 use EternalSword\Models\Value;
+use EternalSword\Exceptions\ExceptionHandler;
 use GrahamCampbell\HTMLMin\Facades\HTMLMin;
 
 class BaseController extends Controller {
@@ -156,7 +157,7 @@ class BaseController extends Controller {
 		else {
 			$model = $model_name::find($id);
 			if(is_null($model)) {
-				return App::abort(
+				return ExceptionHandler::renderError(
 					404, 
 					Lang::get(
 						'l-press::errors.modelIdNotFound',
@@ -218,7 +219,7 @@ class BaseController extends Controller {
 		$pivot_test = self::verifyPivot($model_name, $model_id, $pivot);
 		$code = $pivot_test['code'];
 		if($code != 200) {
-			return App::abort($code, $pivot_test['data']);
+			return ExceptionHandler::renderError($code, $pivot_test['data']);
 		}
 		$model = $pivot_test['data'];
 		$model_basename = explode('\\', $model_name);
@@ -255,7 +256,7 @@ class BaseController extends Controller {
 		$pivot_test = self::verifyPivot($model_name, $model_id, $pivot);
 		$code = $pivot_test['code'];
 		if($code != 200) {
-			return App::abort($code, $pivot_test['data']);
+			return ExceptionHandler::renderError($code, $pivot_test['data']);
 		}
 		$model = $pivot_test['data'];
 		$rules = array($pivot => 'pivot:' . $pivot_name);
