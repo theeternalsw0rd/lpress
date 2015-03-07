@@ -25,7 +25,7 @@ class LPressServiceProvider extends ServiceProvider {
 		$db_connections[$db_type]['prefix'] .= Config::get('lpress::settings.db_prefix');
 		Config::set('database.connections', $db_connections);
 		Config::set('auth.driver', 'eloquent');
-		Config::set('auth.model', 'App\EternalSword\Models\User');
+		Config::set('auth.model', 'EternalSword\Models\User');
 		$this->app->validator->resolver(function($translator, $data, $rules, $messages) {
 			return new CustomValidator($translator, $data, $rules, $messages);
 		});
