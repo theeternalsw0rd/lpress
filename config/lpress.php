@@ -3,7 +3,7 @@
 		'attachments' => array('path_base' => 'package', 'path' => 'attachments'),
 		'themes' => array('path_base' => 'package', 'path' => 'resources/views/themes'),
 		'route_index' => array(
-			'controller' => 'EternalSword\LPress\IndexController',
+			'controller' => 'EternalSword\Controllers\IndexController',
 			'action' => 'getIndex'
 		),
 		'db_prefix' => 'lpress_',
