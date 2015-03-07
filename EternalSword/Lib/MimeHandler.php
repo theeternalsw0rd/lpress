@@ -22,7 +22,7 @@ class MimeHandler {
 			$this->$allowed_mime_parts = $allowed_mime_parts;
 		}
 		if(is_string($path) && is_string($file_name)) {
-			if(!file_exists($file_name)) {
+			if(!file_exists($path)) {
 				$this->status_code = 404;
 			}
 			else {
