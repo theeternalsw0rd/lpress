@@ -2,8 +2,8 @@
 
 use Illuminate\Routing\Controllers\Controller;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\HTML;
 use Illuminate\Support\Facades\View;
+use Illuminate\Html\HtmlBuilder as HTML;
 use EternalSword\Models\BaseModel;
 use EternalSword\Models\Comment;
 use EternalSword\Models\Field;

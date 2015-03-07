@@ -1,7 +1,7 @@
 <?php namespace EternalSword\Lib;
 
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\HTML;
+use Illuminate\Html\HtmlBuilder as HTML;
 
 HTML::macro('asset', function($type, $path, $attributes = array()) {
 	$asset_domain = Config::get('lpress::settings.asset_domain');

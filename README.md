@@ -5,10 +5,15 @@ This package depends on "graham-campbell/htmlmin": "~3.0"
 
 In order to get this package and its dependencies to load, please add
 
-GrahamCampbell\HTMLMin\HTMLMinServiceProvider
+'GrahamCampbell\HTMLMin\HTMLMinServiceProvider',
+'Illuminate\Html\HtmlServiceProvider',
+'EternalSword\LPress\LPressServiceProvider',
 
-and
+to your app config service providers list.
 
-EternalSword\LPress\LPressServiceProvider
+and add
 
-to your app config service proividers list.
+'HTML'      => 'Illuminate\Html\HtmlFacade',
+'Form'      => 'Illuminate\Html\FormFacade',
+
+to your app config aliases array.

@@ -1,8 +1,8 @@
 <?php namespace EternalSword\Lib;
 
-use Illuminate\Support\Facades\HTML;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Str;
+use Illuminate\Html\HtmlBuilder as HTML;
 
 HTML::macro('pivot_icons', function($model, $base_url) {
 	$pivots = $model->getPivots();

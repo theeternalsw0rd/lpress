@@ -1,7 +1,7 @@
 <?php namespace EternalSword\Lib;
 
-use Illuminate\Support\Facades\HTML;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Html\HtmlBuilder as HTML;
 
 HTML::macro('pivot_editor', function($model, $pivot, $url) {
 	$collection = $model->$pivot;

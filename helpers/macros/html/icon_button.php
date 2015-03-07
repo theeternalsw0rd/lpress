@@ -1,6 +1,6 @@
 <?php namespace EternalSword\Lib;
 	
-use Illuminate\Support\Facades\HTML;
+use Illuminate\Html\HtmlBuilder as HTML;
 
 HTML::macro('icon_button', function($label, $type = 'button', $attributes = array(), $icon_class = '') {
 	$icon = '';

@@ -1,7 +1,7 @@
 <?php namespace EternalSword\Lib;
 
-use Illuminate\Support\Facades\HTML;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Html\HtmlBuilder as HTML;
 
 HTML::macro('collection_editor', function($collection, $type = 'standard') {
 	$rows = array();
