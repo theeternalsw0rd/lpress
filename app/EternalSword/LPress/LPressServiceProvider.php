@@ -24,14 +24,14 @@ class LPressServiceProvider extends ServiceProvider {
 		$db_connections[$db_type]['prefix'] .= Config::get('lpress::settings.db_prefix');
 		Config::set('database.connections', $db_connections);
 		Config::set('auth.driver', 'eloquent');
-		Config::set('auth.model', 'EternalSword\LPress\User');
+		Config::set('auth.model', 'App\EternalSword\Models\User');
 		$this->app->validator->resolver(function($translator, $data, $rules, $messages) {
 			return new CustomValidator($translator, $data, $rules, $messages);
 		});
-		define('PATH', dirname(dirname(__DIR__)));
-		$this->loadViewsFrom(PATH . '/views', 'l-press');
-		$this->loadTranslationsFrom(PATH . '/lang', 'l-press');
-		require PATH . '/routes.php';
+		define('PATH', dirname(dirname(dirname(__DIR__))));
+		$this->loadViewsFrom(PATH . '/resources/views', 'l-press');
+		$this->loadTranslationsFrom(PATH . '/resources/lang', 'l-press');
+		require PATH . '/app/EternalSword/routes.php';
 	}
 
 	/**
@@ -47,7 +47,7 @@ class LPressServiceProvider extends ServiceProvider {
 	// thanks kaidesu from laravel forums
 	public function registerConfig() {
 		$userConfigFile    = app()->configPath().'/lpress/settings.php';
-		$packageConfigFile = __DIR__.'/../../config/lpress.php';
+		$packageConfigFile = __DIR__.'/../../../config/lpress.php';
 		$config            = $this->app['files']->getRequire($packageConfigFile);
 
 		if (file_exists($userConfigFile)) {

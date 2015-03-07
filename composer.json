@@ -12,18 +12,16 @@
         "illuminate/support": "5.*",
 	"illuminate/html": "5.*",
 	"doctrine/dbal": "~2.3",
-	"jeremeamia/superclosure": "~2.0"
+	"jeremeamia/superclosure": "~2.0",
+	"graham-campbell/htmlmin": "~3.0"
     },
     "autoload": {
         "classmap": [
-            "app/migrations",
-            "app/seeds",
-            "app/controllers",
-            "app/models",
-            "app/lib"
+            "database/migrations",
+            "database/seeds"
         ],
         "psr-4": {
-            "EternalSword\\": "app/EternalSword"
+            "App\\": "app"
         }
     },
     "minimum-stability": "dev"
