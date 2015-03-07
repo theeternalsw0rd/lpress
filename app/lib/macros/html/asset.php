@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\HTML;
 
 HTML::macro('asset', function($type, $path, $attributes = array()) {
-	$asset_domain = Config::get('l-press::asset_domain');
+	$asset_domain = Config::get('lpress::settings.asset_domain');
 	$asset_domain = empty($asset_domain) ? DOMAIN : $asset_domain;
 	$route_prefix = (new PrefixGenerator)->getPrefix();
 	$open = '';

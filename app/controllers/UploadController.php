@@ -16,7 +16,7 @@ class UploadController extends BaseController {
 		$date = new \DateTime();
 		$date = $date->format('Y/m/');
 		$options['upload_dir'] = $asset_path . Input::get('path') . $date;
-		$asset_domain = Config::get('l-press::asset_domain');
+		$asset_domain = Config::get('lpress::settings.asset_domain');
 		$asset_domain = empty($asset_domain) ? DOMAIN : $asset_domain;
 		$route_prefix = (new PrefixGenerator)->getPrefix();
 		$options['script_url'] = "//" . DOMAIN . $route_prefix . '/+upload';

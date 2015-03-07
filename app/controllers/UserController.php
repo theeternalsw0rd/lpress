@@ -21,7 +21,7 @@ class UserController extends BaseController {
 
 	public static function getRedirect($id = NULL) {
 		$route_prefix = (new PrefixGenerator)->getPrefix();
-		$dashboard_route = '+' . Config::get('l-press::dashboard_route');
+		$dashboard_route = '+' . Config::get('lpress::settings.dashboard_route');
 		$prefix = $route_prefix . '/' . $dashboard_route;
 		if(is_null($id)) {
 			return $prefix . '/users/:id:/groups';

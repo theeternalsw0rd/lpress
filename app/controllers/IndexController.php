@@ -13,7 +13,7 @@ class IndexController extends BaseController {
 				'domain' => DOMAIN,
 				'view_prefix' => $view_prefix,
 				'title' => $site[0]['label'],
-				'route_prefix' => Config::get('l-press::route_prefix')
+				'route_prefix' => Config::get('lpress::settings.route_prefix')
 			)
 		);
 	}

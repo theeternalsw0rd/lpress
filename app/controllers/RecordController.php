@@ -82,7 +82,7 @@ class RecordController extends BaseController {
 		if($root_record_type->slug == 'attachments') {
 			$site = $record->site()->first();
 			$path = dirname($router->getPath());
-			$attachment_config = Config::get('l-press::attachments');
+			$attachment_config = Config::get('lpress::settings.attachments');
 			$path = $attachment_config['path'] . '/' . $site->domain . '/' . $path;
 			if(!$verifyAttachment($record)) {
 				return App::abort('404', Lang::get('l-press::errors.attachmentMissing'));
@@ -160,7 +160,7 @@ class RecordController extends BaseController {
 						'records' => $records,
 						'path' => $router->getPath(),
 						'record_type' => $original_record_type,
-						'route_prefix' => Config::get('l-press::route_prefix')
+						'route_prefix' => Config::get('lpress::settings.route_prefix')
 					)
 				);
 			} catch (\InvalidArgumentException $e) {
@@ -180,7 +180,7 @@ class RecordController extends BaseController {
 		if(!$user->hasPermission('create')) {
 			return App::abort(403, Lang::get('l-press::errors.executePermissionError'));
 		}
-		$attachment_config = Config::get('l-press::attachments');
+		$attachment_config = Config::get('lpress::settings.attachments');
 		$relative_path = explode($attachment_config['path'], $path);
 		$segments = explode('/', $relative_path[1]);
 		array_shift($segments);

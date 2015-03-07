@@ -256,7 +256,7 @@ class BaseController extends Controller {
 		}
 		$model->{$pivot}()->sync($pivot_data);
 		$route_prefix = (new PrefixGenerator)->getPrefix();
-		$dashboard_route = '+' . Config::get('l-press::dashboard_route');
+		$dashboard_route = '+' . Config::get('lpress::settings.dashboard_route');
 		$prefix = $route_prefix . '/' . $dashboard_route;
 		return Redirect::to($prefix . '/' . $slug);
 	}

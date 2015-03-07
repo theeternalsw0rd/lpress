@@ -17,7 +17,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 require_once PATH . '/helpers/ssl.php';
 
 $route_prefix = (new PrefixGenerator)->getPrefix();
-$dashboard_route = '+' . Config::get('l-press::dashboard_route');
+$dashboard_route = '+' . Config::get('lpress::settings.dashboard_route');
 
 // filtering placement thanks to http://markvaneijk.com/minify-the-html-output-in-laravel-4
 App::after(function($request, $response) {
@@ -102,7 +102,7 @@ Route::get(
 		'before' => 'theme|general',
 		'as' => 'lpress-index',
 		function() {
-			$route = Config::get('l-press::route_index');
+			$route = Config::get('lpress::settings.route_index');
 			return App::make($route['controller'])->{$route['action']}();
 		}
 	)
@@ -119,7 +119,7 @@ Route::get(
 				array(
 					'view_prefix' => $view_prefix,
 					'title' => Lang::get('l-press::titles.sha2'),
-					'route_prefix' => Config::get('l-press::route_prefix')
+					'route_prefix' => Config::get('lpress::settings.route_prefix')
 				)
 			);
 		}

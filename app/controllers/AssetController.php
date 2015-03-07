@@ -88,7 +88,7 @@ class AssetController extends BaseController {
 		$segments = explode('/', $path);
 		$count = count($segments);
 		$path = $this->verifyPath($segments, $count);
-		$attachment_config = Config::get('l-press::attachments');
+		$attachment_config = Config::get('lpress::settings.attachments');
 		$path = self::getAssetPath($segments[0] == $attachment_config['path']) . $path;
 		$file_name = $segments[--$count];
 		$this->sendFile($path, $file_name);
@@ -97,7 +97,7 @@ class AssetController extends BaseController {
 	public static function getAssetPath($attachment = FALSE) {
 		$path = '';
 		if($attachment) {
-			$attachment_config = Config::get('l-press::attachments');
+			$attachment_config = Config::get('lpress::settings.attachments');
 			$attachment_path_base = $attachment_config['path_base'];
 			switch($attachment_path_base) {
 				case 'package': {
@@ -114,7 +114,7 @@ class AssetController extends BaseController {
 			}
 		}
 		else {
-			$theme_config = Config::get('l-press::themes');
+			$theme_config = Config::get('lpress::settings.themes');
 			$theme_path_base = $theme_config['path_base'];
 			switch($theme_path_base) {
 				case 'package':

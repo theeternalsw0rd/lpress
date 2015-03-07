@@ -12,7 +12,7 @@ class PrefixGenerator {
 	}
 
 	protected function getRoutePrefix() {
-		$route_prefix = Config::get('l-press::route_prefix');
+		$route_prefix = Config::get('lpress::settings.route_prefix');
 		$route_prefix = $route_prefix == '/' ? '' : $route_prefix;
 		return $route_prefix;
 	}
@@ -21,7 +21,7 @@ class PrefixGenerator {
 		$route_prefix = $this->getRoutePrefix();
 		$route_prefix = empty($route_prefix) ? '/' : $route_prefix;
 		$url_prefix = rtrim('//' . DOMAIN . '/' . $route_prefix, '/');
-		$dashboard_route = '+' . Config::get('l-press::dashboard_route');
+		$dashboard_route = '+' . Config::get('lpress::settings.dashboard_route');
 		return $url_prefix . '/' . $dashboard_route;
 	}
 

@@ -13,7 +13,7 @@ class InstallController extends BaseController {
 		$user = Auth::user();
 		if($user && $user->username == 'lpress') {
 			$route_prefix = (new PrefixGenerator)->getPrefix();
-			$dashboard_prefix = '+' . Config::get('l-press::dashboard_route');
+			$dashboard_prefix = '+' . Config::get('lpress::settings.dashboard_route');
 			$form_url = $route_prefix . $dashboard_prefix . '/users/1';
 			return View::make($view_prefix . '.dashboard.installer',
 				array(
