@@ -1,8 +1,8 @@
 <?php namespace EternalSword\Lib;
 
-use Illuminate\Support\Facades\Form;
-use Illuminate\Support\Facades\HTML;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Html\FormBuilder as Form;
+use Illuminate\Html\HtmlBuilder as HTML;
 
 Form::macro('model_delete', function($url) {
 	$html = Form::open(array('url' => $url));

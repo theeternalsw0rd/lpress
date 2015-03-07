@@ -1,8 +1,8 @@
 <?php namespace EternalSword\Lib;
 
-use Illuminate\Support\Facades\Form;
-use Illuminate\Support\Facades\HTML;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Html\FormBuilder as Form;
+use Illuminate\Html\HtmlBuilder as HTML;
 
 /* $hidden when passed is an associative array with 'name' and 'value' keys */
 Form::macro('pivotables', function($model, $pivot_name, $name, $label, $hidden = array()) {

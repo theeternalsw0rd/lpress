@@ -1,8 +1,8 @@
 <?php namespace EternalSword\Lib;
 
-use Illuminate\Support\Facades\Form;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Html\FormBuilder as Form;
 
 Form::macro('file_input', function($slug, $upload_command = 'create', $single = TRUE, $value = '', $attributes = array()) {
 	$type = RecordType::where('slug', '=', $slug)->first();

@@ -1,7 +1,7 @@
 <?php namespace EternalSword\Lib;
 
-use Illuminate\Support\Facades\Form;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Html\FormBuilder as Form;
 
 Form::macro('checkbox_input', function($name, $label, $value, $attributes = array()) {
 	$error = MacroLoader::getValidationError($name);
