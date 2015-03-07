@@ -3,6 +3,5 @@ composer.phar
 composer.lock
 .DS_Store
 node_modules
-*.css.map
 /resources/attachments/*
 !/resources/attachments/.gitkeep
