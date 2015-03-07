@@ -1,4 +1,4 @@
-<?php namespace EternalSword;
+<?php namespace EternalSword\Models;
 
 class Site extends BaseModel {
 
@@ -36,14 +36,14 @@ class Site extends BaseModel {
 	 * @return array of User objects 
 	 */
 	public function users() {
-		return $this->hasMany('EternalSword\User', 'group_user');
+		return $this->hasMany('EternalSword\Models\User', 'group_user');
 	}
 
 	public function groups() {
-		return $this->hasMany('EternalSword\Group', 'group_user');
+		return $this->hasMany('EternalSword\Models\Group', 'group_user');
 	}
 
 	public function theme() {
-		return $this->belongsTo('EternalSword\Theme');
+		return $this->belongsTo('EternalSword\Models\Theme');
 	}
 }	

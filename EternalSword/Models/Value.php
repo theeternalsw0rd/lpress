@@ -1,4 +1,4 @@
-<?php namespace EternalSword;
+<?php namespace EternalSword\Models;
 
 class Value extends BaseModel {
 
@@ -17,7 +17,7 @@ class Value extends BaseModel {
 	protected $hidden = array();
 
 	public function field() {
-		return $this->belongsTo('\EternalSword\Field');
+		return $this->belongsTo('\EternalSword\Models\Field');
 	}
 
 	public function valuable() {
@@ -25,10 +25,10 @@ class Value extends BaseModel {
 	}
 
 	public function current_revision() {
-		return $this->belongsTo('\EternalSword\Revision', 'current_revision_id');
+		return $this->belongsTo('\EternalSword\Models\Revision', 'current_revision_id');
 	}
 
 	public function revisions() {
-	return $this->hasMany('\EternalSword\Revision');
+	return $this->hasMany('\EternalSword\Models\Revision');
 	}
 }

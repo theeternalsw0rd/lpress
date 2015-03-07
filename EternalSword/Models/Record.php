@@ -1,4 +1,4 @@
-<?php namespace EternalSword;
+<?php namespace EternalSword\Models;
 
 class Record extends BaseModel {
 
@@ -24,31 +24,31 @@ class Record extends BaseModel {
 	protected $guarded = array('*');
 
 	public function values() {
-		return $this->morphMany('\EternalSword\Value', 'valuable');
+		return $this->morphMany('\EternalSword\Models\Value', 'valuable');
 	}
 
 	public function comments() {
-		return $this->hasMany('\EternalSword\Comment');
+		return $this->hasMany('\EternalSword\Models\Comment');
 	}
 
 	public function symlinks() {
-		return $this->hasMany('\EternalSword\Symlink');
+		return $this->hasMany('\EternalSword\Models\Symlink');
 	}
 
 	public function record_type() {
-		return $this->belongsTo('\EternalSword\RecordType');
+		return $this->belongsTo('\EternalSword\Models\RecordType');
 	}
 
 	public function author() {
-		return $this->belongsTo('\EternalSword\User', 'author_id');
+		return $this->belongsTo('\EternalSword\Models\User', 'author_id');
 	}
 
 	public function publisher() {
-		return $this->belongsTo('\EternalSword\User', 'publisher_id');
+		return $this->belongsTo('\EternalSword\Models\User', 'publisher_id');
 	}
 
 	public function site() {
-		return $this->belongsTo('\EternalSword\Site');
+		return $this->belongsTo('\EternalSword\Models\Site');
 	}
 
 	public function getPath($record_type, $path) {

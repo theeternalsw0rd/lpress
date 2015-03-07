@@ -1,4 +1,4 @@
-<?php namespace EternalSword;
+<?php namespace EternalSword\Models;
 
 class Symlink extends BaseModel {
 
@@ -24,14 +24,14 @@ class Symlink extends BaseModel {
 	protected $guarded = array('*');
 
 	public function record() {
-		return $this->belongsTo('\EternalSword\Record');
+		return $this->belongsTo('\EternalSword\Models\Record');
 	}
 
 	public function record_type() {
-		return $this->belongsTo('\EternalSword\RecordType');
+		return $this->belongsTo('\EternalSword\Models\RecordType');
 	}
 
 	public function site() {
-		return $this->belongsTo('\EternalSword\Site');
+		return $this->belongsTo('\EternalSword\Models\Site');
 	}
 }

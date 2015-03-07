@@ -1,4 +1,4 @@
-<?php namespace EternalSword;
+<?php namespace EternalSword\Models;
 
 use Illuminate\Auth\UserInterface;
 use Illuminate\Auth\Reminders\RemindableInterface;
@@ -173,23 +173,23 @@ class User extends BaseModel implements UserInterface, RemindableInterface {
 	}
 
 	public function published_records() {
-		return $this->hasMany('\EternalSword\Record', 'publisher_id');
+		return $this->hasMany('\EternalSword\Models\Record', 'publisher_id');
 	}
 
 	public function authored_records() {
-		return $this->hasMany('\EternalSword\Record', 'author_id');
+		return $this->hasMany('\EternalSword\Models\Record', 'author_id');
 	}
 
 	public function published_revisions() {
-		return $this->hasMany('\EternalSword\Revision', 'publisher_id');
+		return $this->hasMany('\EternalSword\Models\Revision', 'publisher_id');
 	}
 
 	public function authored_revisions() {
-		return $this->hasMany('\EternalSword\Revision', 'author_id');
+		return $this->hasMany('\EternalSword\Models\Revision', 'author_id');
 	}
 
 	public function groups() {
-		return $this->belongsToMany('\EternalSword\Group')->withPivot(array('site_id'));
+		return $this->belongsToMany('\EternalSword\Models\Group')->withPivot(array('site_id'));
 	}
 
 	private function loadPermissions() {
