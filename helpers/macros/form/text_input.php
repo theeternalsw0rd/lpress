@@ -1,7 +1,7 @@
 <?php namespace EternalSword\Lib;
 
 use Illuminate\Support\Facades\Input;
-use Illuminate\Html\FormBuilder as Form;
+use Collective\Html\FormBuilder as Form;
 
 Form::macro('text_input', function($type, $name, $label, $value, $attributes = array()) {
 	$error = MacroLoader::getValidationError($name);

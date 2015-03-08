@@ -140,7 +140,7 @@ Route::get(
 Route::post(
 	$route_prefix . '+login',
 	array(
-		'before' => 'csrf|theme',
+		'before' => 'theme',
 		'uses' => 'EternalSword\Controllers\AuthenticationController@verifyLogin'
 	)
 );
@@ -177,21 +177,21 @@ Route::group(
 				Route::get(
 					'/',
 					array(
-						'before' => 'csrf|theme|dashboard',
+						'before' => 'theme|dashboard',
 						'uses' => 'EternalSword\Controllers\UploadController@getURL'
 					)
 				);
 				Route::post(
 					'/',
 					array(
-						'before' => 'csrf|theme|dashboard',
+						'before' => 'theme|dashboard',
 						'uses' => 'EternalSword\Controllers\UploadController@postFile'
 					)
 				);
 				Route::delete(
 					'/',
 					array(
-						'before' => 'csrf|theme|dashboard',
+						'before' => 'theme|dashboard',
 						'uses' => 'EternalSword\Controllers\UploadController@deleteFile'
 					)
 				);
@@ -238,7 +238,7 @@ Route::group(
 		Route::post(
 			'{slug}/{id}',
 			array(
-				'before' => 'csrf|theme|dashboard',
+				'before' => 'theme|dashboard',
 				'uses' => 'EternalSword\Controllers\DashboardController@routePostAction'
 			)
 		);
@@ -266,7 +266,7 @@ Route::group(
 		Route::post(
 			'{slug}/{id}/{pivot}',
 			array(
-				'before' => 'csrf|theme|dashboard',
+				'before' => 'theme|dashboard',
 				'uses' => 'EternalSword\Controllers\DashboardController@routePostPivotAction'
 			)
 		);
@@ -280,14 +280,14 @@ Route::group(
 		Route::post(
 			'{slug}/{id}/{pivot}/add',
 			array(
-				'before' => 'csrf|theme|dashboard',
+				'before' => 'theme|dashboard',
 				'uses' => 'EternalSword\Controllers\DashboardController@routePostPivotAdd'
 			)
 		);
 		Route::delete(
 			'{slug}/{id}',
 			array(
-				'before' => 'csrf|theme|dashboard',
+				'before' => 'theme|dashboard',
 				'uses' => 'EternalSword\Controllers\DashboardController@routeDeleteAction'
 			)
 		);

@@ -1,6 +1,6 @@
 <?php namespace EternalSword\Lib;
 
-use Illuminate\Html\HtmlBuilder as HTML;
+use Collective\Html\HtmlBuilder as HTML;
 
 HTML::macro('url', function($url, $text = null, $attributes = array()) {
 	$attribute_string = '';

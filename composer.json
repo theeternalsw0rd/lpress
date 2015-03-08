@@ -10,7 +10,7 @@
     "require": {
         "php": ">=5.3.0",
         "illuminate/support": "5.*",
-	"illuminate/html": "5.*",
+	"laravelcollective/html": "~5.0",
 	"doctrine/dbal": "~2.3",
 	"jeremeamia/superclosure": "~2.0",
 	"graham-campbell/htmlmin": "~3.0"
@@ -21,7 +21,6 @@
             "database/seeds"
         ],
         "psr-4": {
-            "App\\": "app",
 	    "EternalSword\\": "EternalSword"
         }
     },

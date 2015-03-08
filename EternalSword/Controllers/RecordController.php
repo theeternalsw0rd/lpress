@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
-use Illuminate\Html\HtmlBuilder as HTML;
+use Collective\Html\HtmlBuilder as HTML;
 use EternalSword\Lib\SlugRouter;
 use EternalSword\Models\BaseModel;
 use EternalSword\Models\Comment;

@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
-use Illuminate\Html\HtmlBuilder as HTML;
+use Collective\Html\HtmlBuilder as HTML;
 use EternalSword\Models\BaseModel;
 use EternalSword\Models\Comment;
 use EternalSword\Models\Field;

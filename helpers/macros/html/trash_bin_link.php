@@ -1,7 +1,7 @@
 <?php namespace EternalSword\Lib;
 
 use Illuminate\Support\Facades\Lang;
-use Illuminate\Html\HtmlBuilder as HTML;
+use Collective\Html\HtmlBuilder as HTML;
 
 HTML::macro('trash_bin_link', function($model) {
 	$dashboard_prefix = (new PrefixGenerator('dashboard'))->getPrefix();

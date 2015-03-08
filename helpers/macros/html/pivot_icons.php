@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Str;
-use Illuminate\Html\HtmlBuilder as HTML;
+use Collective\Html\HtmlBuilder as HTML;
 
 HTML::macro('pivot_icons', function($model, $base_url) {
 	$pivots = $model->getPivots();

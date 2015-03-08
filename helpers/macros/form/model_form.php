@@ -2,8 +2,8 @@
 
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Str;
-use Illuminate\Html\FormBuilder as Form;
-use Illuminate\Html\HtmlBuilder as HTML;
+use Collective\Html\FormBuilder as Form;
+use Collective\Html\HtmlBuilder as HTML;
 
 Form::macro('model_form', function($model, $url = NULL) {
 	if(is_null($url)) {

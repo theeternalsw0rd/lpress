@@ -1,6 +1,6 @@
 <?php namespace EternalSword\Lib;
 
-use Illuminate\Html\FormBuilder as Form;
+use Collective\Html\FormBuilder as Form;
 
 Form::macro('select_input', function($name, $label, $options, $selected, $attributes = array()) {
 	$error = MacroLoader::getValidationError($name);

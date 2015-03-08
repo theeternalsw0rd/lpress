@@ -1,6 +1,6 @@
 <?php namespace EternalSword\Lib;
 
-use Illuminate\Html\HtmlBuilder as HTML;
+use Collective\Html\HtmlBuilder as HTML;
 
 HTML::macro('image_alt', function($record) {
 	if(is_array($record)) {

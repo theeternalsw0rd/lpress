@@ -1,7 +1,7 @@
 <?php namespace EternalSword\Lib;
 
 use Illuminate\Support\Facades\Config;
-use Illuminate\Html\HtmlBuilder as HTML;
+use Collective\Html\HtmlBuilder as HTML;
 use EternalSword\Controllers\AssetController;
 
 HTML::macro('asset', function($type, $path, $attributes = array()) {
