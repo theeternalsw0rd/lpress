@@ -322,10 +322,10 @@ class BaseController extends Controller {
 	}
 
 	public static function getModels() {
-		$namespace = __NAMESPACE__;
+		$namespace = 'EternalSword\\Models';
 		$base_class = $namespace . '\\BaseModel';
 		$result = array();
-		$autoload_path = dirname(PATH) . '/vendor/autoload.php';
+		$autoload_path = base_path() . '/vendor/autoload.php';
 		foreach (ClassLoader::getClasses($autoload_path, $namespace) as $class) {
 			if (is_subclass_of($class, $base_class))
 				$result[] = $class;
