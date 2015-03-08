@@ -7,11 +7,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class BaseModel extends Eloquent {
+	use SoftDeletes;
 	protected $special_inputs = array('description' => 'text:textarea');
-
-	protected $softDelete = true;
 
 	protected $pivots = array();
 
