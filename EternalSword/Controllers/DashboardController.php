@@ -54,7 +54,7 @@ class DashboardController extends BaseController {
 		foreach($models as $model_name) {
 			$instance = new $model_name();
 			if($instance->getTable() == $slug) {
-				$controller = $model_name . 'Controller';
+				$controller = str_replace('Models', 'Controllers', $model_name . 'Controller');
 				if(!class_exists($controller)) {
 					$controller = __NAMESPACE__ . '\\BaseController';
 				}
