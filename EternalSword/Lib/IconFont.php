@@ -1,4 +1,4 @@
-<?php namespace App\EternalSword\Lib;
+<?php namespace EternalSword\Lib;
 
 class IconFont {
 	private $icons = array(

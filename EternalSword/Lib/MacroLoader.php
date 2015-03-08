@@ -1,4 +1,4 @@
-<?php namespace Eternalsword\Lib;
+<?php namespace EternalSword\Lib;
 
 use Illuminate\Support\Facades\Session;
 
