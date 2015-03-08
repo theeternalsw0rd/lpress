@@ -6,7 +6,7 @@
 	@parent
 	<h2>{{ $model_basename }}: {{ $model->label }}</h2>
 	<h3>{{ $pivot_name }}</h3>
-	{{ Form::pivot_form($model, $pivot, Request::url()) }}
+	{!! Form::pivot_form($model, $pivot, Request::url()) !!}
 @stop
 @section('footer_scripts')
 	@parent

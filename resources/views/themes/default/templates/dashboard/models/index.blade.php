@@ -12,7 +12,7 @@
 		</span>
 	</h2>
 	{!! HTML::collection_editor($collection) !!}
-	{{ $collection->render() }}
+	{!! $collection->render() !!}
 @stop
 @section('footer_scripts')
 	@parent

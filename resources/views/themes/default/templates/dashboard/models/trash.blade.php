@@ -8,7 +8,7 @@
 		{{ $title }}
 	</h2>
 	{!! HTML::collection_editor($collection, 'trash') !!}
-	{{ $collection->render() }}
+	{!! $collection->render() !!}
 @stop
 @section('footer_scripts')
 	@parent

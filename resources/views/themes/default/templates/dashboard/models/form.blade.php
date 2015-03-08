@@ -5,7 +5,7 @@
 @section('content')
 	@parent
 	<h2>{{ $model_basename }}: {{ $model->label }}</h2>
-	{{ Form::model_form($model, Request::url()) }}
+	{!! Form::model_form($model, Request::url()) !!}
 @stop
 @section('footer_scripts')
 	@parent
