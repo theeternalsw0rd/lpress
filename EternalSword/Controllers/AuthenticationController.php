@@ -25,7 +25,7 @@ use EternalSword\Models\Symlink;
 use EternalSword\Models\Theme;
 use EternalSword\Models\User;
 use EternalSword\Models\Value;
-use GrahamCampbell\HTMLMin\Facades\HTMLMin;
+use EternalSword\Lib\HTMLMin;
 
 class AuthenticationController extends BaseController {
 	public function getLogin() {
@@ -45,7 +45,7 @@ class AuthenticationController extends BaseController {
 		if($user) {
 			return Redirect::route('lpress-logout-logged');
 		}
-		return HTMLMin::live(View::make($view_prefix . '.authentication.login',
+		return HTMLMin::html(View::make($view_prefix . '.authentication.login',
 			array(
 				'login_failed' => $login_failed,
 				'view_prefix' => $view_prefix,
@@ -64,7 +64,7 @@ class AuthenticationController extends BaseController {
 
 	public function getLogoutLogged() {
 		extract(parent::prepareMake());	
-		return HTMLMin::live(View::make($view_prefix . '.authentication.logged-in',
+		return HTMLMin::html(View::make($view_prefix . '.authentication.logged-in',
 			array(
 				'view_prefix' => $view_prefix,
 				'title' => Lang::get('l-press::titles.loggedIn')

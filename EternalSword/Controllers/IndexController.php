@@ -18,7 +18,7 @@ use EternalSword\Models\Symlink;
 use EternalSword\Models\Theme;
 use EternalSword\Models\User;
 use EternalSword\Models\Value;
-use GrahamCampbell\HTMLMin\Facades\HTMLMin;
+use EternalSword\Lib\HTMLMin;
 
 class IndexController extends BaseController {
 	public function getIndex() {

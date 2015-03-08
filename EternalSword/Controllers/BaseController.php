@@ -32,7 +32,7 @@ use EternalSword\Models\Theme;
 use EternalSword\Models\User;
 use EternalSword\Models\Value;
 use EternalSword\Exceptions\ExceptionHandler;
-use GrahamCampbell\HTMLMin\Facades\HTMLMin;
+use EternalSword\Lib\HTMLMin;
 
 class BaseController extends Controller {
 	protected static function getRedirect() {
@@ -181,9 +181,9 @@ class BaseController extends Controller {
 		);
 		$slug_view = $view_prefix . '.dashboard.' . $slug . '.form';
 		if(View::exists($slug_view)) {
-			return HTMLMin::live(View::make($slug_view, $pass_to_view));
+			return HTMLMin::html(View::make($slug_view, $pass_to_view));
 		}
-		return HTMLMin::live(View::make($view_prefix . '.dashboard.models.form', $pass_to_view));
+		return HTMLMin::html(View::make($view_prefix . '.dashboard.models.form', $pass_to_view));
 	}
 
 	protected static function verifyPivot($model_name, $model_id, $pivot) {
@@ -247,9 +247,9 @@ class BaseController extends Controller {
 		);
 		$slug_view = $view_prefix . '.dashboard.' . $slug . '.' . $pivot . '.index';
 		if(View::exists($slug_view)) {
-			return HTMLMin::live(View::make($slug_view, $pass_to_view));
+			return HTMLMin::html(View::make($slug_view, $pass_to_view));
 		}
-		return HTMLMin::live(View::make($view_prefix . '.dashboard.models.pivot.index', $pass_to_view));
+		return HTMLMin::html(View::make($view_prefix . '.dashboard.models.pivot.index', $pass_to_view));
 	}
 
 	public static function processPivotModelForm($slug, $model_name, $model_id, $pivot, $pivot_name, $extra_column = array()) {
@@ -295,9 +295,9 @@ class BaseController extends Controller {
 		);
 		$slug_view = $view_prefix . '.dashboard.' . $slug . '.index';
 		if(View::exists($slug_view)) {
-			return HTMLMin::live(View::make($slug_view, $pass_to_view));
+			return HTMLMin::html(View::make($slug_view, $pass_to_view));
 		}
-		return HTMLMin::live(View::make($view_prefix . '.dashboard.models.index', $pass_to_view));
+		return HTMLMin::html(View::make($view_prefix . '.dashboard.models.index', $pass_to_view));
 	}
 
 	public static function getModelTrash($slug, $model_name, $per_page) {
@@ -312,9 +312,9 @@ class BaseController extends Controller {
 		);
 		$slug_view = $view_prefix . '.dashboard.' . $slug . '.trash';
 		if(View::exists($slug_view)) {
-			return HTMLMin::live(View::make($slug_view, $pass_to_view));
+			return HTMLMin::html(View::make($slug_view, $pass_to_view));
 		}
-		return HTMLMin::live(View::make($view_prefix . '.dashboard.models.trash', $pass_to_view));
+		return HTMLMin::html(View::make($view_prefix . '.dashboard.models.trash', $pass_to_view));
 	}
 
 	public static function hasPermission() {

@@ -20,7 +20,7 @@ use EternalSword\Models\Theme;
 use EternalSword\Models\User;
 use EternalSword\Models\Value;
 use EternalSword\Exceptions\ExceptionHandler;
-use GrahamCampbell\HTMLMin\Facades\HTMLMin;
+use EternalSword\Lib\HTMLMin;
 
 class DashboardController extends BaseController {
 	public static function getDashboard() {
@@ -46,7 +46,7 @@ class DashboardController extends BaseController {
 			$pass_to_view['users'] = $users;
 			$pass_to_view['new_user'] = new User;
 		}
-		return HTMLMin::live(View::make($view_prefix . '.dashboard.index', $pass_to_view));
+		return HTMLMin::html(View::make($view_prefix . '.dashboard.index', $pass_to_view));
 	}
 
 	protected static function getModelInfo($slug) {

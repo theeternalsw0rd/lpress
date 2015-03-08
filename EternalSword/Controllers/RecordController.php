@@ -24,7 +24,7 @@ use EternalSword\Models\Theme;
 use EternalSword\Models\User;
 use EternalSword\Models\Value;
 use EternalSword\Exceptions\ExceptionHandler;
-use GrahamCampbell\HTMLMin\Facades\HTMLMin;
+use EternalSword\Lib\HTMLMin;
 
 class RecordController extends BaseController {
 	public static function parseRoute($path) {
@@ -166,7 +166,7 @@ class RecordController extends BaseController {
 		$original_record_type = $record_type;
 		while($record_type->depth > 0) {
 			try {
-				return HTMLMin::live(View::make(
+				return HTMLMin::html(View::make(
 					$view_prefix . '.collections.' . $record_type->slug,
 					array(
 						'domain' => DOMAIN,

@@ -21,7 +21,7 @@ use EternalSword\Models\Symlink;
 use EternalSword\Models\Theme;
 use EternalSword\Models\User;
 use EternalSword\Models\Value;
-use GrahamCampbell\HTMLMin\Facades\HTMLMin;
+use EternalSword\Lib\HTMLMin;
 
 class InstallController extends BaseController {
 	public function getInstaller() {
@@ -31,7 +31,7 @@ class InstallController extends BaseController {
 			$route_prefix = (new PrefixGenerator)->getPrefix();
 			$dashboard_prefix = '+' . Config::get('lpress::settings.dashboard_route');
 			$form_url = $route_prefix . $dashboard_prefix . '/users/1';
-			return HTMLMin::live(View::make($view_prefix . '.dashboard.installer',
+			return HTMLMin::html(View::make($view_prefix . '.dashboard.installer',
 				array(
 					'view_prefix' => $view_prefix,
 					'title' => Lang::get('l-press::titles.newModel', array('model_basename' => 'User')),

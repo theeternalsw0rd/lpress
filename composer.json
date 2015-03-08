@@ -12,8 +12,7 @@
         "illuminate/support": "5.*",
 	"laravelcollective/html": "~5.0",
 	"doctrine/dbal": "~2.3",
-	"jeremeamia/superclosure": "~2.0",
-	"graham-campbell/htmlmin": "~3.0"
+	"jeremeamia/superclosure": "~2.0"
     },
     "autoload": {
         "classmap": [
