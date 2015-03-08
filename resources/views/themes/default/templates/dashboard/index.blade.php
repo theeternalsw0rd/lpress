@@ -4,7 +4,7 @@
 @stop
 @section('content')
 	@parent
-	<!--<h2>Welcome, {{ $user->username }} <?php /*{!!HTML::linkRoute('lpress-logout', 'Logout')*/!!} ?></h2>-->
+	<!--<h2>Welcome, {{ $user->username }} <?php /*{!!HTML::linkRoute('lpress-logout', 'Logout')!!}*/ ?></h2>-->
 	@if($is_root)
 		<p>{{ Lang::get('l-press::messages.dashboard_root_message') }}</p>
 		<h2>

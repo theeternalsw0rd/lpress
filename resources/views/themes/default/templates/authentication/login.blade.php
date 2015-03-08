@@ -15,23 +15,23 @@
 		@if ($install)
 			{$ $button_index = 2 $}
 			<div class='text'>
-				{{ Form::text_input(
+				{!! Form::text_input(
 					'password',
 					'password',
 					Lang::get('l-press::labels.application_key') . Lang::get('l-press::labels.label_separator'),
 					''
-				) }}
+				) !!}
 			</div>
 			{!! Form::hidden('username', 'lpress') !!}
 		@else
 			{$ $button_index = 4 $}
 			<div class='text'>
-				{{ Form::text_input(
+				{!! Form::text_input(
 					'text',
 					'username',
 					Lang::get('l-press::labels.username') . Lang::get('l-press::labels.label_separator'),
 					''
-				) }}
+				) !!}
 			</div>
 			<div class='text'>
 				{!! Form::text_input(

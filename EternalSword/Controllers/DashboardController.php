@@ -46,7 +46,7 @@ class DashboardController extends BaseController {
 			$pass_to_view['users'] = $users;
 			$pass_to_view['new_user'] = new User;
 		}
-		return HTMLMin::live(View::make($view_prefix . '.dashboard.index', $pass_to_view);
+		return HTMLMin::live(View::make($view_prefix . '.dashboard.index', $pass_to_view));
 	}
 
 	protected static function getModelInfo($slug) {
