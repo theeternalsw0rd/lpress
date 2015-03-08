@@ -4,7 +4,10 @@ class HTMLMin {
 	// works on strings
 	public static function html($html) {
 		// remove whitespace between tags to avoid issues with inline-block
-		return preg_replace('/>[\r\n\s]*</', '><', $html);
+		$html = preg_replace('/>[\r\n\s]+</', '><', $html);
+		$html = preg_replace('/>[\r\n]+/', '>', $html);
+		$html = preg_replace('/[\r\n]</', '<', $html);
+		return preg_replace('/\t/', '', $html);
 	}
 
 	// Works on response object
